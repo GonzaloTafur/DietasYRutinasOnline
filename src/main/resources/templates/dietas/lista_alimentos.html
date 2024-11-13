@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+	<script src="https://kit.fontawesome.com/dcce108ca1.js" crossorigin="anonymous"></script>
+    <title>Alimentos</title>
+</head>
+<body>
+    <main>
+		<section>
+            <h2>Alimentos</h2>
+        <div class="conttabla">
+        <div>
+            <table class="pure-table">
+                
+                <div class="pure-menu pure-menu-horizontal">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item">
+                            <a th:href="@{/home/verDietas}" class="pure-menu-link">Dieta</a>
+                        </li>
+                        <li class="pure-menu-item pure-menu-selected">
+                            <a href="#" class="pure-menu-link">Alimentos</a>
+                        </li>
+                    </ul>
+                    
+                    <form th:action="@{/dieta/buscarAlimentos}" method="GET">
+    						<select class="form-select" name="tipo">
+        						<option th:each="alimento : ${cbxAlimentos}"
+               						 th:value="${alimento}"
+                					th:text="${alimento}">
+        						</option>
+    						</select>
+    						<button type="submit" class="btn btn-primary">Buscar</button>
+					</form>
+					
+                </div>
+
+           		 	<thead>
+                        <tr>
+                            <th>Alimento</th>
+                            <th>Nutrientes</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="pure-table-border">
+                        <tr th:each="alimento: ${listaAlimentos}">
+                            <td><span th:text="${alimento.nombre}"></span></td>
+                            <td><span th:text="${alimento.nutrientes}"></span></td>
+                            <td><span th:text="${alimento.tipo}"></span></td>
+                            <td><span th:text="${alimento.descripcion}"></span></td>
+                        </tr> 
+                    </tbody>
+            </table>
+
+        </div>
+    </div>
+</section>
+</main>
+	<footer>
+		<p class="p-footer">2024. Todos los derechos reservados.</p>
+	</footer>
+	
+	<script type="text/javascript">
+		function myFunction() {
+  			var x = document.getElementById("myTopnav");
+  			if (x.className === "topnav") {
+    			x.className += " responsive";
+  			} else {
+    		x.className = "topnav";
+  			}
+		}
+	</script>
+</body>
+</html>

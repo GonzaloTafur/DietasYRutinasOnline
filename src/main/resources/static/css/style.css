@@ -1,0 +1,53 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	background-color: #edfac9;
+}
+
+.perfil{
+	margin: 10px;
+}
+
+.perfil .w3-text-black{
+	text-align: center;
+}
+
+footer {
+	width: auto;
+	height: auto;
+	margin: 0 auto;
+	padding: 1% 0;
+	background-color: rgb(185, 185, 185);
+	display: flex;
+	justify-content: center;
+}
+
+.p-footer {
+	color: #000000;
+	font-size: 0.8rem;
+	line-height: 1.2rem;
+}
+
+button{
+	margin: 10px;
+}
+
+.span{
+    color: gray;
+}
+
+.alert{
+    color: red;
+}
+
+.w3-card{
+	background-color: rgb(170, 215, 252);
+	border-radius: 10px;
+	padding: 20px;
+}
+
+hr{
+	color: black;
+}

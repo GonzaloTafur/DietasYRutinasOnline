@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Registrar usuario</title>
+	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
+</head>
+<body>
+	<main>
+		<section>
+			<h2>Registrate</h2>
+			<form class="pure-form pure-form-stacked" 
+            	th:action="@{/usuario/grabarUsuario}" 
+            	th:object="${objUsuario}"
+            	method="POST" >
+
+				<label for="autos">¿Eres paciente o nutriólogo?</label>
+				<select class="form-select" 
+			            th:field="*{tipousuario.idtipousu}">
+    				<option 
+    					th:each="tipos: ${listaTiposUsuario}"
+            			th:value="${tipos.idtipousu}" 
+            			th:text="${tipos.nomtipousu}">Selecciona un tipo</option>
+				</select>    
+
+				<label for="nombres_apellidos">Nombres</label>
+				<input 
+                            	type="text" 
+                            	id="multi-first-name" 
+                            	th:field="*{nombres}" 
+                            	required=""
+                            	/>
+
+				<label for="nombres_apellidos">Apellidos</label>
+				<input 
+                            	type="text" 
+                            	id="multi-last-name" 
+                            	th:field="*{apellidos}" 
+                            	required=""
+                            	/>
+
+				<label for="nombres_apellidos">Fecha nacimiento</label>
+				<input 
+                                type="date" 
+                                id="multi-fecha-nacimiento" 
+                                th:field="*{fechanacimiento}" 
+                                required="" />
+                                
+                <label for="percentage">Nacionalidad</label>        
+					<select id="percentage" name="nacionalidad">
+						<option th:value="Otro" selected="selected">Otro</option>
+						<option th:value="'Argentina'">Argentina</option>
+						<option th:value="'Bolivia'">Bolivia</option>
+						<option th:value="'Chile'">Chile</option>
+						<option th:value="'Colombia'">Colombia</option>
+						<option th:value="'Ecuador'">Ecuador</option>
+						<option th:value="'España'">España</option>
+						<option th:value="'Mexico'">Mexico</option>
+						<option th:value="'Paraguay'">Paraguay</option>
+						<option th:value="'Perú'">Perú</option>
+						<option th:value="'Uruguay'">Uruguay</option>
+						<option th:value="'Venezuela'">Venezuela</option>
+					</select> 
+				
+    			<!--<label for="nombres_apellidos">Nacionalidad</label>
+    				<select id="multi-nacionalidad" th:field="*{nacionalidad}" required>
+        				<option value="" disabled selected>Seleccione su país</option>
+        				<option 
+        				th:each="pais: ${listaPaises}" 
+        				th:value="${pais.nombre}" 
+        				th:text="${pais.nombre}"></option>
+    				</select>
+					
+				<label for="nombres_apellidos">Nacionalidad</label>
+				<input 
+                                type="text" 
+                                id="multi-nacionalidad" 
+                                th:field="*{nacionalidad}" 
+                                required="" />
+
+				<label for="nombres_apellidos">Sexo</label>
+				<input 
+                            	type="text" 
+                            	id="multi-sexo" 
+                            	th:field="*{sexo}" 
+                            	required=""
+                            	/>-->
+				
+				<label for="percentage">Sexo</label>        
+					<select id="percentage" name="sexo">
+						<option th:value="Masculino" selected="selected">Masculino</option>
+						<option th:value="Femenino">Femenino</option>
+				</select>
+
+				<label for="nombres_apellidos">Correo Electronico</label>
+				<input 
+                            	type="email" 
+                            	id="multi-email" 
+                            	class="pure-u-23-24" 
+                            	th:field="*{correo}" 
+                            	required="" 
+                            	/>
+
+				<label for="nombres_apellidos">Contraseña</label>
+				<input 
+                            	type="password" 
+                            	id="aligned-password" 
+                            	th:field="*{password}" 
+                            	required="" 
+                            	/>
+                            	
+                <span class="span" th:if="${error}" th:text="${error}"></span>
+
+				<input type="submit" value="Enviar">
+
+			</form>
+		</section>
+	</main>
+
+	<footer>
+		<p class="p-footer">2024. Todos los derechos reservados.</p>
+	</footer>
+
+</body>
+</html>

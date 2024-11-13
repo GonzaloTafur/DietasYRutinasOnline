@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Menú Principal</title>
+	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
+</head>
+<body>
+	<header>
+		
+		<ul>
+            <!-- <li><a th:if="${esPaciente}" th:href="@{/home/perfilPaciente}">Perfil</a></li>
+            <li><a th:if="${!esPaciente}" th:href="@{/home/perfilNutriologo}">Perfil</a></li>-->
+            <li><a th:href="@{/home/verPerfil}">Perfil</a></li>
+            <li><a th:href="@{/home/ajustesCuenta}">Ajustes</a></li>
+            <li><a href="#">Notificaciones</a></li>
+            <li><a th:if="${esPaciente}" th:href="@{/home/verHorario}">Mi horario</a></li>
+          </ul>
+		
+	</header>
+	<main>
+		<section id="intro">
+			<h1>Bienvenido</h1>
+			<b th:if="${esPaciente}">En esta aplicación podrás mejorar tu estilo de vida, con rutinas y dietas que puedes descubrir tu mismo o por recomendación.</b>
+		</section>
+		<section>
+			<h2>Descubre</h2>
+			<p th:if="${esPaciente}">Estas son listas creadas por usuarios nutriologos/instructores y están ajustada según tu información como paciente</p>
+			<div class="container-01">
+				<div>
+					<a th:href="@{/home/verRutinas}" class="enlace-imagen">
+						<img th:src="@{/images/rutinas.png}">
+					</a>
+					<h3>Rutinas</h3>
+					<p>Hecha un vistazo a nuestras rutinas para organizarlas y ver sus detalles en cualquier momento</p>
+				</div>
+				<div>
+					<a th:href="@{/home/verDietas}" class="enlace-imagen" >
+						<img th:src="@{/images/dieta.png}">
+					</a>
+					<h3>Dietas</h3>
+					<p>Hecha un vistazo a nuestras dietas para organizarlas y ver sus detalles en cualquier momento</p>
+					</a>
+				</div>
+			</div>
+		</section>
+
+	</main>
+
+	<footer>
+		<p class="p-footer">2024. Todos los derechos reservados.</p>
+	</footer>
+	<!-- JS PARA MENU SUPERIOR -->
+	<script type="text/javascript">
+		function myFunction() {
+  			var x = document.getElementById("myTopnav");
+  			if (x.className === "topnav") {
+    			x.className += " responsive";
+  			} else {
+    		x.className = "topnav";
+  			}
+		}
+	</script>
+</body>
+</html>

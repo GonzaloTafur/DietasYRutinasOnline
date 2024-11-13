@@ -1,0 +1,486 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+body {
+	background:  #999999 fixed;
+}
+/* == ESTRUCTURA == */
+header {
+	width: 80%;
+	height: auto;
+	margin: 0 auto;
+	padding: 1% 0;
+	background-color: #ffffff;
+	display: flex;
+	flex-direction: row;
+	justify-content: space-between;
+	align-items: center;
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	border-bottom: 1px solid #e6e6e6;
+}
+
+header img { 
+	margin: 0 30px;
+	width: 90px;
+}
+main {
+	width: 80%;
+	height: 100%;
+	overflow: hidden;
+	margin: 0 auto;
+	background-color: #FFFFFF;
+}
+footer {
+	width: 80%;
+	height: auto;
+	margin: 0 auto;
+	padding: 1% 0;
+	background-color: #dadada;
+	display: flex;
+	justify-content: center;
+}
+section {
+	width: 96%;
+	height: 100%;
+	overflow: hidden;
+	margin: 0 auto;
+	background-color: #edfac9;
+	padding: 4% 2%;
+}
+section h2 {
+	margin-bottom: 20px;
+	text-align: center;
+}
+section h3 {
+	text-align: center;
+	margin: 12px 0;
+	font-size: 1.2rem;
+	line-height: 1.8rem;
+}
+section p {
+	text-align: center;
+	font-size: 0.9rem;
+	line-height: 1.3rem;
+}
+/* ==  MENU SUPERIOR == */
+ul {
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+  }
+  
+  li {
+	float: left;
+  }
+  
+  li a, .dropbtn {
+	font-family: 'Kumbh Sans', sans-serif;
+	display: inline-block;
+	color: #BA1E26;
+	text-align: center;
+	padding: 15px;
+	text-decoration: none;
+  }
+  
+  li a:hover, .dropdown:hover .dropbtn {
+	  background-color: #ffffff;
+	color: rgb(124, 124, 124);
+  }
+  
+  li.dropdown {
+	display: inline-block;
+  }
+  
+  .dropdown-content {
+	display: none;
+	position: absolute;
+	background-color: #f9f9f9;
+	min-width: 160px;
+	box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+	z-index: 1;
+  }
+  
+  .dropdown-content a {
+	color: #BA1E26;
+	padding: 12px 16px;
+	text-decoration: none;
+	display: block;
+	text-align: left;
+  }
+  
+  .dropdown-content a:hover {
+	  color: rgb(124, 124, 124);
+	  background-color: #f1f1f1;
+  }
+  
+  .dropdown:hover .dropdown-content {
+	display: block;
+  }
+
+/* == FIN DE MENU SUPERIOR == */
+
+/* == SLIDE == */
+#intro {
+	display: flex;
+	flex-direction: column;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: flex-start;
+	background: url("../images/intro.jpeg") no-repeat;
+	padding: 4% 8%;
+	min-height: 300px;
+	width: 84%;
+	animation-name: animacion-intro;
+	animation-duration: 300ms;
+	animation-timing-function: ease;
+}
+
+@keyframes animacion-intro {
+	from{
+		filter: opacity(0%);
+		transform: translateY(-200px);
+	}
+	to{
+		filter: opacity(100%);
+		transform: translate(0);
+	}
+}
+#intro h1 {
+	padding-bottom: 2%;
+	padding-left: 4%;
+	width: 50%;
+	color: #2b5231;
+}
+#intro p {
+	text-align: left;
+	width: 50%;
+	color: #2b5231;
+}
+#cabecera-01 {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center; 
+    background: url(images/Banner\ Directo\ Interior\ 1189x322px.png) no-repeat center center; /* Alinea el fondo al centro */
+    background-size: cover;
+    padding: 4% 8%;
+    height: auto;
+    width: 90%;
+}
+/* == BOTONES == */
+a.boton {
+	color: rgb(255, 255, 255);
+	background: #013354;
+	font-family: 'Kumbh Sans', sans-serif;
+	font-weight: 700;
+	text-align: center;
+	text-decoration: none;
+	font-size: 1rem;
+	display: inline-block;
+	margin: 40px 0;
+	padding: 10px 30px;
+	transition-property: all;
+	transition-duration: 0.6s;
+	transition-timing-function: ease;
+}
+a.boton:hover {
+	color: #013354;
+	background: rgb(255, 255, 255);
+}
+.enlace-icono {
+	align-items:end;
+    border-radius: 10px;
+}
+
+.enlace-icono:hover {
+    color: #2b5231;
+}
+
+
+/* == CONTENEDORES FLEX == */
+.container-01, .container-02 {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	justify-content: center;
+	width: 100%;
+	height: auto;	
+}
+.container-01 > div {
+	width: 26%;
+	margin: 2%;
+	padding: 1%;
+}
+.container-02 > div {
+	width: 40%;
+	margin: 1%;
+	padding: 1%;
+}
+/* == TIPOGRAFÍAS == */
+:root {
+	font-size: 20px; /* MEDIDA BASE: 20px = 1rem */
+}
+@font-face {
+	font-family: miFuente01;
+	src: url(fonts/AbrilFatface-Regular.ttf);
+}
+h1 {
+	color: rgb(255, 255, 255);
+	font-family: 'Yeseva One', cursive;
+	font-size: 3rem;
+	line-height: 4.5rem;
+	text-align: center;
+    margin-left: -10%;
+}
+h2 {
+	color: #093469;
+	font-family: 'Eczar', serif;
+	font-weight: 900;
+	font-size: 1.8rem;
+	line-height: 3.6rem;
+}
+h3 {
+	color: #E42621;
+	font-family: 'Kumbh Sans', sans-serif;
+	font-weight: 700;
+	font-size: 1.4rem;
+	line-height: 2.2rem;
+}
+p {
+	color: rgb(56, 56, 66);
+	font-family: 'Kumbh Sans', sans-serif;
+	font-weight: 300;
+	font-size: 1rem;
+	line-height: 1.6rem;
+}
+.p-footer {
+	color: #000000;
+	font-size: 0.8rem;
+	line-height: 1.2rem;
+}
+/* == IMAGENES == */
+.container-01 > div img, .container-02 > div img {
+	width: 100%;
+	margin-bottom: 20px;
+}
+.enlace-imagen{
+ 	filter: none;
+}
+.enlace-imagen:hover{
+	filter: opacity(80%);
+}
+/* == ICONOS*/
+.enlace-icono{
+	position: fixed;
+	bottom: 140px;
+	right: 10px;
+}
+/*VIDEO*/
+.container-02 video {
+	width: 40%;
+	margin-bottom: 30px;
+}
+.container-video {
+	position: relative;
+	overflow: hidden;
+	width: 100%;
+	padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
+  }
+  
+  /* Then style the iframe to fit in the container div with full height and width */
+  .responsive-iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
+	width: 85%;
+	height: 85%;
+	border: 0;
+	margin: 0 auto;
+  }
+
+  /*FORMULARIO*/
+  form {
+	display: flex;
+	flex-direction: column;
+	width: 54%;
+	margin:  0 auto;
+  }
+  label, input, textarea, select{
+	margin: 5px 0;
+	color: rgb(0, 0, 0);
+	font-family: 'Kumbh Sans', sans-serif;
+	font-weight: 300;
+	font-size: 1rem;
+	line-height: 1.6rem;
+  }
+  input[type=text], textarea, select{
+	padding: 4px 12px;
+	font-size: 0.8rem;
+	border: 1px solid rgb(0, 0, 0);
+	background: #ececec;
+  }
+	input[type=text]:focus textarea:focus{
+	border:1px solid #E42313;
+	background: #ffffff;
+	}
+	input[type=text]:focus-visible, textarea:focus-visible, select:focus-visible{
+	outline: 1px solid #E42313;
+	}
+  textarea{
+	resize: vertical;
+	min-height: 200px;
+  }
+  input[type=submit]{
+	color: rgb(255, 255, 255);
+	background: #013354;
+	font-family: 'Kumbh Sans', sans-serif;
+	font-weight: 700;
+	text-align: center;
+	text-decoration: none;
+	font-size: 1rem;
+	display: inline-block;
+	margin: 15px 0;
+	transition-property: all;
+	transition-duration: 300ms;
+	transition-timing-function: ease;
+	border: none;
+	width: 170px;
+	cursor: pointer;
+  }
+  input[type=submit]:hover {
+	color: #013354;
+	background: rgb(180, 180, 180);
+  }
+
+/* == MEDIA QUERIES TABLET == */
+@media screen and (max-width:768px) {
+
+	header, main, footer {
+		width: 100%;
+	}
+	footer {
+		padding: 3% 0;
+	}
+	header {
+		flex-direction: column;
+		padding: 0;
+	}
+	header img {
+		padding: 20px 0;
+	}
+	#intro {
+		align-items: center;
+		background: url(images/pexels-rachel-claire-5865282-main.jpg) no-repeat bottom center;
+		padding-top: 200px;
+	}
+	#intro h1 {
+		text-align: center;
+		width: 100%;
+	}
+	#intro p {
+		text-align: center;
+		width: 80%;
+	}
+	.container-01 > div, .container-02 > div {
+		width: 40%;
+		border: none;
+	}
+	form{
+		width: 74%;
+
+	}
+
+}
+/* == MEDIA QUERIES MOVILES == */
+@media screen and (max-width:428px) {
+
+	header, main, footer {
+		width: 100%;
+	}
+	footer {
+		padding: 3% 0;
+	}
+	header {
+		flex-direction: column;
+		padding: 0;
+	}
+	header img {
+		padding: 20px 0;
+	}
+	.container-01, .container-02 {
+		flex-direction: column;
+		align-items: center;
+	}
+	.container-01 > div, .container-02 > div {
+		width: 90%;
+		border: none;
+	}
+	h1 {
+		font-size: 2.2rem;
+		text-align: center;
+	}
+	h2 {
+		padding: 3% 0;
+		text-align: center;
+	}
+	#cabecera-01{
+		align-items: center;
+	}
+	form{
+		width: 94%;
+	}
+	input[type=submit]{
+		width: 100%;
+	}
+}
+
+.span{
+    font-style: italic;
+    color: gray;
+}
+
+.alert{
+    font-style: italic;
+    color: red;
+}
+
+.btn-link{
+    border:none; 
+    background:none; 
+    padding:0; 
+    color:blue; 
+    text-decoration:underline; 
+    cursor:pointer;
+}
+
+.conttabla{
+    height: auto;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 15px;
+    background-color: rgb(243, 255, 210);
+    border-radius: 8px;
+    box-shadow: 0 0 5px rgba(0, 0, 0, 0.267);
+	margin-bottom: 10px;
+}
+
+.pure-menu{
+    background-color: rgb(172, 172, 172);
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black;
+}
+
+.sectionlist{
+	background-color: rgb(241, 241, 241);
+}

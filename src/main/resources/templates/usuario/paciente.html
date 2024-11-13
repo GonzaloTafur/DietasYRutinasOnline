@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Perfil</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" th:href="@{https://www.w3schools.com/w3css/4/w3.css}">
+<link rel='stylesheet' th:href='@{https://fonts.googleapis.com/css?family=Roboto}'>
+<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+<!-- Page Container -->
+<div class="w3-content w3-margin-top" style="max-width:1400px;">
+
+  <!-- The Grid -->
+  <div class="w3-row-padding">
+  
+    <!-- PERFIL -->
+    <div class="w3-third">
+    <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}"> <- Retroceder</a>
+      <div class="w3-white w3-text-grey w3-card-4" th:value="objUsuario">
+      
+        <div class="perfil">
+          <img src="/images/ave.jpg" style="width:100%" alt="Avatar">
+          <div class="w3-text-black">
+            <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+            <span th:text="${objUsuario.nombres}"></span>
+            <span th:text="${objUsuario.apellidos}"></span>
+            </h2>
+            <p class="w3-text-grey" th:text="${objUsuario.biografia}"></p>     
+          </div>
+          <br>
+          
+          <!--<a th:href="@{/home/editarPerfil}" th:method="POST">Editar perfil</a>-->
+          <form th:action="@{/perfil/editarPerfil}" th:method="POST">
+            	<!--  <input type="hidden" name="idcuestionario" th:value="${miInfo.idcuestionario}" />-->
+            	<button type="submit" class="pure-button pure-button-primary">
+        			Editar Perfil
+        		</button>
+			</form> 
+          <span class="span" th:if="${actualizado}" th:text="${actualizado}"></span>
+        </div>
+        <div class="w3-container">
+          <p th:text="${objUsuario.fechanacimiento}">
+          <i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          
+          <p th:text="${objUsuario.nacionalidad}">
+          <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          
+          <p th:text="${objUsuario.sexo}">
+          <span></span>
+          <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          
+          <!--<p th:text="${detalleDieta.descripcion}">
+          <i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          
+          <p th:text="${detalleDieta.descripcion}">
+          <i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          <hr>-->
+          
+        </div>
+        
+      </div><br>
+
+    <!-- End Left Column -->
+    </div>
+
+
+    <!-- Right Column -->
+    
+    <div class="w3-twothird">
+    
+    	<div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${esPaciente}" th:value="miInfo">
+    	
+        <h2 class="w3-text-grey w3-padding-16">
+            <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Información</h2>
+			<span class="span" th:if="${exito}" th:text="${exito}"></span>
+        <div>
+        
+        <!-- SI EL PACIENTE NO TIENE INFO -->
+        <div th:if="${miInfo==null}">
+        <h3>¿Aún no has tienes información sobre ti? <br>
+        Recuerda llenar y actualizar nuestro cuestionario</h3>
+        <form th:action="@{/perfil/llenarCuestionario}" th:method="POST">
+            	<button type="submit" class="pure-button pure-button-primary">
+        			Hacer cuestionario
+        		</button>
+			</form>
+        </div>
+          
+        <!-- SI EL PACIENTE TIENE INFO -->
+        <div th:if="${miInfo!=null}">
+          <h3>Frecuencia de ejercicios:</h3>        
+    	  <p th:text="${miInfo.frecEjercicios}">
+    	  <hr>
+    	  
+					<h3>Condición alimenticia:</h3>
+    				<p th:text="${miInfo.condicion}">
+    				<hr>
+    				
+                    <h3>Peso corporal:</h3>
+					<p th:text="${miInfo.pesoCorporal}">
+    				<hr>
+    				
+    				<h3>Estatura:</h3>
+					<p th:text="${miInfo.estatura}">
+    				<hr>
+    				
+                    <h3>Perímetro de cintura:</h3>
+					<p th:text="${miInfo.perimCintura}">
+    				<hr>
+    				
+                    <h3>Perímetro de cadera:</h3>
+					<p th:text="${miInfo.perimCadera}">
+    				<hr>
+    				
+                    <h3>Perímetro de muslo:</h3>
+                    <p th:text="${miInfo.perimMuslo}">
+                    <hr>
+                    
+                    <h3>Perímetro de brazo/bicep:</h3>
+					<p th:text="${miInfo.perimBrazo}">
+    				<hr>
+    				
+                    <h3>Objetivo nutricional:</h3>
+					<p th:text="${miInfo.objetivo}">
+            		<hr>
+            		
+            </div>
+            
+        </div>
+        <div th:if="${miInfo!=null}" class="w3-container">
+          <!--<form th:action="@{/home/editarInfo}" method="POST">
+            <button type="submit" class="pure-button pure-button-primary">
+            Editar mi información</button>
+          </form>-->
+          
+          <form th:action="@{/home/editarInfo}" th:method="POST">
+            	<input type="hidden" name="idinfopaciente" th:value="${miInfo.idinfopaciente}" />
+            	<button type="submit" class="pure-button pure-button-primary">
+        			Editar mi información
+        		</button>
+			</form>
+			
+      </div>
+      
+
+   	<div class="w3-container w3-card w3-white w3-margin-bottom">
+   	<span th:if="${mensaje}" th:text="${mensaje}"></span>
+      <h2 class="w3-text-grey w3-padding-16">
+          Dieta(s) que estoy haciendo</h2>
+        <!--<div class="w3-container" th:if="${miInfo.dieta!=null}">-->
+      
+        <table class="pure-table">
+      <thead>
+          <tr>
+              <th>Nombre</th>
+              <th>Objetivo</th>
+              <th>Descripción</th>
+              <th>Acciones</th>
+          </tr>
+      </thead>
+  
+      <tbody class="pure-table-border">
+          <tr th:each="dieta: ${miInfo.dieta}">
+          <td><span th:text="${dieta.nombre}"></span></td>
+          <td><span th:text="${dieta.objetivo}"></span></td>
+          <td><span th:text="${dieta.descripcion}"></span></td>
+          <td>
+              <div class="dropdown">
+                  <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">
+                      <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+              </div>
+              <br>
+              
+              <form th:action="@{/dieta/dejarSeguirDieta(iddieta=${dieta.iddieta})}" method="POST">
+            			<button type="submit" class="pure-button pure-button-secondary">
+            			Dejar de seguir Dieta</button>
+            		</form>
+          </td>
+          
+          </tr> 
+      </tbody>
+ 
+          </table>        
+    </div>
+    
+    <a th:href="@{/home/verDietas}" type="button">
+			Ver otras dietas
+		</a>
+		
+    </div>
+    	</div>
+    	
+
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
+</div>
+
+<footer>
+  <p class="p-footer">2024. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>

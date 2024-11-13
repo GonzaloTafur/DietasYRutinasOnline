@@ -1,0 +1,95 @@
+<!doctype html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Nueva Dieta</title>
+	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
+</head>
+<body>
+	<main>
+		<section>
+			<h2>Insertar nueva dieta</h2>
+			<form class="pure-form pure-form-stacked" 
+            	th:action="@{/dieta/grabarDieta}" 
+            	th:object="${objDieta}"
+            	method="POST" >
+
+				<label for="nombres_apellidos">Nombre</label>
+				<input 
+                            	type="text" 
+                            	id="multi-first-name" 
+                            	th:field="*{nombre}"
+                            	required=""
+                            	/>
+                
+                <label for="percentage">Objetivo</label>        
+    				<select id="percentage" name="objetivo">
+        				<option th:value="'Deficit'" selected="selected">Deficit</option>
+        				<option th:value="'Volumen'">Volumen</option>
+    				</select>
+    				
+				<!--
+				<label for="nombres_apellidos">Categoría</label>
+				<input 
+                            	type="text" 
+                            	id="multi-last-name" 
+                            	th:field="*{categoria}" 
+                            	required=""
+                            	/>-->
+    	
+				<label for="mensaje">Descripción</label>
+                    <textarea id="mensaje" th:field="*{descripcion}"></textarea>
+                <!--   
+				<label for="autos">Ejercicios</label>
+				<select class="form-select" th:field="*{ejercicio}">
+    				<option th:each="ejercicio : ${listaEjercicios}"
+           				th:value="${ejercicio.idejercicio}"
+            			th:text="${ejercicio.nomejercicio}">
+    				</option>
+				</select>-->
+				
+				<label>¿Que alimenos incluye?</label>
+					<div th:each="alimento : ${listaAlimentos}">
+					<label th:text="${alimento.nombre}"></label>
+    				<input 
+    					type="checkbox" 
+    					th:field="*{alimento}" 
+    					th:value="${alimento.idalimento}"
+    				/>
+				</div>
+				       	
+                <span class="span" th:if="${error}" th:text="${error}"></span>
+
+				<input type="submit" value="Guardar Dieta">
+
+			</form>
+		</section>
+	</main>
+
+	<footer>
+		<p class="p-footer">2024. Todos los derechos reservados.</p>
+	</footer>
+	<!-- JS PARA MENU SUPERIOR -->
+	<script type="text/javascript">
+		function myFunction() {
+  			var x = document.getElementById("myTopnav");
+  			if (x.className === "topnav") {
+    			x.className += " responsive";
+  			} else {
+    		x.className = "topnav";
+  			}
+		}
+	</script>
+</body>
+</html>

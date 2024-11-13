@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+	<script src="https://kit.fontawesome.com/dcce108ca1.js" crossorigin="anonymous"></script>
+    <title>Lista de Dietas</title>
+</head>
+<body>
+    <main>
+		<section>
+            <h2>Dietas</h2>
+
+            <span th:if="${finalizado}" th:text="${finalizado}"></span>
+            <span class="span" th:if="${excepcion}" th:text="${excepcion}"></span>
+        <div class="conttabla">
+        <div>
+            <table class="pure-table">
+                
+                <div class="pure-menu pure-menu-horizontal">
+                    <ul class="pure-menu-list">
+                        <li class="pure-menu-item pure-menu-selected">
+                            <a href="#" class="pure-menu-link">Dietas</a>
+                        </li>
+                        <li class="pure-menu-item">
+                            <a th:href="@{/dieta/verAlimentos}" class="pure-menu-link">Alimentos</a>
+                        </li>
+                    </ul>
+                </div>
+
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Objetivo</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+        
+            <tbody class="pure-table-border">
+                <tr th:each="dieta: ${listaDietas}">
+                <td><span th:text="${dieta.nombre}"></span></td>
+            	<td><span th:text="${dieta.objetivo}"></span></td>
+                <td><span th:text="${dieta.descripcion}"></span></td>
+                <!--<td>
+                    <div class="dropdown">
+                        <a th:href="@{/ordenCompra/ver/{id} (id=${ordenCompra.id})}">
+                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                    </div>
+                </td>-->
+                <td>
+                    <div class="dropdown">
+                        <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">
+                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                    </div>
+                    <br>
+                                        
+                    <form th:if="${esPaciente}" th:action="@{/dieta/seguirDieta(iddieta=${dieta.iddieta})}" method="POST">
+            			<button type="submit" class="pure-button pure-button-primary">
+            			Seguir Dieta</button>
+            		</form>
+            		
+                    <!--<div class="dropdown" th:if="${esPaciente}">
+                        <a th:href="@{/dieta/seguirDieta(iddieta=${dieta.iddieta})}">
+                            <i class="bx bx-edit-alt me-2"></i>Seguir Dieta</a>
+                    </div>-->
+                </td>
+                
+                
+                </tr> 
+            </tbody>
+
+            </table>
+
+			<form th:if="${!esPaciente}" th:action="@{/dieta/crearDieta}" method="POST">
+            	<button type="submit" class="pure-button pure-button-primary">
+            	Crear Nueva Dieta</button>
+            </form>
+            
+            <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
+            
+        </div>
+    </div>
+</section>
+</main>
+
+<footer>
+    <p class="p-footer">2024. Todos los derechos reservados.</p>
+</footer>
+
+<script type="text/javascript">
+    function myFunction() {
+          var x = document.getElementById("myTopnav");
+          if (x.className === "topnav") {
+            x.className += " responsive";
+          } else {
+        x.className = "topnav";
+          }
+    }
+</script>
+</body>
+</html>

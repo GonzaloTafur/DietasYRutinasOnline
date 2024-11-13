@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Nueva Rutina</title>
+	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
+</head>
+<body>
+	<main>
+		<section>
+			<h2>Insertar nueva rutina</h2>
+			<form class="pure-form pure-form-stacked" 
+            	th:action="@{/rutina/grabarRutina}" 
+            	th:object="${objRutina}"
+            	method="POST" >
+				
+				<label for="nombres_apellidos">Nombre de rutina</label>
+				<input 
+                            	type="text" 
+                            	id="multi-first-name" 
+                            	th:field="*{nombre}"
+                            	required=""
+                            	/>
+				
+				<!--<label for="nombres_apellidos">Categoría</label>
+				<input 
+                            	type="text" 
+                            	id="multi-last-name" 
+                            	th:field="*{categoria}" 
+                            	required=""
+                            	/>-->
+                            	
+                <label for="percentage">Tipo de rutina</label>        
+    				<select id="percentage" name="tipo">
+        				<option th:value="'Deficit'" selected="selected">Rutina de Deficit</option>
+        				<option th:value="'Volumen'">Rutina de Volumen</option>
+    				</select>
+    				
+    			<label for="percentage">Parte del cuerpo</label>        
+    				<select id="percentage" name="parteCuerpo">
+        				<option th:value="'Tren Superior'" selected="selected">Tren Superior</option>
+        				<option th:value="'Tren Inferior'">Tren Inferior</option>
+    				</select>
+                            	
+				<label for="percentage">Nivel</label>        
+    				<select id="percentage" name="nivel">
+        				<option th:value="Principiante" selected="selected">Principiante</option>
+        				<option th:value="Intermedio">Intermedio</option>
+        				<option th:value="Avanzado">Avanzado</option>
+    				</select>
+    	
+				<label for="mensaje">Descripción</label>
+                    <textarea id="mensaje" th:field="*{descripcion}"></textarea>
+                <!--   
+				<label for="autos">Ejercicios</label>
+				<select class="form-select" th:field="*{ejercicio}">
+    				<option th:each="ejercicio : ${listaEjercicios}"
+           				th:value="${ejercicio.idejercicio}"
+            			th:text="${ejercicio.nomejercicio}">
+    				</option>
+				</select>
+				
+				<table class="pure-table">
+					<thead>
+                        <tr>
+                            <th>Nombre del Ejercicio</th>
+                            <th>Grupo Muscular</th>
+                            <th>Tipo</th>
+                            <th>Número de Series</th>
+                            <th>Número de Repeticiones</th>
+                            <th>Descripción</th>
+                            <th>Seleccionar</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="pure-table-border">
+                        <tr th:each="ejercicio: ${listaEjercicios}">
+                            <td><span th:text="${ejercicio.nombre}"></span></td>
+                            <td><span th:text="${ejercicio.grupomuscular}"></span></td>
+                            <td><span th:text="${ejercicio.tipo}"></span></td>
+                            <td><span th:text="${ejercicio.series}"></span></td>
+                            <td><span th:text="${ejercicio.repeticiones}"></span></td>
+                            <td><span th:text="${ejercicio.descripcion}"></span></td>
+                            <td><input 
+    					type="checkbox" 
+    					th:field="*{ejercicio}" 
+    					th:value="${ejercicio.idejercicio}"
+    				/></td>
+                        </tr> 
+                    </tbody>
+    			</table>
+				-->
+				
+				<label>Ejercicios</label>
+					<div th:each="ejercicio : ${listaEjercicios}">
+					<label th:text="${ejercicio.nombre}"></label>
+    				<input 
+    					type="checkbox" 
+    					th:field="*{ejercicio}" 
+    					th:value="${ejercicio.idejercicio}"
+    				/>
+				</div>
+				       	
+                <span class="span" th:if="${error}" th:text="${error}"></span>
+
+				<input type="submit" value="Guardar Rutina">
+
+			</form>
+		</section>
+	</main>
+
+	<footer>
+		<p class="p-footer">2024. Todos los derechos reservados.</p>
+	</footer>
+	<!-- JS PARA MENU SUPERIOR -->
+	<script type="text/javascript">
+		function myFunction() {
+  			var x = document.getElementById("myTopnav");
+  			if (x.className === "topnav") {
+    			x.className += " responsive";
+  			} else {
+    		x.className = "topnav";
+  			}
+		}
+	</script>
+</body>
+</html>

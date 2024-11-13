@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+
+	
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+	<script src="https://kit.fontawesome.com/dcce108ca1.js" crossorigin="anonymous"></script>
+    <title>Detalle de Dieta</title>
+</head>
+<body>
+    <main>
+		<section>
+    <div>
+
+                <div class="mb-3" th:value="${detalleDieta}">
+                
+                    <span th:text="${detalleDieta.nombre}"></span>
+          			<br>
+          			
+          			<label class="form-label">Objetivo:</label>
+          			<span th:text="${detalleDieta.objetivo}"></span>
+          			<br>
+          			
+                	<label class="form-label">Descripción:</label>
+                	<span th:text="${detalleDieta.descripcion}"></span>
+                	<br>
+                	
+                	<label class="form-label">Creado por:</label>
+                	<a th:href="@{/perfil/verSuPerfil(idusuario=${detalleDieta.nutriologo.idusuario})}">
+                            <i class="bx bx-edit-alt me-2"></i>
+                            <span th:text="${detalleDieta.nutriologo.nombres}"></span>
+                        	<span th:text="${detalleDieta.nutriologo.apellidos}"></span>
+                    </a>
+                    
+                </div>
+                
+                <div>
+                	<h3>Alimentos incluidos</h3>
+                </div>
+                <table class="pure-table">
+                    <thead>
+                        <tr>
+                            <th>Alimento</th>
+                            <th>Nutrientes</th>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                        </tr>
+                    </thead>
+
+                    <tbody class="pure-table-border">
+                        <tr th:each="alimento: ${detalleDieta.alimento}">
+                            <td><span th:text="${alimento.nombre}"></span></td>
+                            <td><span th:text="${alimento.nutrientes}"></span></td>
+                            <td><span th:text="${alimento.tipo}"></span></td>
+                            <td><span th:text="${alimento.descripcion}"></span></td>
+                        </tr> 
+                    </tbody>
+                </table>
+
+
+			<!--<form 
+			th:if="${pacienteActual}" 
+			th:action="@{/dieta/seguirDieta2}" 
+			th:object="${objInfoPaciente}" 
+			th:method="POST" >
+			
+			 <span class="alert" th:if="${exito}" th:text="${exito}"></span> 
+            	<input type="hidden" name="iddieta" th:value="${detalleDieta.iddieta}" />
+            	<button type="submit" class="pure-button pure-button-primary">
+        			¿Te interesa hacer esta Dieta?
+        		</button>
+			</form>-->
+			
+            <form th:if="${esCreador}" th:action="@{/dieta/editarDieta}" th:method="POST">
+            	<input type="hidden" name="iddieta" th:value="${detalleDieta.iddieta}" />
+            	<button type="submit" class="pure-button pure-button-primary">
+        			Editar Dieta
+        		</button>
+			</form>
+
+    </div>
+</section>
+</main>
+
+<footer>
+    <p class="p-footer">2024. Todos los derechos reservados.</p>
+</footer>
+
+</body>

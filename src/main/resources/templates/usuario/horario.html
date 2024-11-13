@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th="http://www.thymeleaf.org">
+<title>Horario de rutinas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" th:href="@{https://www.w3schools.com/w3css/4/w3.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    
+<body>
+
+    <div class="w3-container">
+    <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}"> <- Retroceder</a>
+    
+        <h2>Horario de rutinas</h2>
+        <p>Programa tus tiempos para hacer rutinas a tu gusto.</p>
+        <br>
+        
+        <span class="span" th:if="${eliminado}" th:text="${eliminado}"></span>
+        
+        <div class="w3-row-padding" style="margin: 40px;">
+            <div th:each="horario: ${miHorario}">
+              <div class="w3-card w3-container">
+              <h2 th:text="${horario.rutina.nombre}"></h2>
+              <a th:href="@{/rutina/verDetalleRutina(idrutina=${horario.rutina.idrutina})}">
+                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+              <br>
+              <br>
+              <i class="fa fa-desktop w3-text-theme"></i>
+              <div class="w3-col s6">
+                <h3><span th:text="${horario.dia}"></span></h3>
+                <br>
+                <a th:href="@{/perfil/eliminarHora/{idhorario} (idhorario=${horario.idhorario})}" 
+                    	class="btn btn-danger btn-circle btn-sm">Eliminar de tu horario</a>
+              </div>
+              <div class="w3-col s6">
+                <h3>Periodo:
+                <span th:text="${horario.periodo}"></span>
+                </h3>
+              </div>
+              </div>
+            </div>
+          <hr>  
+        </div>
+        
+
+ 
+    <form style="margin: 20px;" th:action="@{/perfil/grabarHorario}" th:object="${objHorario}" method="POST">
+    <h3>Inserte un nuevo horario</h3>
+    <span class="alert" th:if="${error}" th:text="${error}"></span>
+    <span class="span" th:if="${exito}" th:text="${exito}"></span>
+    <br>
+    	<label>Rutina:</label>
+    	<select th:field="*{rutina.idrutina}">
+    		<option th:each="rutinas: ${listaRutinas}"
+            		th:value="${rutinas.idrutina}"
+            		th:text="${rutinas.nombre}">
+    		</option>
+    	</select>
+    	
+        <label for="dia">Día de la semana:</label>
+        <select name="dia">
+            <option th:value="'Lunes'">Lunes</option>
+            <option th:value="'Martes'">Martes</option>
+            <option th:value="'Miercoles'">Miércoles</option>
+            <option th:value="'Jueves'">Jueves</option>
+            <option th:value="'Viernes'">Viernes</option>
+            <option th:value="'Sabado'">Sábado</option>
+            <option th:value="'Domingo'">Domingo</option>
+        </select>
+
+		<label for="periodo">Periodo de día:</label>
+        <select name="periodo">
+            <option th:value="'Mañana'">Mañana</option>
+            <option th:value="'Medio día'">Medio día</option>
+            <option th:value="'Tarde'">Tarde</option>
+            <option th:value="'Noche'">Noche</option>
+        </select>
+        
+        <!--  <label for="horaInicio">Descanzo por serie:</label>
+        <input type="time" min="00:30" max="01:30" th:field="*{horaInicio}" />
+    
+        <label for="horaFin">Descanzo por ejercicio:</label>
+        <input type="time" min="01:00" max="07:00" th:field="*{horaFin}" />-->
+    
+        <button type="submit">Guardar nuevo horario</button>
+    </form>
+
+
+	<h2 class="w3-text-grey w3-padding-16">
+          Rutinas</h2>
+      
+     <table class="pure-table">
+            <thead>
+                <tr>
+                    <th>Nombre de la Rutina</th>
+                    <th>Tipo</th>
+                    <th>Parte del cuerpo</th>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+        
+            <tbody class="pure-table-border">
+                <tr th:each="rutina: ${listaRutinas}">
+                <td><span th:text="${rutina.nombre}"></span></td>
+                <td><span th:text="${rutina.tipo}"></span></td>
+                <td><span th:text="${rutina.parteCuerpo}"></span></td>
+                <td><span th:text="${rutina.nivel}"></span></td>
+                <td><span th:text="${rutina.descripcion}"></span></td>
+                <td>
+                    <div class="dropdown">
+                        <a th:href="@{/rutina/verDetalleRutina(idrutina=${rutina.idrutina})}">
+                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                    </div>
+                    <br>
+                </tr> 
+            </tbody>
+            </table>
+
+          
+      </div>
+
+</body>
+</html>

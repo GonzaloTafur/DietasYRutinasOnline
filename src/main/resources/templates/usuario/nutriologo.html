@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Perfil</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" th:href="@{https://www.w3schools.com/w3css/4/w3.css}">
+<link rel='stylesheet' th:href='@{https://fonts.googleapis.com/css?family=Roboto}'>
+<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+<!-- Page Container -->
+<div class="w3-content w3-margin-top" style="max-width:1400px;">
+
+  <!-- The Grid -->
+  <div class="w3-row-padding">
+  
+    <!-- PERFIL -->
+    <div class="w3-third">
+    <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}"> <- Retroceder</a>
+      
+      <div class="w3-white w3-text-grey w3-card-4" th:value="objUsuario">
+      
+        <div class="perfil">
+          <img src="/images/ave.jpg" style="width:100%" alt="Avatar">
+          <div class="w3-text-black">
+            <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+            <span th:text="${objUsuario.nombres}"></span>
+            <span th:text="${objUsuario.apellidos}"></span>
+            </h2>
+            <p class="w3-text-grey" th:text="${objUsuario.biografia}"></p>     
+          </div>
+          <br>
+          
+          <!--<a th:href="@{/home/editarPerfil}" th:method="POST">Editar perfil</a>-->
+          <form th:action="@{/perfil/editarPerfil}" th:method="POST">
+            	<!--  <input type="hidden" name="idcuestionario" th:value="${miInfo.idcuestionario}" />-->
+            	<button type="submit" class="pure-button pure-button-primary">
+        			Editar Perfil
+        		</button>
+			</form> 
+          <span class="span" th:if="${actualizado}" th:text="${actualizado}"></span>
+        </div>
+        <div class="w3-container">
+          <p th:text="${objUsuario.fechanacimiento}">
+          <i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          
+          <p th:text="${objUsuario.nacionalidad}">
+          <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          
+          <p th:text="${objUsuario.sexo}">
+          <span></span>
+          <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          
+          <!--<p th:text="${detalleDieta.descripcion}">
+          <i class="fa fa-envelope fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          
+          <p th:text="${detalleDieta.descripcion}">
+          <i class="fa fa-phone fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
+          <hr>-->
+          
+        </div>
+        
+      </div><br>
+      
+    <!-- End Left Column -->
+    </div>
+
+    <!-- Right Column -->
+    
+    <div class="w3-twothird">
+    
+      <div class="w3-container w3-card w3-white w3-margin-bottom">
+        <h2 class="w3-text-grey w3-padding-16"><i class="fa fa-suitcase fa-fw w3-margin-right w3-xxlarge w3-text-teal">
+        </i>Rutinas creadas</h2>
+
+        <div class="w3-container" >
+        <table class="pure-table">
+            <thead>
+                <tr>
+                    <th>Nombre de la Rutina</th>
+                    <th>Tipo</th>
+                    <th>Parte del cuerpo</th>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+        
+            <tbody class="pure-table-border">
+                <tr th:each="rutina: ${misRutinas}">
+                <td><span th:text="${rutina.nombre}"></span></td>
+                <td><span th:text="${rutina.tipo}"></span></td>
+                <td><span th:text="${rutina.parteCuerpo}"></span></td>
+                <td><span th:text="${rutina.nivel}"></span></td>
+                <td><span th:text="${rutina.descripcion}"></span></td>
+                <!--<td>
+                    <div class="dropdown">
+                        <a th:href="@{/ordenCompra/ver/{id} (id=${ordenCompra.id})}">
+                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                    </div>
+                </td>-->
+                <td>
+                    <div class="dropdown">
+                        <a th:href="@{/rutina/verDetalleRutina(idrutina=${rutina.idrutina})}">
+                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                    </div>
+                    <br>
+                </td>
+                </tr> 
+            </tbody>
+            </table>
+
+            <form th:action="@{/rutina/crearRutina}" method="POST">
+            	<button type="submit" class="pure-button pure-button-primary">
+            	Crear Nueva rutina</button>
+            </form>
+
+        </div>
+
+      </div>
+
+      <div class="w3-container w3-card w3-white w3-margin-bottom">
+        <h2 class="w3-text-grey w3-padding-16">
+            <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>
+            Dietas creadas</h2>
+        <div class="w3-container">
+            <table class="pure-table">
+        <thead>
+            <tr>
+              <th>Nombre</th>
+                <th>Objetivo</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+    
+        <tbody class="pure-table-border">
+            <tr th:each="dieta: ${misDietas}">
+            <td><span th:text="${dieta.nombre}"></span></td>
+            <td><span th:text="${dieta.objetivo}"></span></td>
+            <td><span th:text="${dieta.descripcion}"></span></td>
+            <!--<td>
+                <div class="dropdown">
+                    <a th:href="@{/ordenCompra/ver/{id} (id=${ordenCompra.id})}">
+                        <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                </div>
+            </td>-->
+            <td>
+                <div class="dropdown">
+                    <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">
+                        <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                </div>
+                <br>
+            </td>
+            
+            </tr> 
+        </tbody>
+   
+            </table>
+        <form th:action="@{/rutina/crearRutina}" method="POST">
+            	<button type="submit" class="pure-button pure-button-primary">
+            	Crear Nueva rutina</button>
+            </form>
+        
+      </div>
+
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
+
+<footer>
+  <p class="p-footer">2024. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>
