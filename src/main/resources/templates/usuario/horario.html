@@ -22,18 +22,22 @@ xmlns:th="http://www.thymeleaf.org">
         <span class="span" th:if="${eliminado}" th:text="${eliminado}"></span>
         
         <div class="w3-row-padding" style="margin: 40px;">
+        
             <div th:each="horario: ${miHorario}">
               <div class="w3-card w3-container">
               <h2 th:text="${horario.rutina.nombre}"></h2>
-              <a th:href="@{/rutina/verDetalleRutina(idrutina=${horario.rutina.idrutina})}">
-                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+              <a th:href="@{/rutina/verDetalleRutina(idrutina=${horario.rutina.idrutina})}">Ver detalles</a>
               <br>
               <br>
-              <i class="fa fa-desktop w3-text-theme"></i>
+
               <div class="w3-col s6">
+                
+                <p>Descanso por serie: <span th:text="${horario.descaSerie}"></span></p>
+                <p>Descanso por ejercicio: <span th:text="${horario.descaEjercicio}"></span></p>
+                
                 <h3><span th:text="${horario.dia}"></span></h3>
                 <br>
-                <a th:href="@{/perfil/eliminarHora/{idhorario} (idhorario=${horario.idhorario})}" 
+                <a th:href="@{/horario/eliminarHora/{idhorario} (idhorario=${horario.idhorario})}" 
                     	class="btn btn-danger btn-circle btn-sm">Eliminar de tu horario</a>
               </div>
               <div class="w3-col s6">
@@ -42,17 +46,24 @@ xmlns:th="http://www.thymeleaf.org">
                 </h3>
               </div>
               </div>
-            </div>
+            
           <hr>  
+          </div>
         </div>
         
 
  
-    <form style="margin: 20px;" th:action="@{/perfil/grabarHorario}" th:object="${objHorario}" method="POST">
+    <form class="pure-form pure-form-stacked"  
+    	style="margin: 20px;" 
+    	th:action="@{/horario/grabarHorario}" 
+    	th:object="${objHorario}"
+    	 method="POST">
+    	 
     <h3>Inserte un nuevo horario</h3>
     <span class="alert" th:if="${error}" th:text="${error}"></span>
     <span class="span" th:if="${exito}" th:text="${exito}"></span>
     <br>
+    
     	<label>Rutina:</label>
     	<select th:field="*{rutina.idrutina}">
     		<option th:each="rutinas: ${listaRutinas}"
@@ -61,16 +72,16 @@ xmlns:th="http://www.thymeleaf.org">
     		</option>
     	</select>
     	
-        <label for="dia">Día de la semana:</label>
-        <select name="dia">
-            <option th:value="'Lunes'">Lunes</option>
-            <option th:value="'Martes'">Martes</option>
-            <option th:value="'Miercoles'">Miércoles</option>
-            <option th:value="'Jueves'">Jueves</option>
-            <option th:value="'Viernes'">Viernes</option>
-            <option th:value="'Sabado'">Sábado</option>
-            <option th:value="'Domingo'">Domingo</option>
-        </select>
+        <label for="dia">Día:</label>
+        		<select name="dia">
+            		<option th:value="'LUNES'">Lunes</option>
+            		<option th:value="'MARTES'">Martes</option>
+            		<option th:value="'MIERCOLES'">Miércoles</option>
+            		<option th:value="'JUEVES'">Jueves</option>
+            		<option th:value="'VIERNES'">Viernes</option>
+            		<option th:value="'SABADO'">Sábado</option>
+            		<option th:value="'DOMINGO'">Domingo</option>
+        		</select>
 
 		<label for="periodo">Periodo de día:</label>
         <select name="periodo">
@@ -80,13 +91,30 @@ xmlns:th="http://www.thymeleaf.org">
             <option th:value="'Noche'">Noche</option>
         </select>
         
+        <label for="descaEjercicio">Descanzo por ejercicio:</label>
+        <select name="descaEjercicio">
+        			<option th:value="'no especificado'">No especificado</option>
+            		<option th:value="'5 minutos'">5 minutos</option>
+            		<option th:value="'10 minutos'">10 minutos</option>
+            		<option th:value="'15 minutos o más'">15 minutos o más</option>
+        		</select>
+        
+        <label for="descaSerie">Descanzo por serie:</label>
+        <select name="descaSerie">
+        			<option th:value="'no especificado'">No especificado</option>
+            		<option th:value="'15 segundos'">15 segundos</option>
+            		<option th:value="'30 segundos'">30 segundos o más</option>
+            		<option th:value="'1 minuto'">1 minuto o más</option>
+        		</select>
+        
         <!--  <label for="horaInicio">Descanzo por serie:</label>
         <input type="time" min="00:30" max="01:30" th:field="*{horaInicio}" />
     
         <label for="horaFin">Descanzo por ejercicio:</label>
         <input type="time" min="01:00" max="07:00" th:field="*{horaFin}" />-->
     
-        <button type="submit">Guardar nuevo horario</button>
+    	<br>
+        <button type="submit" class="pure-button pure-button-secondary">Guardar nuevo horario</button>
     </form>
 
 
@@ -114,8 +142,7 @@ xmlns:th="http://www.thymeleaf.org">
                 <td><span th:text="${rutina.descripcion}"></span></td>
                 <td>
                     <div class="dropdown">
-                        <a th:href="@{/rutina/verDetalleRutina(idrutina=${rutina.idrutina})}">
-                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                        <a th:href="@{/rutina/verDetalleRutina(idrutina=${rutina.idrutina})}">Ver detalles</a>
                     </div>
                     <br>
                 </tr> 

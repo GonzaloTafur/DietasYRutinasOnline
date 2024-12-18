@@ -26,7 +26,7 @@
     <main>
 		<section>
             <div class="mb-3" th:value="${detalleRutina}">
-            			<span th:text="${detalleRutina.nombre}"></span>
+            			<h2 th:text="${detalleRutina.nombre}"></h2>
                         <br>
                         <label class="form-label">Tipo de Rutina:</label>
                         <span th:text="${detalleRutina.tipo}"></span>
@@ -39,7 +39,6 @@
                         <br>
                         <label class="form-label">Creado por:</label>
                         <a th:href="@{/perfil/verSuPerfil(idusuario=${detalleRutina.nutriologo.idusuario})}">
-                            <i class="bx bx-edit-alt me-2"></i>
                             <span th:text="${detalleRutina.nutriologo.nombres}"></span>
                         	<span th:text="${detalleRutina.nutriologo.apellidos}"></span>
                         </a>
@@ -74,19 +73,7 @@
                             </tr> 
                         </tbody>
                     </table>
-    
-                    
-                    <!--<div th:if="${esCreador}">
-                           <button type="button" class="btn btn-warning" th:action="@{/rutina/editarRutina}">
-                            Editar Rutina
-                        </button>
-                    </div>
-    
-                    <button type="submit" class="btn btn-primary">Guardar Rutina a Calendario</button>
-                    
-                    <a th:action="@{/rutina/descargarRutina}">
-                        Descargar Rutina
-                    </a>-->
+
                 
                 <form th:if="${esCreador}" th:action="@{/rutina/editarRutina}" th:method="POST">
                     <input type="hidden" name="idrutina" th:value="${detalleRutina.idrutina}" />
@@ -101,14 +88,4 @@
     <p class="p-footer">2024. Todos los derechos reservados.</p>
 </footer>
 
-<script type="text/javascript">
-    function myFunction() {
-          var x = document.getElementById("myTopnav");
-          if (x.className === "topnav") {
-            x.className += " responsive";
-          } else {
-        x.className = "topnav";
-          }
-    }
-</script>
 </body>

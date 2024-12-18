@@ -40,10 +40,6 @@ public class Rutina {
     @Column(name = "estrutina")
     private String estado;
 
-    //@ManyToOne
-    //@JoinColumn(name = "idejercicio")
-    //private Ejercicio ejercicio;
-    
     @ManyToMany
     @JoinTable(
       name = "RutinaEjercicio", 
@@ -54,9 +50,6 @@ public class Rutina {
     @ManyToOne
     @JoinColumn(name = "idusuario")
     private Usuario nutriologo;
-    
-    //@ManyToMany(mappedBy = "rutina")
-    //private List<Horario> horario;
 
 	public int getIdrutina() {
 		return idrutina;

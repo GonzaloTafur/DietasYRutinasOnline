@@ -42,13 +42,13 @@ public class Horario {
 	@Column(name="esthorario")
 	private String estado;
 	
-	/*@ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(
-      name = "HorarioRutina", 
-      joinColumns = @JoinColumn(name = "id_horario", referencedColumnName ="idhorario"), 
-      inverseJoinColumns = @JoinColumn(name = "id_rutina", referencedColumnName ="idrutina"))
-    private List<Rutina> rutina;*/
+	@Column(name="descansoSerie")
+	private String descaSerie;
+	
+	@Column(name="descansoEjer")
+	private String descaEjercicio;
 
+	
 	public int getIdhorario() {
 		return idhorario;
 	}
@@ -95,6 +95,22 @@ public class Horario {
 
 	public void setEstado(String estado) {
 		this.estado = estado;
+	}
+
+	public String getDescaSerie() {
+		return descaSerie;
+	}
+
+	public void setDescaSerie(String descaSerie) {
+		this.descaSerie = descaSerie;
+	}
+
+	public String getDescaEjercicio() {
+		return descaEjercicio;
+	}
+
+	public void setDescaEjercicio(String descaEjercicio) {
+		this.descaEjercicio = descaEjercicio;
 	}
 	
 }

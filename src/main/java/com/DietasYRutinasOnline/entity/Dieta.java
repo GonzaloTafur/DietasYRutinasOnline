@@ -45,6 +45,13 @@ public class Dieta {
       joinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="iddieta"), 
       inverseJoinColumns = @JoinColumn(name = "id_alimento", referencedColumnName ="idalimento"))
     private List<Alimento> alimento;
+	
+	@ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+      name = "DietaCondicion", 
+      joinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="iddieta"), 
+      inverseJoinColumns = @JoinColumn(name = "id_condicion", referencedColumnName ="idcondicion"))
+    private List<Condicion> condicion;
 
 	@ManyToMany(mappedBy = "dieta")
     private List<InfoPaciente> paciente;
@@ -103,6 +110,14 @@ public class Dieta {
 
 	public void setAlimento(List<Alimento> alimento) {
 		this.alimento = alimento;
+	}
+
+	public List<Condicion> getCondicion() {
+		return condicion;
+	}
+
+	public void setCondicion(List<Condicion> condicion) {
+		this.condicion = condicion;
 	}
 
 	public List<InfoPaciente> getPaciente() {

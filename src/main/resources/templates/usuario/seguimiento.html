@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+     <link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <title>Seguimiento</title>
+</head>
+<body>
+      <main>
+		<section>
+            <h3>Historial de seguimiento de medidas</h3>  
+        
+        <div class="deslisable">
+            <table class="pure-table">
+            <thead>
+                <tr>
+                	<th>Fecha de modificación</th>
+                    <th>Frecuencia de ejercicios</th>
+                    <th>Peso corporal</th>
+                    <th>Estatura</th>
+                    <th>Perimetro de cintura</th>                   
+                    <th>Perimetro de cadera</th>   
+                    <th>Perimetro de muslo</th>   
+                    <th>Perimetro de brazo</th> 
+                </tr>
+            </thead>
+        
+            <tbody class="pure-table-border">
+                <tr th:each="infopaciente: ${listaSeguimiento}">
+                	<td><span th:text="${infopaciente.fecha}"></span></td>
+                	<td><span th:text="${infopaciente.frecEjercicios}"></span></td>
+                    <td><span th:text="${infopaciente.pesoCorporal}"></span></td>
+                    <td><span th:text="${infopaciente.estatura}"></span></td>
+                    <td><span th:text="${infopaciente.perimCintura}"></span></td>
+                    <td><span th:text="${infopaciente.perimCadera}"></span></td>
+                    <td><span th:text="${infopaciente.perimMuslo}"></span></td>
+					<td><span th:text="${infopaciente.perimBrazo}"></span></td>
+                </tr>
+                
+            </tbody>
+            </table>
+            </div>
+
+		<br>
+        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
+    </section>
+	</main>
+	
+	
+</body>
+</html>

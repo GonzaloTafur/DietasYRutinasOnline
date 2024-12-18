@@ -19,6 +19,7 @@ import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Ejercicio;
 import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.InfoPaciente;
+import com.DietasYRutinasOnline.entity.Notificacion;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.TipoUsuario;
 import com.DietasYRutinasOnline.entity.Transaccion;
@@ -26,7 +27,9 @@ import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.EjercicioRepository;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
 import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
+import com.DietasYRutinasOnline.repository.NotificacionRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
+import com.DietasYRutinasOnline.repository.TipoUsuarioRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
 
@@ -48,6 +51,13 @@ public class RutinaController {
 	
 	@Autowired
 	TransaccionRepository transaccionRepository;
+	
+	@Autowired
+	NotificacionRepository notificacionRepository;
+	
+	@Autowired
+	TipoUsuarioRepository tipoUsuarioRepository;
+	
 	
 	// ---- VER EJERCICIOS -------------------------------------------------------------------
 	@GetMapping("/verEjercicios")
@@ -78,65 +88,6 @@ public class RutinaController {
 		return "rutinas/lista_ejercicios";
 	}
 	
-	/*@PostMapping("/seguirRutina")
-	public String seguirRutina(
-	        HttpSession sesion,
-	        @ModelAttribute("objRutina") Rutina objRutina,
-	        Model model) {
-	    
-	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);
-	        
-	        Horario miHorario = horarioRepository.findByPaciente(objUsuario);
-	        model.addAttribute("miHorario", miHorario);
-	        
-	        if (miHorario!=null) {
-	            Rutina objRutinaBD = rutinaRepository.findById(objRutina.getIdrutina()).orElse(null);
-	            
-	            if (objRutinaBD!=null && !miHorario.getRutina().contains(objRutinaBD)) {
-	                //pacienteActual.getDieta().add(objRutinaBD);
-	            	miHorario.getRutina().add(objRutinaBD);
-	            	//miHorario.setEstado("Activo");
-	                horarioRepository.save(miHorario);
-	                model.addAttribute("exito", "Se guardó la rutina con éxito");  
-	            } 
-	            else {
-	                model.addAttribute("excepcion", "Ya tienes esta rutina");
-	            }
-
-	            Transaccion objTransaccion = new Transaccion();
-	            objTransaccion.setFecha(LocalDateTime.now());
-	            objTransaccion.setTipo("Seguir Rutina");
-	            objTransaccion.setHorario(miHorario);
-	            objTransaccion.setUsuario(objUsuario);
-	            objTransaccion.setRutina(objRutinaBD);        
-	            transaccionRepository.save(objTransaccion);
-                
-	            List<Rutina> listaRutinas;
-	    	    listaRutinas = rutinaRepository.findByEstado("Activo");
-	    	    model.addAttribute("listaRutinas", listaRutinas);
-	    	    
-	    	    InfoPaciente pacienteActual = infoPacienteRepository.findByPaciente(objUsuario);
-		        model.addAttribute("pacienteActual", pacienteActual);
-	    	    
-	    	    if(pacienteActual!=null && pacienteActual.getObjetivo().equals("Deficit")) {
-	    	    	listaRutinas = rutinaRepository.findByTipo("Deficit");
-	    		    model.addAttribute("listaRutinas", listaRutinas);
-	    		    
-	    	    }
-	    	    else if(pacienteActual!=null && pacienteActual.getObjetivo().equals("Volumen")) {
-	    	    	listaRutinas = rutinaRepository.findByTipo("Volumen");
-	    	    	model.addAttribute("listaRutinas", listaRutinas);
-	    	    }
-	            return "rutinas/menu_rutinas";
-	        } 
-	    }
-	    return "index";
-	}*/
-	
 	// ---- VENTANA CREAR RUTINA -------------------------------------------------------------------
 	@PostMapping("/crearRutina")
 	public String crearRutina(Model model) {
@@ -159,6 +110,13 @@ public class RutinaController {
     		objRutina.setEstado("Activo");
             rutinaRepository.save(objRutina);
             
+            Transaccion objTransaccion = new Transaccion();
+            objTransaccion.setFecha(LocalDateTime.now());
+            objTransaccion.setTipo("Creación");
+            objTransaccion.setUsuario(objUsuario);
+            objTransaccion.setRutina(objRutina);
+            transaccionRepository.save(objTransaccion);
+           
 	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
 	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
@@ -177,6 +135,13 @@ public class RutinaController {
 			@ModelAttribute("objRutina") Rutina objRutina,
 			Model model) {
 		
+		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+        if (objUsuario!=null) {
+        	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
+	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        model.addAttribute("esPaciente", esPaciente);
+	    } 
+		
 		Rutina detalleRutina = rutinaRepository.findByIdrutina(idrutina);
 		model.addAttribute("detalleRutina", detalleRutina);
 		
@@ -185,6 +150,7 @@ public class RutinaController {
 		return "rutinas/detalle_rutina";
 	}
 	
+	// ---- EDITAR RUTINA -------------------------------------------------------------------
 	@PostMapping("/editarRutina")
 	public String editarRutina(
 			@RequestParam("idrutina")int idrutina, 
@@ -197,7 +163,6 @@ public class RutinaController {
 		return "rutinas/editar_rutina";			
 	}
 	
-	// ---- VENTANA EDITAR RUTINA -------------------------------------------------------------------
 	@PostMapping("/actualizarRutina")
 	public String actualizarRutina(
 			HttpSession sesion,

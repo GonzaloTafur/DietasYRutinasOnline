@@ -51,3 +51,42 @@ button{
 hr{
 	color: black;
 }
+
+/*table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid black;
+    margin: 30px;
+}*/
+
+.deslisable {
+	max-height: 400px; /* Altura máxima de la tabla */
+	overflow: auto; /* Barra de desplazamiento vertical */
+	border: 1px solid #ccc; /* Opcional: bordes */
+}
+
+table {
+	width: 100%; /* Ajustar la tabla al contenedor */
+	border-collapse: collapse; /* Quitar separación entre bordes */
+}
+
+th, td {
+	border: 1px solid #ddd; /* Bordes de las celdas */
+	padding: 8px; /* Espaciado interno */
+	text-align: left;
+	background-color: #d7ebee;
+}
+
+th {
+	background-color: #f4f4f4; /* Fondo para la cabecera */
+	position: sticky; /* Cabecera fija */
+	top: 0; /* Fijar cabecera al tope */
+}
+
+section{
+	margin: 70px;
+}
+
+tbody{
+	background-color: #d7ebee;
+}

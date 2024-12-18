@@ -12,12 +12,12 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="Transaccion")
+@Table(name="TransaccionGeneral")
 public class Transaccion {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idtransaccion")
+    @Column(name = "idtrangeneral")
     private int idregistro;
 
 	@Column(name="fechatrans")
@@ -30,17 +30,9 @@ public class Transaccion {
     @JoinColumn(name = "idusuario")
     private Usuario usuario;
 	
-	/*@ManyToOne
-    @JoinColumn(name = "idejercicio")
-    private Ejercicio ejercicio;*/
-	
 	@ManyToOne
     @JoinColumn(name = "idrutina")
     private Rutina rutina;
-	
-	/*@ManyToOne
-    @JoinColumn(name = "idalimento")
-    private Alimento alimento;*/
 	
 	@ManyToOne
 	@JoinColumn(name = "iddieta")
@@ -53,6 +45,14 @@ public class Transaccion {
 	@ManyToOne
     @JoinColumn(name = "idinfopaciente")
     private InfoPaciente infopaciente;
+
+	@ManyToOne
+    @JoinColumn(name = "idreunion")
+    private Reunion reunion;
+	
+	@ManyToOne
+    @JoinColumn(name = "idasistencia")
+    private Asistencia asistencia;
 
 	public int getIdregistro() {
 		return idregistro;
@@ -117,5 +117,22 @@ public class Transaccion {
 	public void setInfopaciente(InfoPaciente infopaciente) {
 		this.infopaciente = infopaciente;
 	}
+
+	public Reunion getReunion() {
+		return reunion;
+	}
+
+	public void setReunion(Reunion reunion) {
+		this.reunion = reunion;
+	}
+
+	public Asistencia getAsistencia() {
+		return asistencia;
+	}
+
+	public void setAsistencia(Asistencia asistencia) {
+		this.asistencia = asistencia;
+	}
+
 	
 }

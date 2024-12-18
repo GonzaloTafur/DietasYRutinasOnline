@@ -28,7 +28,7 @@
 
                 <div class="mb-3" th:value="${detalleDieta}">
                 
-                    <span th:text="${detalleDieta.nombre}"></span>
+                    <h2 th:text="${detalleDieta.nombre}"></h2>
           			<br>
           			
           			<label class="form-label">Objetivo:</label>
@@ -44,13 +44,16 @@
                             <i class="bx bx-edit-alt me-2"></i>
                             <span th:text="${detalleDieta.nutriologo.nombres}"></span>
                         	<span th:text="${detalleDieta.nutriologo.apellidos}"></span>
-                    </a>
-                    
+                    </a>  
                 </div>
                 
-                <div>
-                	<h3>Alimentos incluidos</h3>
-                </div>
+                <div><h3>Condicion</h3>
+    				<div th:each="condicion : ${detalleDieta.condicion}">
+    					<p th:text="${condicion.nombre}"></p>
+    				</div>
+				</div>
+                
+                <div><h3>Alimentos incluidos</h3></div>
                 <table class="pure-table">
                     <thead>
                         <tr>
@@ -70,20 +73,6 @@
                         </tr> 
                     </tbody>
                 </table>
-
-
-			<!--<form 
-			th:if="${pacienteActual}" 
-			th:action="@{/dieta/seguirDieta2}" 
-			th:object="${objInfoPaciente}" 
-			th:method="POST" >
-			
-			 <span class="alert" th:if="${exito}" th:text="${exito}"></span> 
-            	<input type="hidden" name="iddieta" th:value="${detalleDieta.iddieta}" />
-            	<button type="submit" class="pure-button pure-button-primary">
-        			¿Te interesa hacer esta Dieta?
-        		</button>
-			</form>-->
 			
             <form th:if="${esCreador}" th:action="@{/dieta/editarDieta}" th:method="POST">
             	<input type="hidden" name="iddieta" th:value="${detalleDieta.iddieta}" />

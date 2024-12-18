@@ -4,6 +4,7 @@ import java.sql.Date;
 import java.util.List;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -12,6 +13,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -28,14 +30,6 @@ public class Usuario {
 	@ManyToOne
     @JoinColumn(name = "idtipousu")
     private TipoUsuario tipousuario;
-
-	/*@Override
-	public String toString() {
-		return "Usuario [idusuario=" + idusuario + ", tipousuario=" + tipousuario.toString() + ",\n nomusuario=" + nomusuario
-				+ ", apepaterno=" + apepaterno + ", apematerno=" + apematerno + ", fechanacimiento=" + fechanacimiento
-				+ ", nacionalidad=" + nacionalidad + ", sexo=" + sexo + ", estusuario=" + estusuario + ", correo="
-				+ correo + ", password=" + password + "]";
-	}*/
 
 	@Column(name = "nomusuario")
     private String nombres;
@@ -64,17 +58,7 @@ public class Usuario {
     @Column(name = "password")
     private String password;
 
-    /*@OneToMany
-    @JoinTable(
-        name = "TransaccionUsuario",
-        joinColumns = @JoinColumn(name = "idusuario", referencedColumnName = "idusuario"),
-        inverseJoinColumns = @JoinColumn(name = "idtransaccion", referencedColumnName = "idtransaccion")
-    )
-    private Set<TransaccionUsuario> transaccion;*/
     
-    @OneToMany(mappedBy="usuario", fetch=FetchType.EAGER)
-    private List<TransaccionUsuario> transaccion;
-
 	public int getIdusuario() {
 		return idusuario;
 	}
@@ -161,14 +145,6 @@ public class Usuario {
 
 	public void setPassword(String password) {
 		this.password = password;
-	}
-	
-	public List<TransaccionUsuario> getTransaccion() {
-		return transaccion;
-	}
-
-	public void setTransaccion(List<TransaccionUsuario> transaccion) {
-		this.transaccion = transaccion;
 	}
 
     

@@ -23,14 +23,11 @@
 		<section>
             <h2>Rutinas</h2>  
 
-        <div class="conttabla">
         <span th:if="${finalizado}" th:text="${finalizado}"></span>
         <span class="alert" th:if="${excepcion}" th:text="${excepcion}"></span>
        	 <span class="span" th:if="${exito}" th:text="${exito}"></span>
         
-        <div>
-            <table class="pure-table">
-                
+        <div class="deslisable">
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list">
                         <li class="pure-menu-item pure-menu-selected">
@@ -41,7 +38,8 @@
                         </li>
                     </ul>
                 </div>
-
+                
+		<table class="pure-table">
             <thead>
                 <tr>
                     <th>Nombre de la Rutina</th>
@@ -50,7 +48,6 @@
                     <th>Nivel</th>
                     <th>Descripción</th>
                     <th>Acciones</th>
-                    <!--  <th>¿Para ti?</th>-->
                 </tr>
             </thead>
         
@@ -61,64 +58,25 @@
                 	<td><span th:text="${rutina.parteCuerpo}"></span></td>
                 	<td><span th:text="${rutina.nivel}"></span></td>
                 	<td><span th:text="${rutina.descripcion}"></span></td>
-                <!--<td>
-                    <div class="dropdown">
-                        <a th:href="@{/ordenCompra/ver/{id} (id=${ordenCompra.id})}">
-                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
-                    </div>
-                </td>-->
-                <td>
-                    <div class="dropdown">
-                        <a th:href="@{/rutina/verDetalleRutina(idrutina=${rutina.idrutina})}">
-                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
-                    </div>
-                    <br>
-                    
-                    <!--<form th:if="${esPaciente}" 
-                    th:action="@{/rutina/seguirRutina(idrutina=${rutina.idrutina})}" method="POST">
-            			<button type="submit" class="pure-button pure-button-primary">
-            			Seguir Rutina</button>
-            		</form>
+                <td><a th:href="@{/rutina/verDetalleRutina(idrutina=${rutina.idrutina})}">Ver detalles</a><br>
                 </td>
-                
-                  <td th:if="${esPaciente}">
-                    <div class="dropdown">
-                        <a th:href="@{/rutina/verDetalleRutina(idrutina=${rutina.idrutina})}">
-                            <i class="bx bx-edit-alt me-2"></i>Seguir Rutina</a>
-                    </div>-->
-                </td>
-                	<!--<td><span class="alert" th:if="${condicionRutina}">
-                	No Recomendado para ti, empieza con una rutina para principiantes</span></td>
-                  <td><span class="alert" th:text="${listaRutinas}"></span></td>-->
-                </tr>
-                
+                </tr> 
             </tbody>
             </table>
 
-			<form th:if="${!esPaciente}" th:action="@{/rutina/crearRutina}" method="POST">
+        </div>
+        <form th:if="${!esPaciente}" th:action="@{/rutina/crearRutina}" method="POST">
             	<button type="submit" class="pure-button pure-button-primary">
             	Crear Nueva rutina</button>
             </form>
 
     		<a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
-
-        </div>
-    	</div>
     </section>
+    
 	</main>
     <footer>
 		<p class="p-footer">2024. Todos los derechos reservados.</p>
 	</footer>
 	
-	<script type="text/javascript">
-		function myFunction() {
-  			var x = document.getElementById("myTopnav");
-  			if (x.className === "topnav") {
-    			x.className += " responsive";
-  			} else {
-    		x.className = "topnav";
-  			}
-		}
-	</script>
 </body>
 </html>

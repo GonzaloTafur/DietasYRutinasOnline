@@ -14,113 +14,79 @@
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
 	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+	
+	<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+	
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 </head>
 <body>
         <main>
             <section>
                 <h2>Cuestionario</h2>
-                <form th:action="@{/usuario/grabarCuestionario}" 
+                <form class="pure-form pure-form-stacked" 
+                	th:action="@{/usuario/grabarCuestionario}" 
                       th:object="${objCuestionario}"
                       method="POST" >
     
                     <span class="span">Este cuestionario nos ayudara a saber más de ti.<br>
-                        Si no sabe como responder dale click a "Omitir por ahora". <br>
-                        Puede responderlo en cualquier momento.
+                        También puede editarlo para hacer seguimiento.
                     </span>
                     
                     <input type="hidden" name="usuRegistrado" th:value="${usuRegistrado}"/>
                     
     				<span class="span" th:if="${exito}" th:text="${usuRegistrado}"></span>
-                    <!--<label for="multi-last-name">Con que frecuencia haces ejercicio</label>
-                    <input 
-                            type="text" 
-                            id="multi-last-name"
-                            th:field="*{frecEjercicios}" 
-                            />-->
                             
-                    <label for="percentage">¿Con que frecuencia haces ejercicio?</label>        
+                    <label for="percentage">¿Con que frecuencia haces ejercicios?</label>        
 					<select id="percentage" name="frecEjercicios">
 						<option th:value="'A veces o nada'" selected="selected">A veces o nada</option>
-    					<option th:value="'30 minutos a diario'">30 o 40 minutos a diario</option>
+    					<option th:value="'30 minutos a diario'">30 minutos a diario</option>
     					<option th:value="'1 hora a diario'">1 hora a diario</option>
+    					<option th:value="'1 hora algunos dias'">1 hora algunos días</option>
     					<option th:value="'2 horas o más'">2 horas o más</option>
-    					<option th:value="'Semanalmente'">Semanalmente/dos o tres días a la semana</option>
+    					<option th:value="'Semanalmente'">Semanalmente</option>
 					</select>
-    
-                    <!--
-                    <input 
-                            type="text" 
-                            id="multi-last-name"
-                            th:field="*{alergia}" 
-                            />-->
+
 					<label for="percentage">¿Tienes una condicion alimenticia?</label>
 					<select id="percentage" name="condicion">
-						<option th:value="'Nada'" selected="selected">Nada</option>
+						<option th:value="'Ninguna'" selected="selected">Ninguna</option>
     					<option th:value="'Gluten'">Gluten</option>
     					<option th:value="'Lacteos'">Lacteos</option>
     					<option th:value="'Vegano'">Vegano</option>
-    					<option th:value="'Otro'">Otro</option>
+    					<option th:value="'Otra'">Otra</option>
 					</select>
-    
-                    <label for="nombres_apellidos">Peso corporal</label>
-                    <input 
-                            type="number" 
-                            id="multi-last-name"
-                            th:field="*{pesoCorporal}"
-                            step="0.01"
-                            />
-                            
-                    <label for="estatura">Estatura</label>
-                    <input 
-                            type="number" 
-                            id="multi-last-name"
-                            th:field="*{estatura}"
-                            step="0.01"
-                            />
-    
-                    <label for="nombres_apellidos">Perímetro de cintura</label>
-                    <input 
-                            type="number" 
-                            id="multi-last-name"
-                            th:field="*{perimCintura}"
-                            step="0.01"
-                            />
-    
-                    <label for="nombres_apellidos">Perímetro de cadera</label>
-                    <input 
-                            type="number" 
-                            id="multi-last-name"
-                            th:field="*{perimCadera}"
-                            step="0.01"
-                            />
-    
-                    <label for="nombres_apellidos">Perímetro de muslo</label>
-                    <input 
-                            type="number" 
-                            id="multi-last-name"
-                            th:field="*{perimMuslo}" 
-                            step="0.01"
-                            />
-    
-                    <label for="nombres_apellidos">Perímetro de brazo/bicep</label>
-                    <input 
-                            type="number" 
-                            id="multi-last-name"
-                            th:field="*{perimBrazo}"
-                            step="0.01"
-                            />
-    
-                    <label for="mensaje">¿Tienes un objetivo?</label>
+					
+					<label for="mensaje">¿Tienes un objetivo?</label>
                     <select id="percentage" name="objetivo">
 						<option th:value="'Volumen'" selected="selected">Volumen</option>
     					<option th:value="'Deficit'">Deficit</option>
+    					<option th:value="'Mejorar Habitos'">Ninguno, solo cambiar y mejorar mis habitos</option>
 					</select>
+					
+					<br>
+					<span class="span">Si aún no sabe sus medidas, puede saltarte esta parte y luego llenarlas en otro momento.</span>
+					
+                    <label for="nombres_apellidos">Peso corporal</label>
+                    <input type="number" id="multi-last-name" th:field="*{pesoCorporal}" step="0.01" />
+                            
+                    <label for="estatura">Estatura</label>
+                    <input type="number"  id="multi-last-name" th:field="*{estatura}" step="0.01"/>
     
-                    <input type="submit" value="Grabar e ir al menú">
-                    
-                    <a th:href="@{/usuario/omitir}">Omitir por ahora</a>
-                    
+                    <label for="nombres_apellidos">Perímetro de cintura</label>
+                    <input  type="number"  id="multi-last-name"th:field="*{perimCintura}" step="0.01" />
+    
+                    <label for="nombres_apellidos">Perímetro de cadera</label>
+                    <input type="number" id="multi-last-name" th:field="*{perimCadera}" step="0.01" />
+    
+                    <label for="nombres_apellidos">Perímetro de muslo</label>
+                    <input type="number" id="multi-last-name" th:field="*{perimMuslo}" step="0.01"  />
+    
+                    <label for="nombres_apellidos">Perímetro de brazo/bicep</label>
+                    <input  type="number"  id="multi-last-name" th:field="*{perimBrazo}"step="0.01"  /> 
+    
+                    <input type="submit" value="Grabar">
+                   
                 </form>
             </section>
         </main>

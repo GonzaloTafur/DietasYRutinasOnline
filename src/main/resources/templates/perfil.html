@@ -65,18 +65,61 @@ xmlns:th="http://www.thymeleaf.org">
           <span th:text="${objUsuario.sexo}"></span></p>
           <br>
           
-          <p>Me uní en: </p>
+          <!--<p>Me uní en: </p>
            <p th:each="transaccion: ${objUsuario.transaccion}">
     		<span th:text="${transaccion.registro}"></span>  
-    		<!--<span th:text="${#dates.format(transaccion.registro, 'yyyy-MM-dd')}"></span>-->
-    		
-			</p>
+    		<span th:text="${#dates.format(transaccion.registro, 'yyyy-MM-dd')}"></span>
+			</p>--> 
 			<br>
           
         </div>
-        
       </div><br>
-
+		
+	  <div class="w3-white w3-text-grey w3-card-4" th:if="${!esPaciente}">
+              
+                <div class="perfil">
+                  <div class="w3-text-black">
+                    <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+                        Reuniones
+                    </h2>
+                    
+                    <div th:each="reunion: ${objReunion}">
+                    	<p th:text="${reunion.motivo}"></p>
+                    	<p th:text="${reunion.dia}"></p>  
+                    	<p th:text="${reunion.hora}"></p>                 
+                    	<!--  <button class="pure-button pure-button-primary">Ingresar vía Zoom</button>-->
+                    	<a type="button" class="pure-button pure-button-primary" th:href="${reunion.enlace}">Enlace de la reunión</a>
+                    	<!--<a type="button" class="pure-button pure-button-secondary" th:href="@{/reunion/pacientesAsistidos}">Pacientes asistidos</a>
+                    	<a type="button" class="pure-button pure-button-secondary" 
+                    		th:href="@{/reunion/pacientesAsistidos(idreunion=${objReunion.idreunion})}">Pacientes asistidos</a>-->
+                    	<a th:href="@{/reunion/desactivarReunion/{idreunion} (idreunion=${reunion.idreunion})}" 
+                    		class="btn btn-danger btn-circle btn-sm">Desactivar Reunion</a>
+                    	<hr>
+                    	<br>
+                    </div>
+                    <a type="button" class="pure-button pure-button-secondary" th:href="@{/reunion/pacientesAsistidos}">Pacientes asistidos</a>
+                    
+                    <a th:href="@{/reunion/crearReunion}">Programar una nueva reunión</a>
+                  </div>
+                  <br>
+                  
+                </div>
+                
+              </div><br>
+              
+              <div class="w3-white w3-text-grey w3-card-4" th:if="${esPaciente}">
+            <div class="perfil">
+              <div class="w3-text-black">
+                <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+                    Medidas de seguimiento
+                </h2>
+                <a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/verSeguimiento}">Ver seguimiento</a>
+              </div>
+              <br>
+            </div>
+          </div><br>
+            
+              
     <!-- End Left Column -->
     </div>
 
@@ -84,12 +127,12 @@ xmlns:th="http://www.thymeleaf.org">
     <!-- Right Column -->
     
     <div class="w3-twothird">
-    
     	<div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${esPaciente}" th:value="miInfo">
     	
         <h2 class="w3-text-grey w3-padding-16">
             <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Información</h2>
 			<span class="span" th:if="${exito}" th:text="${exito}"></span>
+			<span class="alert" th:if="${inactivo}" th:text="${inactivo}"></span>
         <div>
         
         <!-- SI EL PACIENTE NO TIENE INFO -->
@@ -105,9 +148,10 @@ xmlns:th="http://www.thymeleaf.org">
           
         <!-- SI EL PACIENTE TIENE INFO -->
         <div th:if="${miInfo!=null}">
-        
+ 
     <div class="w3-container w3-card w3-white w3-margin-bottom">
    	<span th:if="${mensaje}" th:text="${mensaje}"></span>
+   	
       <h2 class="w3-text-grey w3-padding-16">
           Dieta(s) que estoy haciendo</h2>
         <!--<div class="w3-container" th:if="${miInfo.dieta!=null}">-->
@@ -129,8 +173,7 @@ xmlns:th="http://www.thymeleaf.org">
           <td><span th:text="${dieta.descripcion}"></span></td>
           <td>
               <div class="dropdown">
-                  <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">
-                      <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                  <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">Ver detalles</a>
               </div>
               <br>
               
@@ -150,7 +193,9 @@ xmlns:th="http://www.thymeleaf.org">
 		</a>         
     </div>
     
-    
+    		<h3>Objetivo nutricional:</h3>
+			<p th:text="${miInfo.objetivo}">
+            <hr>
         
           <h3>Frecuencia de ejercicios:</h3>        
     	  <p th:text="${miInfo.frecEjercicios}">
@@ -183,11 +228,7 @@ xmlns:th="http://www.thymeleaf.org">
                     <h3>Perímetro de brazo/bicep:</h3>
 					<p th:text="${miInfo.perimBrazo}">
     				<hr>
-    				
-                    <h3>Objetivo nutricional:</h3>
-					<p th:text="${miInfo.objetivo}">
-            		<hr>
-            		
+    					
             </div>
             
         </div>
@@ -195,13 +236,14 @@ xmlns:th="http://www.thymeleaf.org">
           <!--<form th:action="@{/home/editarInfo}" method="POST">
             <button type="submit" class="pure-button pure-button-primary">
             Editar mi información</button>
-          </form>-->
+          </form>
           <form th:action="@{/perfil/editarInfo}" th:method="POST">
             	<input type="hidden" name="idinfopaciente" th:value="${miInfo.idinfopaciente}" />
             	<button type="submit" class="pure-button pure-button-primary">
         			Editar mi información de paciente
         		</button>
-			</form>
+			</form>-->
+			<a type="submit" th:href="@{/perfil/editarInfo}" class="pure-button pure-button-primary">Editar mi información de paciente</a>
       </div>
       
 

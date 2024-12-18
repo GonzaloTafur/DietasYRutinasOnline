@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+     <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <title>Nuestros doctores</title>
+</head>
+<body>
+      <main>
+		<section style="background-color: white;">
+            <h2>Reuniones disponibles</h2>  
+            
+			<div th:each="reunion : ${listaReuniones}">
+    			<p><h3 th:text="${reunion.motivo}"></h3></p>
+    			<p th:text="${reunion.dia}"></p>                       
+    			<p th:text="${reunion.hora}"></p>
+    			
+    			
+    			
+    		<!--  <span th:if="${estadoAsistencia[reunion.idreunion] == null}">Asistirás a esta reunión</span>-->
+            <p><a class="pure-button pure-button-secondary"
+            	th:if="${estadoAsistencia[reunion.idreunion] == 'Inactivo'}"
+               th:href="@{/reunion/confirmarAsistencia(idreunion=${reunion.idreunion})}">
+                Confirmar Asistencia
+            </a></p>
+            <br><br>
+            
+		
+    			<p><a class="pure-button pure-button-primary"
+    				th:if="${estadoAsistencia[reunion.idreunion] == 'Activo'}"
+       				th:href="${reunion.enlace}"
+       				target="_blank">
+        			Entrar a la reunión
+    			</a></p>
+    			<br><br>
+    			
+    		<p><a class="pure-button pure-button-secondary"
+               th:if="${estadoAsistencia[reunion.idreunion] == 'Activo'}"
+               th:href="@{/reunion/cancelarAsistencia(idreunion=${reunion.idreunion})}">
+                Cancelar Asistencia
+            </a></p>
+    		<br><br>
+    		
+    			<hr>
+			</div>
+			
+            
+        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
+    </section>
+	</main>
+    <footer>
+		<p class="p-footer">2024. Todos los derechos reservados.</p>
+	</footer>
+	
+	
+</body>
+</html>

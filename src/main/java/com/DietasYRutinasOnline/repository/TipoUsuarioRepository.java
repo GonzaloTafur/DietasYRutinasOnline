@@ -9,9 +9,6 @@ import com.DietasYRutinasOnline.entity.TipoUsuario;
 
 @Repository
 public interface TipoUsuarioRepository extends JpaRepository<TipoUsuario, Integer>{
-	//List<TipoUsuario> findAll();
-	//List<TipoUsuario> findByEsttipousu(String esttipousu);
-	//TipoUsuario findByNomtipousu(String nomtipousu);
 	TipoUsuario findByIdtipousu(int idtipousu);
 	TipoUsuario findByNomtipousu(String nomtipousu);
 }

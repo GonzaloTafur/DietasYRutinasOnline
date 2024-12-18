@@ -27,36 +27,28 @@ xmlns:th="http://www.thymeleaf.org">
     <!-- PERFIL -->
     <div class="w3-third">
     <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}"> <- Retroceder</a>
-      <div class="w3-white w3-text-grey w3-card-4" th:value="objUsuario">
+      <div class="w3-white w3-text-grey w3-card-4" th:value="suPerfil">
       
         <div class="perfil">
           <img src="/images/ave.jpg" style="width:100%" alt="Avatar">
           <div class="w3-text-black">
             <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
-            <span th:text="${objUsuario.nombres}"></span>
-            <span th:text="${objUsuario.apellidos}"></span>
+            <span th:text="${suPerfil.nombres}"></span>
+            <span th:text="${suPerfil.apellidos}"></span>
             </h2>
-            <p class="w3-text-grey" th:text="${objUsuario.biografia}"></p>     
+            <p class="w3-text-grey" th:text="${suPerfil.biografia}"></p>     
           </div>
           <br>
-          
-          <!--<a th:href="@{/home/editarPerfil}" th:method="POST">Editar perfil</a>-->
-          <form th:action="@{/perfil/editarPerfil}" th:method="POST">
-            	<!--  <input type="hidden" name="idcuestionario" th:value="${miInfo.idcuestionario}" />-->
-            	<button type="submit" class="pure-button pure-button-primary">
-        			Editar Perfil
-        		</button>
-			</form> 
-          <span class="span" th:if="${actualizado}" th:text="${actualizado}"></span>
         </div>
+        
         <div class="w3-container">
-          <p th:text="${objUsuario.fechanacimiento}">
+          <p th:text="${suPerfil.fechanacimiento}">
           <i class="fa fa-briefcase fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
           
-          <p th:text="${objUsuario.nacionalidad}">
+          <p th:text="${suPerfil.nacionalidad}">
           <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
           
-          <p th:text="${objUsuario.sexo}">
+          <p th:text="${suPerfil.sexo}">
           <span></span>
           <i class="fa fa-home fa-fw w3-margin-right w3-large w3-text-teal"></i></p>
           
@@ -70,6 +62,45 @@ xmlns:th="http://www.thymeleaf.org">
         </div>
         
       </div><br>
+      
+      <div class="w3-white w3-text-grey w3-card-4">
+            <div class="perfil">
+              <div class="w3-text-black">
+                <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+                    Total de citas asistidas:
+                </h2>
+                <h3 th:text="${asistencias}"></h3>
+              </div>
+              <br>
+            </div>
+          </div><br>
+      
+      <div class="w3-white w3-text-grey w3-card-4">
+            <div class="perfil">
+              <div class="w3-text-black">
+                <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+                    Medidas de seguimiento
+                </h2>
+                <a type="button" class="pure-button pure-button-primary" 
+                   th:href="@{/reunion/verSuSeguimiento(idusuario=${suPerfil.idusuario})}">Visualizar</a> 
+              </div>
+              <br>
+            </div>
+          </div><br>
+          
+          
+       <div class="w3-white w3-text-grey w3-card-4">
+            <div class="perfil">
+              <div class="w3-text-black">
+                <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+                    Horario
+                </h2>
+                <a type="button" class="pure-button pure-button-primary" 
+                   th:href="@{/reunion/verSuHorario(idusuario=${suPerfil.idusuario})}">Visualizar</a> 
+              </div>
+              <br>
+            </div>
+          </div><br>
 
     <!-- End Left Column -->
     </div>
@@ -79,80 +110,64 @@ xmlns:th="http://www.thymeleaf.org">
     
     <div class="w3-twothird">
     
-    	<div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${esPaciente}" th:value="miInfo">
+    	<div class="w3-container w3-card w3-white w3-margin-bottom" th:value="suInfo">
+    	
+    	<!--<a type="button" class="pure-button pure-button-secondary" th:href="@{/reunion/verSuSeguimiento}">Ver seguimiento</a>-->
     	
         <h2 class="w3-text-grey w3-padding-16">
             <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Información</h2>
-			<span class="span" th:if="${exito}" th:text="${exito}"></span>
         <div>
         
-        <!-- SI EL PACIENTE NO TIENE INFO -->
-        <div th:if="${miInfo==null}">
-        <h3>¿Aún no has tienes información sobre ti? <br>
-        Recuerda llenar y actualizar nuestro cuestionario</h3>
-        <form th:action="@{/perfil/llenarCuestionario}" th:method="POST">
-            	<button type="submit" class="pure-button pure-button-primary">
-        			Hacer cuestionario
-        		</button>
-			</form>
-        </div>
           
         <!-- SI EL PACIENTE TIENE INFO -->
-        <div th:if="${miInfo!=null}">
+        <div>
+        
+        	<h3>Objetivo nutricional:</h3>
+					<p th:text="${suInfo.objetivo}">
+            		<hr>
+            		
           <h3>Frecuencia de ejercicios:</h3>        
-    	  <p th:text="${miInfo.frecEjercicios}">
+    	  <p th:text="${suInfo.frecEjercicios}">
     	  <hr>
     	  
 					<h3>Condición alimenticia:</h3>
-    				<p th:text="${miInfo.condicion}">
+    				<p th:text="${suInfo.condicion}">
     				<hr>
     				
                     <h3>Peso corporal:</h3>
-					<p th:text="${miInfo.pesoCorporal}">
+					<p th:text="${suInfo.pesoCorporal}">
     				<hr>
     				
     				<h3>Estatura:</h3>
-					<p th:text="${miInfo.estatura}">
+					<p th:text="${suInfo.estatura}">
     				<hr>
     				
                     <h3>Perímetro de cintura:</h3>
-					<p th:text="${miInfo.perimCintura}">
+					<p th:text="${suInfo.perimCintura}">
     				<hr>
     				
                     <h3>Perímetro de cadera:</h3>
-					<p th:text="${miInfo.perimCadera}">
+					<p th:text="${suInfo.perimCadera}">
     				<hr>
     				
                     <h3>Perímetro de muslo:</h3>
-                    <p th:text="${miInfo.perimMuslo}">
+                    <p th:text="${suInfo.perimMuslo}">
                     <hr>
                     
                     <h3>Perímetro de brazo/bicep:</h3>
-					<p th:text="${miInfo.perimBrazo}">
+					<p th:text="${suInfo.perimBrazo}">
     				<hr>
-    				
-                    <h3>Objetivo nutricional:</h3>
-					<p th:text="${miInfo.objetivo}">
-            		<hr>
-            		
+
             </div>
             
         </div>
-        <div th:if="${miInfo!=null}" class="w3-container">
-          <!--<form th:action="@{/home/editarInfo}" method="POST">
-            <button type="submit" class="pure-button pure-button-primary">
-            Editar mi información</button>
-          </form>-->
-          
-          <form th:action="@{/home/editarInfo}" th:method="POST">
-            	<input type="hidden" name="idinfopaciente" th:value="${miInfo.idinfopaciente}" />
-            	<button type="submit" class="pure-button pure-button-primary">
-        			Editar mi información
-        		</button>
-			</form>
-			
-      </div>
-      
+    </div>
+   </div>
+    	
+    	
+    	
+    	 <div class="w3-twothird">
+    	<div class="w3-container w3-card w3-white w3-margin-bottom" th:value="suInfo">
 
    	<div class="w3-container w3-card w3-white w3-margin-bottom">
    	<span th:if="${mensaje}" th:text="${mensaje}"></span>
@@ -171,21 +186,15 @@ xmlns:th="http://www.thymeleaf.org">
       </thead>
   
       <tbody class="pure-table-border">
-          <tr th:each="dieta: ${miInfo.dieta}">
+          <tr th:each="dieta: ${suInfo.dieta}">
           <td><span th:text="${dieta.nombre}"></span></td>
           <td><span th:text="${dieta.objetivo}"></span></td>
           <td><span th:text="${dieta.descripcion}"></span></td>
           <td>
               <div class="dropdown">
-                  <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">
-                      <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                  <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">Ver detalles</a>
               </div>
-              <br>
-              
-              <form th:action="@{/dieta/dejarSeguirDieta(iddieta=${dieta.iddieta})}" method="POST">
-            			<button type="submit" class="pure-button pure-button-secondary">
-            			Dejar de seguir Dieta</button>
-            		</form>
+              <br> 
           </td>
           
           </tr> 
@@ -193,14 +202,9 @@ xmlns:th="http://www.thymeleaf.org">
  
           </table>        
     </div>
-    
-    <a th:href="@{/home/verDietas}" type="button">
-			Ver otras dietas
-		</a>
 		
     </div>
     	</div>
-    	
 
     <!-- End Right Column -->
     </div>

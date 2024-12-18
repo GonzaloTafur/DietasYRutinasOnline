@@ -11,7 +11,7 @@ import com.DietasYRutinasOnline.entity.Ejercicio;
 @Repository
 public interface EjercicioRepository extends JpaRepository<Ejercicio, Integer>{
 	List<Ejercicio> findByGrupomuscular(String grupomuscular);
-	//List<Ejercicio> findByIdejercicio(int idejercicio);
+
 	@Query("SELECT DISTINCT e.grupomuscular FROM Ejercicio e")
 	List<String> findDistinctGrupomuscular();
 }

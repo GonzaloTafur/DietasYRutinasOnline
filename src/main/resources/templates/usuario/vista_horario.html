@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th="http://www.thymeleaf.org">
+<title>Horario de rutinas</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" th:href="@{https://www.w3schools.com/w3css/4/w3.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    
+<body>
+
+    <div class="w3-container">
+    <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}"> <- Retroceder</a>
+    
+        <h2>Horario de rutinas</h2>
+        <br>
+        
+        <div class="w3-row-padding" style="margin: 40px;">
+        
+            <div th:each="horario: ${suHorario}">
+              <div class="w3-card w3-container">
+              <h2 th:text="${horario.rutina.nombre}"></h2>
+              <a th:href="@{/rutina/verDetalleRutina(idrutina=${horario.rutina.idrutina})}">Ver detalles</a>
+              <br>
+              <br>
+              <div class="w3-col s6">
+              	<p>Descanso por serie: <span th:text="${horario.descaSerie}"></span></p>
+                <p>Descanso por ejercicio: <span th:text="${horario.descaEjercicio}"></span></p>
+                <h3><span th:text="${horario.dia}"></span></h3>
+                <br>
+              </div>
+              <div class="w3-col s6">
+                <h3>Periodo:
+                <span th:text="${horario.periodo}"></span>
+                </h3>
+              </div>
+              
+              <!--<table class="pure-table">
+                        <thead>
+                            <tr>
+                                <th>Nombre del Ejercicio</th>
+                                <th>Grupo Muscular</th>
+                                <th>Tipo</th>
+                                <th>Número de Series</th>
+                                <th>Número de Repeticiones</th>
+                                <th>Descripción</th>
+                            </tr>
+                        </thead>
+    
+                        <tbody class="pure-table-border">
+                            <tr th:each="ejercicio: ${suHorario.rutina.ejercicio}">
+                                <td><span th:text="${rutina.ejercicio.nombre}"></span></td>
+                                <td><span th:text="${rutina.ejercicio.grupomuscular}"></span></td>
+                                <td><span th:text="${rutina.ejercicio.tipo}"></span></td>
+                                <td><span th:text="${rutina.ejercicio.series}"></span></td>
+                                <td><span th:text="${rutina.ejercicio.repeticiones}"></span></td>
+                                <td><span th:text="${rutina.ejercicio.descripcion}"></span></td>
+                            </tr> 
+                        </tbody>
+                    </table>-->
+                    
+              </div>
+              <hr> 
+            </div>
+          
+        </div>
+        
+
+</body>
+</html>

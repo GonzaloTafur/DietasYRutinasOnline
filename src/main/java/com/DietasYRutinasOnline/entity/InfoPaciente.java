@@ -1,6 +1,7 @@
 package com.DietasYRutinasOnline.entity;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -25,19 +26,9 @@ public class InfoPaciente {
     @Column(name = "idinfopaciente")
     private int idinfopaciente;
 
-    @OneToOne
-    //@ManyToOne
-    //@MapsId("idusuario")
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idusuario")
     private Usuario paciente;
-    
-	/*@Override
-	public String toString() {
-		return "Cuestionario [idcuestionario=" + idcuestionario + ", paciente=" + paciente.toString() + ", frecEjercicios="
-				+ frecEjercicios + ", alergia=" + alergia + ", pesoCorporal=" + pesoCorporal + ", perimCintura="
-				+ perimCintura + ", perimCadera=" + perimCadera + ", perimMuslo=" + perimMuslo + ", perimBrazo="
-				+ perimBrazo + ", objetivo=" + objetivo + "]";
-	}*/
 
 	@Column(name="frecEjercicios")
 	private String frecEjercicios;
@@ -65,10 +56,12 @@ public class InfoPaciente {
 	
 	@Column(name="objetivo")
 	private String objetivo;
-
-	//@ManyToOne
-	//@JoinColumn(name = "iddieta")
-    //private Dieta dieta;
+	
+	@Column(name="estinfo")
+	private String estado;
+	
+	@Column(name="fechainfo")
+	private LocalDateTime fecha;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -163,6 +156,22 @@ public class InfoPaciente {
 
 	public void setObjetivo(String objetivo) {
 		this.objetivo = objetivo;
+	}
+
+	public String getEstado() {
+		return estado;
+	}
+
+	public void setEstado(String estado) {
+		this.estado = estado;
+	}
+
+	public LocalDateTime getFecha() {
+		return fecha;
+	}
+
+	public void setFecha(LocalDateTime fecha) {
+		this.fecha = fecha;
 	}
 
 	public List<Dieta> getDieta() {

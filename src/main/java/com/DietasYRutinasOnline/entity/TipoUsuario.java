@@ -16,12 +16,6 @@ public class TipoUsuario {
     @Column(name = "idtipousu")
     private int idtipousu;
 
-    @Override
-	public String toString() {
-		return "TipoUsuario [idtipousu=" + idtipousu + ", nomtipousu=" + nomtipousu + ", esttipousu=" + esttipousu
-				+ "]";
-	}
-
 	@Column(name = "nomtipousu")
     private String nomtipousu;
 

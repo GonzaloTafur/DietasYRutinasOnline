@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en"
+     xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="utf-8">
+	<title>Ajustes de usuario</title>
+	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
+	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
+	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
+	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
+	
+	<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    
+</head>
+<body>
+	<main>
+		<section>
+		
+			<a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}"> <- Retroceder</a>
+		
+			<h2>Ajustes de cuenta</h2>
+			<br>
+			
+			<h3>Cambiar contraseña</h3>
+			<form class="pure-form pure-form-stacked"  
+					th:action="@{/usuario/nuevaContraseña}" 
+					th:object="${objUsuario}" 
+					method="POST">
+					
+				<!--  <label for="aligned-email">Correo Electronico</label>
+				<input type="email" id="aligned-email" name="correo" required=""/>-->
+
+				<label for="aligned-password">Nueva contraseña</label>
+				<input type="password" id="aligned-password" th:field="*{password}" minlength="8" required="">
+				
+				<label for="aligned-password">Confirmar contraseña</label>
+				<input type="password" id="aligned-password" name="repetirPassword" minlength="8" required="">
+
+				<span class="span" th:if="${error}" th:text="${error}"></span>
+                    
+				<input type="submit" value="Guardar">
+			</form>
+
+			<h3>Cambiar Correo electronico</h3>
+			<form class="pure-form pure-form-stacked" 
+			 	th:action="@{/usuario/cambiarCorreo}" 
+			 	th:object="${objUsuario}" 
+			 	method="POST">
+			 
+				<label for="aligned-email">Correo Electronico</label>
+				<input type="email" id="aligned-email" th:field="*{correo}" required=""/>
+
+				<span class="span" th:if="${errorcorreo}" th:text="${errorcorreo}"></span>
+                    
+				<input type="submit" value="Guardar">
+			</form>
+			
+			<h3>¿Quieres cerrar sesión?</h3>
+			<p><a type="button" 
+				class="pure-button pure-button-secondary" 
+				style="background-color:red; color:white" 
+				th:href="@{/usuario/cerrarSesion}">Cerrar Sesion</a></p>
+			
+		</section>
+	</main>
+
+	<footer>
+		<p class="p-footer">2024. Todos los derechos reservados.</p>
+	</footer>
+
+</body>
+</html>

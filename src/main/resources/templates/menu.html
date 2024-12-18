@@ -14,18 +14,25 @@
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
 	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+	
+	<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+	
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 </head>
 <body>
 	<header>
 		
 		<ul>
-            <!-- <li><a th:if="${esPaciente}" th:href="@{/home/perfilPaciente}">Perfil</a></li>
-            <li><a th:if="${!esPaciente}" th:href="@{/home/perfilNutriologo}">Perfil</a></li>-->
-            <li><a th:href="@{/home/verPerfil}">Perfil</a></li>
-            <li><a th:href="@{/home/ajustesCuenta}">Ajustes</a></li>
-            <li><a href="#">Notificaciones</a></li>
-            <li><a th:if="${esPaciente}" th:href="@{/home/verHorario}">Mi horario</a></li>
+            <li><a th:href="@{/home/verPerfil}">
+            	Perfil<i class="fa-solid fa-user"></i></a></li>
+            <li><a th:href="@{/home/ajustesCuenta}">
+            	Ajustes<i class="fa-solid fa-cog"></i></a></li>
+            <li><a th:href="@{/home/verNotis}">
+            	Notificaciones<i class="fa-solid fa-bell"></i></a></li>
+            <li><a th:if="${esPaciente}" th:href="@{/home/verHorario}">
+            	Mi horario<i class="fa-regular fa-calendar-days"></i></a></li>
           </ul>
 		
 	</header>
@@ -34,8 +41,24 @@
 			<h1>Bienvenido</h1>
 			<b th:if="${esPaciente}">En esta aplicación podrás mejorar tu estilo de vida, con rutinas y dietas que puedes descubrir tu mismo o por recomendación.</b>
 		</section>
+		
+		<section style="background-color: #d7ebee;" th:if="${esPaciente}">
+            <h2>Nutriologos</h2>
+            <img style="width: 500px;" th:src="@{/images/nutricionista.jpg}">
+            
+            
+            <div>
+            <br><br>
+            <p>Visita a nuestros nutriologos registrados y conocelos en medio de reuniones o citas según tus necesidades: 
+            <span><a type="button" th:href="@{/home/verNutriologos}" >Entrar</a></span>
+            </p>
+            <br>
+			
+			</div>
+        </section>
+		
 		<section>
-			<h2>Descubre</h2>
+			<h2 th:if="${esPaciente}">Nuestras Recomendaciones</h2>
 			<p th:if="${esPaciente}">Estas son listas creadas por usuarios nutriologos/instructores y están ajustada según tu información como paciente</p>
 			<div class="container-01">
 				<div>
@@ -58,9 +81,7 @@
 
 	</main>
 
-	<footer>
-		<p class="p-footer">2024. Todos los derechos reservados.</p>
-	</footer>
+
 	<!-- JS PARA MENU SUPERIOR -->
 	<script type="text/javascript">
 		function myFunction() {

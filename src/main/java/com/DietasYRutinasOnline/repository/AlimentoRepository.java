@@ -12,4 +12,5 @@ public interface AlimentoRepository extends JpaRepository<Alimento, Integer>{
 	List<Alimento> findByTipo(String tipo);
 	@Query("SELECT DISTINCT a.tipo FROM Alimento a")
 	List<String> findDistinctTipos();
+
 }

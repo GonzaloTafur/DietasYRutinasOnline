@@ -1,7 +1,7 @@
 package com.DietasYRutinasOnline.controller;
 
-
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import com.DietasYRutinasOnline.entity.Condicion;
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Ejercicio;
 import com.DietasYRutinasOnline.entity.InfoPaciente;
@@ -27,6 +29,7 @@ import com.DietasYRutinasOnline.entity.TipoUsuario;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.TransaccionUsuario;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.repository.CondicionRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
@@ -61,6 +64,13 @@ public class UsuarioController {
 	@Autowired
 	TransUsuarioRepository transUsuarioRepository;
 	
+	@Autowired
+	CondicionRepository condicionRepository;
+	
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+	
+	
 	@RequestMapping(value="/validarUsuario", method= RequestMethod.POST)
 	public String validarUsuario(
 			HttpServletRequest request, 
@@ -68,8 +78,10 @@ public class UsuarioController {
 			@RequestParam("password")String password, 
 			Model model) {
 		
-		Usuario objUsuario = usuarioRepository.findByCorreoAndPassword(correo, password);
-		if (objUsuario!=null) {
+		//Usuario objUsuario = usuarioRepository.findByCorreoAndPassword(correo, password);
+		Usuario objUsuario = usuarioRepository.findByCorreo(correo);
+		if (objUsuario!=null && passwordEncoder.matches(password, objUsuario.getPassword())) {
+		//if (objUsuario!=null) {
 			HttpSession sesion = request.getSession();
 			sesion.setAttribute("usuario", objUsuario);
 			
@@ -85,7 +97,6 @@ public class UsuarioController {
 	        	
 	            return "menu";
 	        }
-	        //model.addAttribute("esPaciente", false);
 	        
 	        TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 	        objTransUsuario.setLogin(LocalDateTime.now());
@@ -121,60 +132,62 @@ public class UsuarioController {
     		@ModelAttribute("nomtipousu") String nomtipousu,
     		Model model) {
 
-		Usuario correoExiste = usuarioRepository.findByCorreo(correo);
-		if (correoExiste!=null) {
-			model.addAttribute("error", "Hubo un error al llenar correo electronico, intente de nuevo.");
+		try {
+			Usuario correoExiste = usuarioRepository.findByCorreo(correo);
+			if (correoExiste!=null) {
+				model.addAttribute("error", "Hubo un error al llenar correo electronico, intente de nuevo.");
+				
+				List<TipoUsuario> listaTiposUsuario = tipoUsuarioRepository.findAll();
+				model.addAttribute("listaTiposUsuario", listaTiposUsuario);
+				
+				model.addAttribute("objUsuario", objUsuario);
+				return "registrar";
+	        }
+			String encryptedPassword = passwordEncoder.encode(objUsuario.getPassword());
+		    objUsuario.setPassword(encryptedPassword);
+			
+			objUsuario.setEstado("Activo");
+	        usuarioRepository.save(objUsuario);
+	        
+	        /*Transaccion objTransaccion = new Transaccion();
+	        objTransaccion.setFecha(LocalDateTime.now());
+	        objTransaccion.setTipo("CREACIÓN");
+	        objTransaccion.setUsuario(objUsuario);
+	        transaccionRepository.save(objTransaccion);*/
+	        
+	        HttpSession sesion = request.getSession();
+			sesion.setAttribute("usuario", objUsuario);
+			
+			TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
+	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        model.addAttribute("esPaciente", esPaciente);
+	        
+	        if(esPaciente) {
+	        	InfoPaciente objCuestionario = new InfoPaciente();
+	            model.addAttribute("objCuestionario", objCuestionario);
+	            //model.addAttribute("usuRegistrado", objUsuario.getIdusuario());
+	            
+	            TransaccionUsuario objTransUsuario = new TransaccionUsuario();
+	            //objTransUsuario.setRegistro(LocalDateTime.now());
+	            objTransUsuario.setUsuario(objUsuario);
+	            objTransUsuario.setTipo(vistaUsuario);
+	            transUsuarioRepository.save(objTransUsuario);
+	            
+	            return "cuestionario";
+	        }
+	        
+	        TransaccionUsuario objTransUsuario = new TransaccionUsuario();
+	        objTransUsuario.setRegistro(LocalDateTime.now());
+	        objTransUsuario.setUsuario(objUsuario);
+	        objTransUsuario.setTipo(vistaUsuario);
+	        transUsuarioRepository.save(objTransUsuario);
+	        
+	        return "menu";
+		}
+		catch(Exception ex) {
 			return "registrar";
-        }
-		objUsuario.setEstado("Activo");
-        usuarioRepository.save(objUsuario);
-        
-        /*Transaccion objTransaccion = new Transaccion();
-        objTransaccion.setFecha(LocalDateTime.now());
-        objTransaccion.setTipo("CREACIÓN");
-        objTransaccion.setUsuario(objUsuario);
-        transaccionRepository.save(objTransaccion);*/
-        
-        HttpSession sesion = request.getSession();
-		sesion.setAttribute("usuario", objUsuario);
+		}
 		
-		TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
-        model.addAttribute("esPaciente", esPaciente);
-        
-        if(esPaciente) {
-        	InfoPaciente objCuestionario = new InfoPaciente();
-            model.addAttribute("objCuestionario", objCuestionario);
-            //model.addAttribute("usuRegistrado", objUsuario.getIdusuario());
-            
-            TransaccionUsuario objTransUsuario = new TransaccionUsuario();
-            //objTransUsuario.setRegistro(LocalDateTime.now());
-            objTransUsuario.setUsuario(objUsuario);
-            objTransUsuario.setTipo(vistaUsuario);
-            transUsuarioRepository.save(objTransUsuario);
-            
-            return "cuestionario";
-        }
-        
-        TransaccionUsuario objTransUsuario = new TransaccionUsuario();
-        objTransUsuario.setRegistro(LocalDateTime.now());
-        objTransUsuario.setUsuario(objUsuario);
-        objTransUsuario.setTipo(vistaUsuario);
-        transUsuarioRepository.save(objTransUsuario);
-        
-        return "menu";
-		/*
-        TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-        if(vistaUsuario != null && vistaUsuario.getNomtipousu().equals("Paciente")) {
-        	model.addAttribute("esPaciente", true);
-            Cuestionario objCuestionario = new Cuestionario();
-            model.addAttribute("objCuestionario", objCuestionario);
-            model.addAttribute("usuRegistrado", objUsuario.getIdusuario());
-            return "cuestionario";
-        }
-        model.addAttribute("esPaciente", false);
-        return "menu";
-        */
     }
 	
 	// ---- VENTANA CUESTIONARIO -------------------------------------------------------------
@@ -187,70 +200,179 @@ public class UsuarioController {
 	        //@ModelAttribute("usuRegistrado") int idusuario,
 	        Model model) {
 
-		//Usuario usuRegistrado = usuarioRepository.findByIdusuario(idusuario);
-		//objCuestionario.setPaciente(usuRegistrado);
-		
-		//Usuario usuarioActualizado = usuarioRepository.findById(objUsuario.getIdusuario()).orElse(null);
-		//objCuestionario.setPaciente(usuarioActualizado);
-		//cuestionarioRepository.save(objCuestionario);
-
+		try {
+			
+		}
+		catch(Exception ex) {
+			return "cuestionario";
+		}
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 		if (objUsuario!=null) {
 			Usuario usuRegistrado = usuarioRepository.findById(objUsuario.getIdusuario()).orElse(null);
 			objCuestionario.setPaciente(usuRegistrado);
+			objCuestionario.setEstado("Activo");
+			objCuestionario.setFecha(LocalDateTime.now());
 			infoPacienteRepository.save(objCuestionario);
 
-			Transaccion objTransaccion = new Transaccion();
-            objTransaccion.setFecha(LocalDateTime.now());
-            objTransaccion.setTipo("CREACION");
-            objTransaccion.setInfopaciente(objCuestionario);
-            objTransaccion.setUsuario(objUsuario);
-            transaccionRepository.save(objTransaccion);
-			
 			TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
 	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
 		    model.addAttribute("esPaciente", esPaciente);
 		}
-		//objCuestionario.setPaciente(objUsuario);
-	    //cuestionarioRepository.save(objCuestionario);
-	    //model.addAttribute("esPaciente", true);
-	    return "menu";
-	}
-	
-	/*@PostMapping("/grabarCuestionario")
-	public String grabarCuestionario(
-			HttpSession sesion, 
-			@ModelAttribute("objCuestionario") Cuestionario objCuestionario,
-			Model model) {
-		
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-        if (objUsuario!=null) {
-        	objCuestionario.setPaciente(objUsuario);
-            cuestionarioRepository.save(objCuestionario);
-            
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);
-	    }        
-        //List<Dieta> listaDietas = dietaRepository.findByEstado("Activo");
-        //model.addAttribute("listaDietas", listaDietas);
-		return "menu";
-	}*/
 
-	@GetMapping("/omitir")
-	public String omitir(Model model) {
-		model.addAttribute("esPaciente", true);
-		return "menu";
+		/* RECOMENDACIÓN INICIAL */
+		
+		/* INFORMACION DE PACIENTE */
+		//InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
+	    model.addAttribute("miInfo", objCuestionario);
+		
+		/* RUTINAS */
+		List<Rutina> listaRutinas;
+	    listaRutinas = rutinaRepository.findByEstado("Activo");
+	    model.addAttribute("listaRutinas", listaRutinas);
+	    
+	    if(objCuestionario!=null && objCuestionario.getObjetivo().equals("Deficit")) {
+	    	listaRutinas = rutinaRepository.findByTipo("Deficit");
+	    	model.addAttribute("listaRutinas", listaRutinas);
+	    	
+		    if(objCuestionario.getFrecEjercicios().equals("A veces o nada") || objCuestionario.getFrecEjercicios().equals("Semanalmente")) {
+		    	
+		    	listaRutinas = rutinaRepository.findByNivelAndTipo("Principiante", "Deficit");
+			    model.addAttribute("listaRutinas", listaRutinas);
+		    }
+		    else if(objCuestionario.getFrecEjercicios().equals("30 minutos a diario")) {
+		    	
+		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
+		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Deficit");
+		    	model.addAttribute("listaRutinas", listaRutinas);
+		    }
+		    
+	    }
+	    
+	    else if(objCuestionario!=null && objCuestionario.getObjetivo().equals("Volumen")) {
+	    	listaRutinas = rutinaRepository.findByTipo("Volumen");
+	    	model.addAttribute("listaRutinas", listaRutinas);
+	    	
+	    	if(objCuestionario.getFrecEjercicios().equals("A veces o nada") || objCuestionario.getFrecEjercicios().equals("Semanalmente")) {
+		    	
+		    	listaRutinas = rutinaRepository.findByNivelAndTipo("Principiante", "Volumen");
+			    model.addAttribute("listaRutinas", listaRutinas);
+		    }
+		    else if(objCuestionario.getFrecEjercicios().equals("30 minutos diario")) {
+		    	
+		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
+		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Volumen");
+		    	model.addAttribute("listaRutinas", listaRutinas);
+
+		    }
+	    }
+	    
+	    else if (objCuestionario!=null){
+	    	if(objCuestionario.getFrecEjercicios().equals("A veces o nada") || objCuestionario.getFrecEjercicios().equals("Semanalmente")) {
+		    	
+		    	listaRutinas = rutinaRepository.findByNivel("Principiante");
+			    model.addAttribute("listaRutinas", listaRutinas);
+		    }
+		    else if(objCuestionario.getFrecEjercicios().equals("30 minutos a diario")) {
+		    	
+		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
+		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Deficit");
+		    	model.addAttribute("listaRutinas", listaRutinas);
+		    }
+	    }
+		
+	    /* DIETAS */
+	    List<Dieta> listaDietas;
+	    listaDietas = dietaRepository.findByEstado("Activo");
+	    model.addAttribute("listaDietas", listaDietas);
+	    
+	    if(objCuestionario!=null && objCuestionario.getObjetivo().equals("Deficit")) {
+	    	listaDietas = dietaRepository.findByObjetivo("Deficit");
+		    model.addAttribute("listaDietas", listaDietas);
+		    
+		    if(objCuestionario.getCondicion().equals("Lacteos")) {
+		    	Condicion lacteos = condicionRepository.findByNombre("Lacteos");
+		    	model.addAttribute("lacteos", lacteos);
+		    	
+		    	listaDietas = dietaRepository.findByCondicionNot(lacteos);
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+	    	
+	    	else if(objCuestionario.getCondicion().equals("Gluten")) {
+		    	Condicion gluten = condicionRepository.findByNombre("Gluten");
+		    	
+		    	listaDietas = dietaRepository.findByCondicionAndObjetivo(gluten, "Deficit");
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+		    
+	    	else if(objCuestionario.getCondicion().equals("Vegano")) {
+	    		Condicion carne = condicionRepository.findByNombre("Carne");
+		    	model.addAttribute("carne", carne);
+		    	
+		    	listaDietas = dietaRepository.findByCondicionNot(carne);
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+	    }
+	    
+	    else if(objCuestionario!=null && objCuestionario.getObjetivo().equals("Volumen")) {
+	    	listaDietas = dietaRepository.findByObjetivo("Volumen");
+	    	model.addAttribute("listaDietas", listaDietas);
+	    	
+	    	if(objCuestionario.getCondicion().equals("Lacteos")) {
+	    		Condicion lacteos = condicionRepository.findByNombre("Lacteos");
+		    	
+		    	listaDietas = dietaRepository.findByCondicion(lacteos);
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+	    	
+	    	else if(objCuestionario.getCondicion().equals("Gluten")) {
+	    		Condicion gluten = condicionRepository.findByNombre("Gluten");
+		    	
+		    	listaDietas = dietaRepository.findByCondicionNotAndObjetivo(gluten, "Volumen");
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+	    	
+	    	else if(objCuestionario.getCondicion().equals("Vegano")) {
+	    		Condicion carne = condicionRepository.findByNombre("Carne");
+		    	model.addAttribute("carne", carne);
+		    	
+		    	listaDietas = dietaRepository.findByCondicionNot(carne);
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+	    }
+	    
+	    else if (objCuestionario!=null){
+	    	
+	    	if(objCuestionario.getCondicion().equals("Lacteos")) {
+	    		Condicion lacteos = condicionRepository.findByNombre("Lacteos");
+		    	model.addAttribute("lacteos", lacteos);
+		    	
+		    	listaDietas = dietaRepository.findByCondicionNot(lacteos);
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+	    	
+	    	else if(objCuestionario.getCondicion().equals("Gluten")) {
+	    		Condicion gluten = condicionRepository.findByNombre("Gluten");
+		    	model.addAttribute("gluten", gluten);
+		    	
+		    	listaDietas = dietaRepository.findByCondicionNot(gluten);
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+	    	
+	    	else if(objCuestionario.getCondicion().equals("Vegano")) {
+	    		Condicion carne = condicionRepository.findByNombre("Carne");
+		    	model.addAttribute("carne", carne);
+		    	
+		    	listaDietas = dietaRepository.findByCondicionNot(carne);
+		    	model.addAttribute("listaDietas", listaDietas);
+		    }
+	    }
+		
+		return "recomendacion_inicial";
 	}
 	
 	@GetMapping("/cerrarSesion")
 	public String cerrarSesion(HttpSession sesion, Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-		/*Transaccion objTransaccion = new Transaccion();
-        objTransaccion.setFecha(LocalDateTime.now());
-        objTransaccion.setTipo("Logout");
-        objTransaccion.setUsuario(objUsuario);
-        transaccionRepository.save(objTransaccion);*/
 	
 		TransaccionUsuario objTransUsuario = new TransaccionUsuario();
         objTransUsuario.setLogout(LocalDateTime.now());
@@ -262,24 +384,24 @@ public class UsuarioController {
 		return "index";
 	}
 	
-	@RequestMapping(value="/nuevaContraseña", method=RequestMethod.POST)
+	@RequestMapping(value = "/nuevaContraseña", method = RequestMethod.POST)
 	public String nuevaContraseña(
-			HttpSession sesion, 
-			@ModelAttribute("objUsuario") Usuario objUsuario,
-			@RequestParam(value="repetirPassword") String repetirPassword, 
-			Model model) {
-		
-		Usuario nuevaPassword = (Usuario) sesion.getAttribute("usuario");
-		if (objUsuario.getPassword().equals(repetirPassword)) {
-			//Usuario usuPassword = usuarioController.findByIdusuario();
-			nuevaPassword.setPassword(objUsuario.getPassword());
-			usuarioRepository.save(nuevaPassword);
+	        HttpSession sesion,
+	        @ModelAttribute("objUsuario") Usuario objUsuario,
+	        @RequestParam(value="repetirPassword") String repetirPassword,
+	        Model model) {
 
-			sesion.invalidate();
-			return "index";
-		}
-		model.addAttribute("errorcontraseña", "Hubo un error al actualizar la nueva contraseña.");
-		return "contraseña";
+	    Usuario nuevaPassword = (Usuario) sesion.getAttribute("usuario");
+	    if (nuevaPassword!=null && objUsuario.getPassword().equals(repetirPassword)) {
+	        String encryptedPassword = passwordEncoder.encode(objUsuario.getPassword());
+	        nuevaPassword.setPassword(encryptedPassword);
+	        usuarioRepository.save(nuevaPassword);
+
+	        sesion.invalidate();
+	        return "index";
+	    }
+	    model.addAttribute("errorcontraseña", "Hubo un error al actualizar la nueva contraseña.");
+	    return "seguridad";
 	}
 	
 	@RequestMapping(value="/cambiarCorreo", method=RequestMethod.POST)
@@ -300,11 +422,10 @@ public class UsuarioController {
 		nuevoCorreo.setCorreo(objUsuario.getCorreo());
 		usuarioRepository.save(nuevoCorreo);
 
-		Transaccion objTransaccion = new Transaccion();
-        objTransaccion.setFecha(LocalDateTime.now());
-        objTransaccion.setTipo("Act. de Correo electronico");
-        objTransaccion.setUsuario(nuevoCorreo);
-        transaccionRepository.save(objTransaccion);
+		TransaccionUsuario objTransUsuario = new TransaccionUsuario();
+        objTransUsuario.setRegistro(LocalDateTime.now());
+        objTransUsuario.setUsuario(objUsuario);
+        transUsuarioRepository.save(objTransUsuario);
         
 		sesion.invalidate();
 		return "index";
@@ -332,11 +453,12 @@ public class UsuarioController {
 	    model.addAttribute("actualizado", "Su perfil se actualizó con exito");
 	    model.addAttribute("objUsuario", perfilActual);
 	    
-	    InfoPaciente miInfo = infoPacienteRepository.findByPaciente(perfilActual);
+	    InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(perfilActual, "Activo");
 	    model.addAttribute("miInfo", miInfo);
 	    
 	    List<Rutina> misRutinas = rutinaRepository.findByNutriologo(perfilActual);
 	    model.addAttribute("misRutinas", misRutinas);
+	    
 	    List<Dieta> misDietas = dietaRepository.findByNutriologo(perfilActual);
 	    model.addAttribute("misDietas", misDietas);
 	    

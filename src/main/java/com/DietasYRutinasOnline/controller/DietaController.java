@@ -16,17 +16,23 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.DietasYRutinasOnline.entity.Alimento;
+import com.DietasYRutinasOnline.entity.Condicion;
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Ejercicio;
 import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.InfoPaciente;
+import com.DietasYRutinasOnline.entity.Notificacion;
 import com.DietasYRutinasOnline.entity.TipoUsuario;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.AlimentoRepository;
+import com.DietasYRutinasOnline.repository.CondicionRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
+import com.DietasYRutinasOnline.repository.NotificacionRepository;
+import com.DietasYRutinasOnline.repository.TipoUsuarioRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
+import com.DietasYRutinasOnline.repository.UsuarioRepository;
 
 
 @Controller
@@ -37,6 +43,9 @@ public class DietaController {
 	AlimentoRepository alimentoRepository;
 	
 	@Autowired
+	CondicionRepository condicionRepository;
+	
+	@Autowired
 	DietaRepository dietaRepository;
 	
 	@Autowired
@@ -44,6 +53,16 @@ public class DietaController {
 	
 	@Autowired
 	TransaccionRepository transaccionRepository;
+	
+	@Autowired
+	NotificacionRepository notificacionRepository;
+
+	@Autowired
+	UsuarioRepository usuarioRepository;
+	
+	@Autowired
+	TipoUsuarioRepository tipoUsuarioRepository;
+	
 
 	@GetMapping("/verAlimentos")
 	public String verAlimentos(Model model) {
@@ -79,16 +98,15 @@ public class DietaController {
 	        Model model) {
 	    
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario != null) {
+	    if (objUsuario!=null) {
 	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
 	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	        
-	        InfoPaciente pacienteActual = infoPacienteRepository.findByPaciente(objUsuario);
+	        InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
 	        model.addAttribute("pacienteActual", pacienteActual);
 	        
 	        if (pacienteActual!=null) {
-	            // Recuperar la dieta completa de la base de datos para evitar valores nulos
 	            Dieta dietaPaciente = dietaRepository.findById(objDieta.getIddieta()).orElse(null);
 	            
 	            if (dietaPaciente!=null && !pacienteActual.getDieta().contains(dietaPaciente)) {
@@ -105,9 +123,11 @@ public class DietaController {
 	            objTransaccion.setTipo("Seguir Dieta");
 	            objTransaccion.setInfopaciente(pacienteActual);
 	            objTransaccion.setUsuario(objUsuario);
-	            objTransaccion.setDieta(dietaPaciente); // Usar dietaCompleta aquí también
+	            objTransaccion.setDieta(dietaPaciente);
 	            transaccionRepository.save(objTransaccion);
-                     
+                
+	            
+	            /* RETORNAR */
 	            List<Dieta> listaDietas;
 	            listaDietas = dietaRepository.findByEstado("Activo");
 	            model.addAttribute("listaDietas", listaDietas);
@@ -131,7 +151,6 @@ public class DietaController {
 	public String dejarSeguirDieta(
 			HttpSession sesion,
 			@ModelAttribute("objDieta") Dieta objDieta,
-			//@ModelAttribute("miInfo") InfoPaciente miInfo,
 			Model model) {
 	    
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
@@ -140,18 +159,10 @@ public class DietaController {
 	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	        
-	        InfoPaciente miInfo = infoPacienteRepository.findByPaciente(objUsuario);
-	        //infoPacienteRepository.findByPaciente(objUsuario);
+	        InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
 		    model.addAttribute("miInfo", miInfo);
 		    
 		    if(miInfo!=null) {
-		    	/*Dieta dietaCompleta = dietaRepository.findById(objDieta.getIddieta()).orElse(null);
-	            
-	            if (dietaCompleta!=null && !pacienteActual.getDieta().contains(dietaCompleta)) {
-	                miInfo.getDieta().add(dietaCompleta);
-	                infoPacienteRepository.save(pacienteActual);
-	                model.addAttribute("exito", "Se guardó a tu perfil con éxito");  
-	            }*/
 		    	Dieta dietaPaciente = dietaRepository.findById(objDieta.getIddieta()).orElse(null);
 		    	
 		    	miInfo.getDieta().remove(dietaPaciente);		    
@@ -166,15 +177,12 @@ public class DietaController {
 	        objTransaccion.setUsuario(objUsuario);
 	        objTransaccion.setDieta(objDieta);
 	        transaccionRepository.save(objTransaccion);
-	        
-	        /*if(pacienteActual!=null && pacienteActual.getDieta().contains(objDieta)) {
-	        	
-	        }*/
+
 	        model.addAttribute("objUsuario", objUsuario);
 		    
-		    //InfoPaciente miInfo = infoPacienteRepository.findByPaciente(objUsuario);
-		    //model.addAttribute("miInfo", miInfo);
-	        return "usuario/paciente";
+		    InfoPaciente miInfo1 = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
+		    model.addAttribute("miInfo", miInfo1);
+	        return "perfil";
 	    }
 		return "index";
 	}
@@ -185,6 +193,15 @@ public class DietaController {
 	public String crearDieta(Model model) {
 		List<Alimento> listaAlimentos = alimentoRepository.findAll();
 		model.addAttribute("listaAlimentos", listaAlimentos);
+		List<Condicion> listaCondiciones = condicionRepository.findAll();
+		model.addAttribute("listaCondiciones", listaCondiciones);
+		
+		List<String> cbxAlimentos = alimentoRepository.findDistinctTipos();
+		if (cbxAlimentos.size() > 4) {
+			cbxAlimentos = cbxAlimentos.subList(0, 4);
+	    }
+		model.addAttribute("cbxAlimentos", cbxAlimentos);
+		
 		Dieta objDieta = new Dieta();
 		model.addAttribute("objDieta", objDieta);
 		return "dietas/nueva_dieta";
@@ -196,26 +213,32 @@ public class DietaController {
 			@ModelAttribute("objDieta") Dieta objDieta,
 			Model model) {
 		
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-        if (objUsuario!=null) {
-        	objDieta.setNutriologo(objUsuario);
-    		objDieta.setEstado("Activo");
-            dietaRepository.save(objDieta);
-            
-            Transaccion objTransaccion = new Transaccion();
-            objTransaccion.setFecha(LocalDateTime.now());
-            objTransaccion.setTipo("Creación");
-            objTransaccion.setUsuario(objUsuario);
-            objTransaccion.setDieta(objDieta);
-            transaccionRepository.save(objTransaccion);
-            
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);
-	    }        
-        List<Dieta> listaDietas = dietaRepository.findByEstado("Activo");
-        model.addAttribute("listaDietas", listaDietas);
-		return "dietas/menu_dietas";
+		try{
+			Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+	        if (objUsuario!=null) {
+	        	objDieta.setNutriologo(objUsuario);
+	    		objDieta.setEstado("Activo");
+	            dietaRepository.save(objDieta);
+	            
+	            Transaccion objTransaccion = new Transaccion();
+	            objTransaccion.setFecha(LocalDateTime.now());
+	            objTransaccion.setTipo("Creación");
+	            objTransaccion.setUsuario(objUsuario);
+	            objTransaccion.setDieta(objDieta);
+	            transaccionRepository.save(objTransaccion);
+	            
+		        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
+		        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+		        model.addAttribute("esPaciente", esPaciente);
+		    }        
+	        List<Dieta> listaDietas = dietaRepository.findByEstado("Activo");
+	        model.addAttribute("listaDietas", listaDietas);
+			return "dietas/menu_dietas";
+		}
+		catch(Exception ex) {
+			return "dietas/nueva_dieta";
+		}
+		
 	}
 
 	// ---- VER DETALLE DIETA -------------------------------------------------------------------
@@ -228,7 +251,7 @@ public class DietaController {
 		
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
         if (objUsuario!=null) {
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
+        	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
 	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    } 
@@ -239,7 +262,7 @@ public class DietaController {
 		Usuario nutriActual = (Usuario) sesion.getAttribute("usuario");
 		model.addAttribute("esCreador", nutriActual.getIdusuario() == detalleDieta.getNutriologo().getIdusuario());
 		
-		InfoPaciente pacienteActual = infoPacienteRepository.findByPaciente(objUsuario);
+		InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
 		model.addAttribute("pacienteActual", pacienteActual);
 		
 		return "dietas/detalle_dieta";
@@ -259,9 +282,9 @@ public class DietaController {
 	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	        
-	        InfoPaciente dietaPaciente = infoPacienteRepository.findByPaciente(objUsuario);
+	        InfoPaciente dietaPaciente = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
 	        
-	        InfoPaciente pacienteActual = infoPacienteRepository.findByPaciente(objUsuario);
+	        InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
 		    model.addAttribute("pacienteActual", pacienteActual);
 		    
 		    /*if(pacienteActual.getObjetivo().equals("Volumen") && objDieta.getObjetivo().equals("Volumen")) {
@@ -297,7 +320,7 @@ public class DietaController {
 		return "index";
 	}
 	
-	// ---- VENTANA EDITAR DIETA -------------------------------------------------------------------
+	// ---- EDITAR DIETA -------------------------------------------------------------------
 	@PostMapping("/editarDieta")
 	public String editarDieta(
 			@RequestParam("iddieta")int iddieta, 
@@ -307,6 +330,9 @@ public class DietaController {
 		
 		List<Alimento> listaAlimentos = alimentoRepository.findAll();
 		model.addAttribute("listaAlimentos", listaAlimentos);
+		List<Condicion> listaCondiciones = condicionRepository.findByEstado("Activo");
+		model.addAttribute("listaCondiciones", listaCondiciones);
+		
 		return "dietas/editar_dieta";			
 	}
 	
@@ -323,6 +349,7 @@ public class DietaController {
         	dietaActual.setObjetivo(objDieta.getObjetivo());
         	dietaActual.setDescripcion(objDieta.getDescripcion());
         	dietaActual.setAlimento(objDieta.getAlimento());
+        	dietaActual.setCondicion(objDieta.getCondicion());
             dietaRepository.save(dietaActual);
             
 	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
