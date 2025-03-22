@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import com.DietasYRutinasOnline.entity.Ejercicio;
 
 @Repository
-public interface EjercicioRepository extends JpaRepository<Ejercicio, Integer>{
+public interface EjercicioRepository extends JpaRepository<Ejercicio, Long>{
 	List<Ejercicio> findByGrupomuscular(String grupomuscular);
 
 	@Query("SELECT DISTINCT e.grupomuscular FROM Ejercicio e")

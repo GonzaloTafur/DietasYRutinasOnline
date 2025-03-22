@@ -6,8 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -24,8 +22,8 @@ import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.InfoPaciente;
 import com.DietasYRutinasOnline.entity.Notificacion;
 import com.DietasYRutinasOnline.entity.Reunion;
+import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
-import com.DietasYRutinasOnline.entity.TipoUsuario;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.AsistenciaRepository;
@@ -34,10 +32,12 @@ import com.DietasYRutinasOnline.repository.HorarioRepository;
 import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
 import com.DietasYRutinasOnline.repository.NotificacionRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
+import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
-import com.DietasYRutinasOnline.repository.TipoUsuarioRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/reunion")
@@ -47,7 +47,7 @@ public class ReunionController {
 	ReunionRepository reunionRepository;
 	
 	@Autowired
-	TipoUsuarioRepository tipoUsuarioRepository;
+	RolRepository rolRepository;
 	
 	@Autowired
 	AsistenciaRepository asistenciaRepository;
@@ -77,28 +77,28 @@ public class ReunionController {
 	@GetMapping("/verReuniones")
 	public String verReuniones(
 	        HttpSession sesion,
-	        @RequestParam("idusuario") int idusuario,
+	        @RequestParam("idusuario") Long idusuario,
 	        Model model) {
 
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	    	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	    	Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
 
 	    Usuario nutriologoReunion = usuarioRepository.findByIdusuario(idusuario);
 	    model.addAttribute("nutriologoReunion", nutriologoReunion);
 
-	    List<Reunion> listaReuniones = reunionRepository.findByNutriologoAndEstado(nutriologoReunion, "Activo");
+	    List<Reunion> listaReuniones = reunionRepository.findByNutriologoAndEstado(nutriologoReunion, true);
 	    model.addAttribute("listaReuniones", listaReuniones);
 
-	    Map<Integer, String> estadoAsistencia = listaReuniones.stream()
+	    Map<Long, Boolean> estadoAsistencia = listaReuniones.stream()
 	        .collect(Collectors.toMap(
 	            Reunion::getIdreunion,
 	            objReunion -> {
-	            	Asistencia asistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(objUsuario, objReunion, "Activo");
-	            	return asistencia!=null ? asistencia.getEstado() : "Inactivo";
+	            	Asistencia asistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(objUsuario, objReunion, true);
+	            	return asistencia!=null ? asistencia.getEstado() : false;
 	            }
 	        ));
 	    model.addAttribute("estadoAsistencia", estadoAsistencia);
@@ -109,7 +109,7 @@ public class ReunionController {
 	@GetMapping("/confirmarAsistencia")
 	public String confirmarAsistencia(
 			HttpSession sesion,
-	        @RequestParam("idreunion") int idreunion,
+	        @RequestParam("idreunion") Long idreunion,
 	        Model model) {
 
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
@@ -117,8 +117,8 @@ public class ReunionController {
 	        return "redirect:/index";
 	    }
 
-	    TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	    Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
         model.addAttribute("esPaciente", esPaciente);
         
 	    Usuario paciente = usuarioRepository.findById(objUsuario.getIdusuario())
@@ -127,13 +127,13 @@ public class ReunionController {
 	    Reunion objReunion = reunionRepository.findById(idreunion)
 	            .orElseThrow(() -> new IllegalArgumentException("Reunión no encontrada"));
 
-	    Asistencia asistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, objReunion, "Activo");
+	    Asistencia asistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, objReunion, true);
 	    if (asistencia==null) {
 
 	        asistencia = new Asistencia();
 	        asistencia.setPaciente(paciente);
 	        asistencia.setReunion(objReunion);
-	        asistencia.setEstado("Activo");
+	        asistencia.setEstado(true);
 	        asistencia.setFecha(LocalDateTime.now());
 	        asistenciaRepository.save(asistencia);
 	        
@@ -150,13 +150,13 @@ public class ReunionController {
 	    	objNotificacion.setRol("Nutriologo");
 	    	objNotificacion.setMensaje("El paciente " + paciente.getNombres() + " confirmó unirse a la reunión " + objReunion.getMotivo());
 	    	objNotificacion.setTimestamp(LocalDateTime.now());
-	    	objNotificacion.setEstado("Activo");
+	    	objNotificacion.setEstado(true);
 	    	notificacionRepository.save(objNotificacion);
 	    }
 
-	    TipoUsuario rolNutriologo = tipoUsuarioRepository.findByNomtipousu("Nutriologo");
+	    Rol rolNutriologo = rolRepository.findByNombre("Nutriologo");
 		   
-	    List<Usuario> listaNutriologos = usuarioRepository.findByTipousuarioAndEstado(rolNutriologo, "Activo");
+	    List<Usuario> listaNutriologos = usuarioRepository.findByRolAndEstado(rolNutriologo, true);
 	    model.addAttribute("listaNutriologos", listaNutriologos);
 	    
 	    return "usuario/lista_nutriologos";
@@ -164,15 +164,15 @@ public class ReunionController {
 
 	@GetMapping("/cancelarAsistencia")
 	public String cancelarAsistencia(
-	        @RequestParam("idreunion") int idreunion,
+	        @RequestParam("idreunion") Long idreunion,
 	        HttpSession sesion) {
 
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    Reunion objReunion = reunionRepository.findByIdreunion(idreunion);
 
-	    Asistencia objAsistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(objUsuario, objReunion, "Activo");
+	    Asistencia objAsistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(objUsuario, objReunion, true);
 	    if (objAsistencia!=null) {
-	    	objAsistencia.setEstado("Inactivo");
+	    	objAsistencia.setEstado(false);
 	        asistenciaRepository.save(objAsistencia);
 	    }
 
@@ -182,20 +182,20 @@ public class ReunionController {
 	@GetMapping("/perfilNutriologo")
 	public String perfilNutriologo(
 	        HttpSession sesion,
-	        @RequestParam("idusuario") int idusuario,
+	        @RequestParam("idusuario") Long idusuario,
 	        Model model) {
 
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario != null) {
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = objUsuario.getRol();
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
 
 	    Usuario suPerfil = usuarioRepository.findByIdusuario(idusuario);
 	    model.addAttribute("suPerfil", suPerfil);
 
-	    List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(suPerfil, "Activo");
+	    List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(suPerfil, true);
 	    model.addAttribute("objReunion", objReunion);
 	    
 	    List<Rutina> susRutinas = rutinaRepository.findByNutriologo(suPerfil);
@@ -226,15 +226,15 @@ public class ReunionController {
 		
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	    	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	    	boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	    	Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	    	boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	        
-	        Reunion reunionUsuario = reunionRepository.findByNutriologoAndDiaAndEstado(objUsuario, dia, "Activo");
+	        Reunion reunionUsuario = reunionRepository.findByNutriologoAndDiaAndEstado(objUsuario, dia, true);
 	        
 	        if(reunionUsuario==null) {
 	        	objReunion.setNutriologo(objUsuario);
-	        	objReunion.setEstado("Activo");
+	        	objReunion.setEstado(true);
 	        	reunionRepository.save(objReunion);
             
 	        	Transaccion objTransaccion = new Transaccion();
@@ -249,7 +249,7 @@ public class ReunionController {
 	        	objNotificacion.setRol("Paciente");
 	        	objNotificacion.setMensaje("Un nutriologo a programado una nueva reunión.");
 	        	objNotificacion.setTimestamp(LocalDateTime.now());
-	        	objNotificacion.setEstado("Activo");
+	        	objNotificacion.setEstado(true);
 	        	notificacionRepository.save(objNotificacion);
 	        }
 	        else {
@@ -271,23 +271,23 @@ public class ReunionController {
 	@GetMapping("/desactivarReunion/{idreunion}")
 	public String eliminarHora(
 			HttpSession sesion, 
-			@ModelAttribute ("idreunion") int idreunion, 
+			@ModelAttribute ("idreunion") Long idreunion, 
 			Model model) {
 		
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
 	    	Reunion reunionDesac = reunionRepository.findByIdreunion(idreunion);
-	    	reunionDesac.setEstado("Inactivo");
+	    	reunionDesac.setEstado(true);
 	    	reunionRepository.save(reunionDesac);
 	    	model.addAttribute("eliminado", "El horario ha eliminado con exito");
 	    	
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = objUsuario.getRol();
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
 	    model.addAttribute("objUsuario", objUsuario);
 	    
-	    List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, "Activo");
+	    List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, true);
 	    model.addAttribute("objReunion", objReunion);
 	    
 	    List<Rutina> misRutinas = rutinaRepository.findByNutriologo(objUsuario);
@@ -306,8 +306,8 @@ public class ReunionController {
 
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	        TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
 
@@ -315,7 +315,7 @@ public class ReunionController {
 	    model.addAttribute("listaReuniones", listaReuniones);
 
 	    List<Asistencia> listaPacientes = listaReuniones.stream()
-	        .flatMap(reunion -> asistenciaRepository.findByReunionAndEstado(reunion, "Activo").stream())
+	        .flatMap(reunion -> asistenciaRepository.findByReunionAndEstado(reunion, true).stream())
 	        .collect(Collectors.toList());
 	    Collections.reverse(listaPacientes);
 	    model.addAttribute("listaPacientes", listaPacientes);
@@ -326,23 +326,23 @@ public class ReunionController {
 	@GetMapping("/perfilPaciente")
 	public String perfilPaciente(
 	        HttpSession sesion,
-	        @RequestParam("idusuario") int idusuario,
+	        @RequestParam("idusuario") Long idusuario,
 	        Model model) {
 
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario != null) {
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = objUsuario.getRol();
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
 
 	    Usuario suPerfil = usuarioRepository.findByIdusuario(idusuario);
 	    model.addAttribute("suPerfil", suPerfil);
 	    
-	    InfoPaciente suInfo = infoPacienteRepository.findByPacienteAndEstado(suPerfil, "Activo");
+	    InfoPaciente suInfo = infoPacienteRepository.findByPacienteAndEstado(suPerfil, true);
 	    model.addAttribute("suInfo", suInfo);
 	    
-	    Long asistencias = asistenciaRepository.countByPacienteAndEstado(suPerfil, "Activo");
+	    Long asistencias = asistenciaRepository.countByPacienteAndEstado(suPerfil, true);
 	    model.addAttribute("asistencias", asistencias);
 	
 	    return "usuario/paciente";
@@ -351,7 +351,7 @@ public class ReunionController {
 	@GetMapping("/verSuSeguimiento")
 	public String verSuSeguimiento(
 	        HttpSession sesion, 
-	        @RequestParam("idusuario") int idusuario, 
+	        @RequestParam("idusuario") Long idusuario, 
 	        Model model) {
 
 	    Usuario suPerfil = usuarioRepository.findByIdusuario(idusuario);
@@ -369,12 +369,12 @@ public class ReunionController {
 	@GetMapping("/verSuHorario")
 	public String verSuHorario(
 	        HttpSession sesion, 
-	        @RequestParam("idusuario") int idusuario, 
+	        @RequestParam("idusuario") Long idusuario, 
 	        Model model) {
 
 	    Usuario suPerfil = usuarioRepository.findByIdusuario(idusuario);
 	    if(suPerfil!=null) {
-	    	List<Horario> suHorario = horarioRepository.findByPacienteAndEstado(suPerfil, "Activo");
+	    	List<Horario> suHorario = horarioRepository.findByPacienteAndEstado(suPerfil, true);
 	    	model.addAttribute("suHorario", suHorario);
 
 	    	return "usuario/vista_horario";

@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.DietasYRutinasOnline.entity.Alimento;
 
 @Repository
-public interface AlimentoRepository extends JpaRepository<Alimento, Integer>{
+public interface AlimentoRepository extends JpaRepository<Alimento, Long>{
 	List<Alimento> findByTipo(String tipo);
 	@Query("SELECT DISTINCT a.tipo FROM Alimento a")
 	List<String> findDistinctTipos();

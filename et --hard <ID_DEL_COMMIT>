@@ -1,0 +1,12 @@
+[33m5776555[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{0}: rebase (finish): returning to refs/heads/main
+[33m5776555[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{1}: rebase (start): checkout refs/remotes/origin/main
+[33mb6e43de[m HEAD@{2}: Branch: renamed refs/heads/main to refs/heads/main
+[33mb6e43de[m HEAD@{4}: Branch: renamed refs/heads/main to refs/heads/main
+[33mb6e43de[m HEAD@{6}: reset: moving to HEAD
+[33mb6e43de[m HEAD@{7}: Branch: renamed refs/heads/main to refs/heads/main
+[33mb6e43de[m HEAD@{9}: Branch: renamed refs/heads/main to refs/heads/main
+[33mb6e43de[m HEAD@{11}: rebase (abort): returning to refs/heads/main
+[33m5776555[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m)[m HEAD@{12}: pull --rebase origin main (start): checkout 5776555a8b1b9727a867169aa922928b929cafd5
+[33mb6e43de[m HEAD@{13}: Branch: renamed refs/heads/main to refs/heads/main
+[33mb6e43de[m HEAD@{15}: Branch: renamed refs/heads/master to refs/heads/main
+[33mb6e43de[m HEAD@{17}: commit (initial): git commit message example

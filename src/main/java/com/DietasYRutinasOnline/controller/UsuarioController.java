@@ -5,9 +5,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -24,19 +21,22 @@ import com.DietasYRutinasOnline.entity.Condicion;
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Ejercicio;
 import com.DietasYRutinasOnline.entity.InfoPaciente;
+import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
-import com.DietasYRutinasOnline.entity.TipoUsuario;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.TransaccionUsuario;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.CondicionRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
+import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
-import com.DietasYRutinasOnline.repository.TipoUsuarioRepository;
 import com.DietasYRutinasOnline.repository.TransUsuarioRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -47,7 +47,7 @@ public class UsuarioController {
 	UsuarioRepository usuarioRepository;
 	
 	@Autowired
-	TipoUsuarioRepository tipoUsuarioRepository;
+	RolRepository rolRepository;
 	
 	@Autowired
 	RutinaRepository rutinaRepository;
@@ -85,14 +85,14 @@ public class UsuarioController {
 			HttpSession sesion = request.getSession();
 			sesion.setAttribute("usuario", objUsuario);
 			
-			TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        if(vistaUsuario!=null && vistaUsuario.getNomtipousu().equals("Paciente")) {
+			Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        if(vistaUsuario!=null && vistaUsuario.getNombre().equals("Paciente")) {
 	        	model.addAttribute("esPaciente", true);
 	            
 	        	TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 		        objTransUsuario.setLogin(LocalDateTime.now());
 		        objTransUsuario.setUsuario(objUsuario);
-		        objTransUsuario.setTipo(vistaUsuario);
+		        objTransUsuario.setRol(vistaUsuario);
 	            transUsuarioRepository.save(objTransUsuario);
 	        	
 	            return "menu";
@@ -101,7 +101,7 @@ public class UsuarioController {
 	        TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 	        objTransUsuario.setLogin(LocalDateTime.now());
 	        objTransUsuario.setUsuario(objUsuario);
-	        objTransUsuario.setTipo(vistaUsuario);
+	        objTransUsuario.setRol(vistaUsuario);
             transUsuarioRepository.save(objTransUsuario);
 	        
 			return "menu";
@@ -112,7 +112,7 @@ public class UsuarioController {
 	
 	@PostMapping("/registrarCuenta")
 	public String registraCuenta(HttpServletRequest request, Model model) {
-		List<TipoUsuario> listaTiposUsuario = tipoUsuarioRepository.findAll();
+		List<Rol> listaTiposUsuario = rolRepository.findAll();
 		model.addAttribute("listaTiposUsuario", listaTiposUsuario);
 		
 		Usuario objUsuario = new Usuario();
@@ -129,7 +129,7 @@ public class UsuarioController {
     		HttpServletRequest request,
     		@RequestParam("correo") String correo,
     		@ModelAttribute("objUsuario") Usuario objUsuario,
-    		@ModelAttribute("nomtipousu") String nomtipousu,
+    		@ModelAttribute("nomrol") String nomrol,
     		Model model) {
 
 		try {
@@ -137,7 +137,7 @@ public class UsuarioController {
 			if (correoExiste!=null) {
 				model.addAttribute("error", "Hubo un error al llenar correo electronico, intente de nuevo.");
 				
-				List<TipoUsuario> listaTiposUsuario = tipoUsuarioRepository.findAll();
+				List<Rol> listaTiposUsuario = rolRepository.findAll();
 				model.addAttribute("listaTiposUsuario", listaTiposUsuario);
 				
 				model.addAttribute("objUsuario", objUsuario);
@@ -146,7 +146,7 @@ public class UsuarioController {
 			String encryptedPassword = passwordEncoder.encode(objUsuario.getPassword());
 		    objUsuario.setPassword(encryptedPassword);
 			
-			objUsuario.setEstado("Activo");
+			objUsuario.setEstado(true);
 	        usuarioRepository.save(objUsuario);
 	        
 	        /*Transaccion objTransaccion = new Transaccion();
@@ -158,8 +158,8 @@ public class UsuarioController {
 	        HttpSession sesion = request.getSession();
 			sesion.setAttribute("usuario", objUsuario);
 			
-			TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+			Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	        
 	        if(esPaciente) {
@@ -170,7 +170,7 @@ public class UsuarioController {
 	            TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 	            //objTransUsuario.setRegistro(LocalDateTime.now());
 	            objTransUsuario.setUsuario(objUsuario);
-	            objTransUsuario.setTipo(vistaUsuario);
+	            objTransUsuario.setRol(vistaUsuario);
 	            transUsuarioRepository.save(objTransUsuario);
 	            
 	            return "cuestionario";
@@ -179,7 +179,7 @@ public class UsuarioController {
 	        TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 	        objTransUsuario.setRegistro(LocalDateTime.now());
 	        objTransUsuario.setUsuario(objUsuario);
-	        objTransUsuario.setTipo(vistaUsuario);
+	        objTransUsuario.setRol(vistaUsuario);
 	        transUsuarioRepository.save(objTransUsuario);
 	        
 	        return "menu";
@@ -210,24 +210,24 @@ public class UsuarioController {
 		if (objUsuario!=null) {
 			Usuario usuRegistrado = usuarioRepository.findById(objUsuario.getIdusuario()).orElse(null);
 			objCuestionario.setPaciente(usuRegistrado);
-			objCuestionario.setEstado("Activo");
+			objCuestionario.setEstado(true);
 			objCuestionario.setFecha(LocalDateTime.now());
 			infoPacienteRepository.save(objCuestionario);
 
-			TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+			Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 		    model.addAttribute("esPaciente", esPaciente);
 		}
 
 		/* RECOMENDACIÓN INICIAL */
 		
 		/* INFORMACION DE PACIENTE */
-		//InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
+		//InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(objUsuario, true);
 	    model.addAttribute("miInfo", objCuestionario);
 		
 		/* RUTINAS */
 		List<Rutina> listaRutinas;
-	    listaRutinas = rutinaRepository.findByEstado("Activo");
+	    listaRutinas = rutinaRepository.findByEstado(true);
 	    model.addAttribute("listaRutinas", listaRutinas);
 	    
 	    if(objCuestionario!=null && objCuestionario.getObjetivo().equals("Deficit")) {
@@ -282,7 +282,7 @@ public class UsuarioController {
 		
 	    /* DIETAS */
 	    List<Dieta> listaDietas;
-	    listaDietas = dietaRepository.findByEstado("Activo");
+	    listaDietas = dietaRepository.findByEstado(true);
 	    model.addAttribute("listaDietas", listaDietas);
 	    
 	    if(objCuestionario!=null && objCuestionario.getObjetivo().equals("Deficit")) {
@@ -377,7 +377,7 @@ public class UsuarioController {
 		TransaccionUsuario objTransUsuario = new TransaccionUsuario();
         objTransUsuario.setLogout(LocalDateTime.now());
         objTransUsuario.setUsuario(objUsuario);
-        objTransUsuario.setTipo(objUsuario.getTipousuario());
+        objTransUsuario.setRol(objUsuario.getRol());
         transUsuarioRepository.save(objTransUsuario);
 		
         sesion.invalidate();
@@ -446,14 +446,14 @@ public class UsuarioController {
 	    	perfilActual.setBiografia(objUsuario.getBiografia());
 	    	usuarioRepository.save(perfilActual);
 	    	
-	        TipoUsuario vistaUsuario = perfilActual.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = perfilActual.getRol();
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
 	    model.addAttribute("actualizado", "Su perfil se actualizó con exito");
 	    model.addAttribute("objUsuario", perfilActual);
 	    
-	    InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(perfilActual, "Activo");
+	    InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(perfilActual, true);
 	    model.addAttribute("miInfo", miInfo);
 	    
 	    List<Rutina> misRutinas = rutinaRepository.findByNutriologo(perfilActual);

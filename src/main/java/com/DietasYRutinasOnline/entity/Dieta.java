@@ -2,38 +2,44 @@ package com.DietasYRutinasOnline.entity;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import org.attoparser.dom.Text;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@Data
 @Table(name="Dieta")
 public class Dieta {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "iddieta")
-    private int iddieta;
+    private Long iddieta;
 
-	@Column(name="nomdieta")
+	@Column(name="nombre", length = 50)
 	private String nombre;
 	
-	@Column(name="objdieta")
+	@Column(name="objetivo", length = 20)
 	private String objetivo;
 	
-	@Column(name="descdieta")
-	private String descripcion;
+	@Column(name="descripcion")
+	private Text descripcion;
 	
-	@Column(name="estdieta")
-	private String estado;
+	@Column(name="estado")
+	private Boolean estado;
 
 	@ManyToOne
     @JoinColumn(name = "idusuario")
@@ -56,76 +62,4 @@ public class Dieta {
 	@ManyToMany(mappedBy = "dieta")
     private List<InfoPaciente> paciente;
 
-	public int getIddieta() {
-		return iddieta;
-	}
-
-	public void setIddieta(int iddieta) {
-		this.iddieta = iddieta;
-	}
-
-	public String getNombre() {
-		return nombre;
-	}
-
-	public void setNombre(String nombre) {
-		this.nombre = nombre;
-	}
-
-	public String getObjetivo() {
-		return objetivo;
-	}
-
-	public void setObjetivo(String objetivo) {
-		this.objetivo = objetivo;
-	}
-
-	public String getDescripcion() {
-		return descripcion;
-	}
-
-	public void setDescripcion(String descripcion) {
-		this.descripcion = descripcion;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public Usuario getNutriologo() {
-		return nutriologo;
-	}
-
-	public void setNutriologo(Usuario nutriologo) {
-		this.nutriologo = nutriologo;
-	}
-
-	public List<Alimento> getAlimento() {
-		return alimento;
-	}
-
-	public void setAlimento(List<Alimento> alimento) {
-		this.alimento = alimento;
-	}
-
-	public List<Condicion> getCondicion() {
-		return condicion;
-	}
-
-	public void setCondicion(List<Condicion> condicion) {
-		this.condicion = condicion;
-	}
-
-	public List<InfoPaciente> getPaciente() {
-		return paciente;
-	}
-
-	public void setPaciente(List<InfoPaciente> paciente) {
-		this.paciente = paciente;
-	}
-	
 }

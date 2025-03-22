@@ -10,12 +10,12 @@ import com.DietasYRutinasOnline.entity.InfoPaciente;
 import com.DietasYRutinasOnline.entity.Usuario;
 
 @Repository
-public interface InfoPacienteRepository extends JpaRepository<InfoPaciente, Integer>{
-	InfoPaciente findByIdinfopaciente(int idinfopaciente);
+public interface InfoPacienteRepository extends JpaRepository<InfoPaciente, Long>{
+	InfoPaciente findByIdinfopaciente(Long idinfopaciente);
 	
 	List<InfoPaciente> findByPaciente(Usuario paciente);
 	
-	InfoPaciente findByPacienteAndEstado(Usuario paciente, String estado);
-	List<InfoPaciente> findByEstado(String estado);
+	InfoPaciente findByPacienteAndEstado(Usuario paciente, Boolean estado);
+	List<InfoPaciente> findByEstado(Boolean estado);
 	InfoPaciente findByDietaAndPaciente(Dieta dieta, Usuario paciente);
 }

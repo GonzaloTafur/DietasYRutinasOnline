@@ -8,7 +8,7 @@ import org.springframework.stereotype.Repository;
 import com.DietasYRutinasOnline.entity.Condicion;
 
 @Repository
-public interface CondicionRepository extends JpaRepository<Condicion, Integer>{
-	List<Condicion> findByEstado(String estado);
+public interface CondicionRepository extends JpaRepository<Condicion, Long>{
+	List<Condicion> findByEstado(boolean estado);
 	Condicion findByNombre(String nombre);
 }

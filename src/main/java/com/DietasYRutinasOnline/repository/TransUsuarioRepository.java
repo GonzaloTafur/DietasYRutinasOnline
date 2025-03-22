@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import com.DietasYRutinasOnline.entity.TransaccionUsuario;
 
 @Repository
-public interface TransUsuarioRepository extends JpaRepository<TransaccionUsuario, Integer> {
+public interface TransUsuarioRepository extends JpaRepository<TransaccionUsuario, Long> {
 
 }

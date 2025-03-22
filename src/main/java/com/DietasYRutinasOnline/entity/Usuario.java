@@ -1,151 +1,60 @@
 package com.DietasYRutinasOnline.entity;
 
+import java.io.Serializable;
 import java.sql.Date;
-import java.util.List;
-import java.util.Set;
+import org.attoparser.dom.Text;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name="Usuario")
-public class Usuario {
+public class Usuario implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idusuario")
-    private int idusuario;
+    private Long idusuario;
 	
 	@ManyToOne
-    @JoinColumn(name = "idtipousu")
-    private TipoUsuario tipousuario;
+    @JoinColumn(name = "idrol")
+    private Rol rol;
 
-	@Column(name = "nomusuario")
+	@Column(name = "nombres", length = 80)
     private String nombres;
 
-    @Column(name = "apeusuario")
+    @Column(name = "apellidos", length = 80)
     private String apellidos;
 
     @Column(name = "fechanacimiento")
     private Date fechanacimiento;
 
-    @Column(name = "nacionalidad")
+    @Column(name = "nacionalidad", length = 40)
     private String nacionalidad;
 
-    @Column(name = "sexo")
+    @Column(name = "sexo", length = 15)
     private String sexo;
 
     @Column(name = "biografia")
-    private String biografia;
+    private Text biografia;
     
-    @Column(name = "estusuario")
-    private String estado;
+    @Column(name = "estado")
+    private Boolean estado;
 
-    @Column(name = "correo")
+    @Column(name = "correo", length = 100)
     private String correo;
 
-    @Column(name = "password")
+    @Column(name = "password", length = 30)
     private String password;
-
-    
-	public int getIdusuario() {
-		return idusuario;
-	}
-
-	public void setIdusuario(int idusuario) {
-		this.idusuario = idusuario;
-	}
-
-	public TipoUsuario getTipousuario() {
-		return tipousuario;
-	}
-
-	public void setTipousuario(TipoUsuario tipousuario) {
-		this.tipousuario = tipousuario;
-	}
-
-	public String getNombres() {
-		return nombres;
-	}
-
-	public void setNombres(String nombres) {
-		this.nombres = nombres;
-	}
-
-	public String getApellidos() {
-		return apellidos;
-	}
-
-	public void setApellidos(String apellidos) {
-		this.apellidos = apellidos;
-	}
-
-	public Date getFechanacimiento() {
-		return fechanacimiento;
-	}
-
-	public void setFechanacimiento(Date fechanacimiento) {
-		this.fechanacimiento = fechanacimiento;
-	}
-
-	public String getNacionalidad() {
-		return nacionalidad;
-	}
-
-	public void setNacionalidad(String nacionalidad) {
-		this.nacionalidad = nacionalidad;
-	}
-
-	public String getSexo() {
-		return sexo;
-	}
-
-	public void setSexo(String sexo) {
-		this.sexo = sexo;
-	}
-
-	public String getBiografia() {
-		return biografia;
-	}
-
-	public void setBiografia(String biografia) {
-		this.biografia = biografia;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public String getCorreo() {
-		return correo;
-	}
-
-	public void setCorreo(String correo) {
-		this.correo = correo;
-	}
-
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
     
 }

@@ -9,9 +9,9 @@ import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Usuario;
 
 
-public interface DietaRepository extends JpaRepository<Dieta, Integer>{
-	List<Dieta> findByEstado(String estado);
-	Dieta findByIddieta(int iddieta);
+public interface DietaRepository extends JpaRepository<Dieta, Long>{
+	List<Dieta> findByEstado(Boolean estado);
+	Dieta findByIddieta(Long iddieta);
 	List<Dieta> findByNutriologo(Usuario nutriologo);
 	List<Dieta> findByObjetivo(String objetivo);
 	

@@ -13,8 +13,6 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -35,8 +33,8 @@ import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.InfoPaciente;
 import com.DietasYRutinasOnline.entity.Notificacion;
 import com.DietasYRutinasOnline.entity.Reunion;
+import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
-import com.DietasYRutinasOnline.entity.TipoUsuario;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.AlimentoRepository;
@@ -47,10 +45,12 @@ import com.DietasYRutinasOnline.repository.HorarioRepository;
 import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
 import com.DietasYRutinasOnline.repository.NotificacionRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
+import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
-import com.DietasYRutinasOnline.repository.TipoUsuarioRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 
 @Controller
@@ -67,7 +67,7 @@ public class HomeController {
 	DietaRepository dietaRepository;
 	
 	@Autowired
-	TipoUsuarioRepository tipoUsuarioRepository;
+	RolRepository rolRepository;
 	
 	@Autowired
 	InfoPacienteRepository infoPacienteRepository;
@@ -98,13 +98,13 @@ public class HomeController {
 			Model model) {
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	        TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
-	    TipoUsuario rolNutriologo = tipoUsuarioRepository.findByNomtipousu("Nutriologo");
+	    Rol rolNutriologo = rolRepository.findByNombre("Nutriologo");
 	   
-	    List<Usuario> listaNutriologos = usuarioRepository.findByTipousuarioAndEstado(rolNutriologo, "Activo");
+	    List<Usuario> listaNutriologos = usuarioRepository.findByRolAndEstado(rolNutriologo, true);
 	    model.addAttribute("listaNutriologos", listaNutriologos);
 	    
 	    return "usuario/lista_nutriologos";
@@ -117,15 +117,15 @@ public class HomeController {
 			Model model) {
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	        TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
-	    InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
+	    InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, true);
 	    model.addAttribute("pacienteActual", pacienteActual);
 	   
 	    List<Rutina> listaRutinas;
-	    listaRutinas = rutinaRepository.findByEstado("Activo");
+	    listaRutinas = rutinaRepository.findByEstado(true);
 	    model.addAttribute("listaRutinas", listaRutinas);
 	    
 	    
@@ -192,16 +192,16 @@ public class HomeController {
 			Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	    	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	    	Rol vistaUsuario = new Rol();
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
 
-	    InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
+	    InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, true);
 	    model.addAttribute("pacienteActual", pacienteActual);
 	    
 	    List<Dieta> listaDietas;
-	    listaDietas = dietaRepository.findByEstado("Activo");
+	    listaDietas = dietaRepository.findByEstado(true);
 	    model.addAttribute("listaDietas", listaDietas);
 	    
 	    /* VISTA PARA LOS PACIENTES*/
@@ -245,7 +245,7 @@ public class HomeController {
 	    }
 	    
 	    else if (pacienteActual!=null){
-	    	listaDietas = dietaRepository.findByEstado("Activo");
+	    	listaDietas = dietaRepository.findByEstado(true);
 	    	model.addAttribute("listaDietas", listaDietas);
 	    	
 	    	if(pacienteActual.getCondicion().equals("Lacteos")) {
@@ -282,19 +282,19 @@ public class HomeController {
 			Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	    	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	    	boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	    	Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	    	boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente); 
 	    }
 	    model.addAttribute("objUsuario", objUsuario);
 	    
 	    /* SI ES PACIENTE*/
-	    InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
+	    InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(objUsuario, true);
 	    model.addAttribute("miInfo", miInfo);
 	    
 	    
 	    /* SI ES NUTRIOLOGO */
-	    List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, "Activo");
+	    List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, true);
 	    model.addAttribute("objReunion", objReunion);
 	    
 	    List<Rutina> misRutinas = rutinaRepository.findByNutriologo(objUsuario);
@@ -322,11 +322,11 @@ public class HomeController {
 	public String verHorario(HttpSession sesion, Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	    	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	    	Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
-		List<Horario> miHorario = horarioRepository.findByPacienteAndEstado(objUsuario, "Activo");
+		List<Horario> miHorario = horarioRepository.findByPacienteAndEstado(objUsuario, true);
 		model.addAttribute("miHorario", miHorario);
 	    
 	    List<Rutina> cbxRutinas = rutinaRepository.findAll();
@@ -336,11 +336,11 @@ public class HomeController {
 		model.addAttribute("objHorario", objHorario);
 		
 		/* RECUPERAR LISTA DE RUTINAS DEBAJO DEL HORARIO */
-		InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, "Activo");
+		InfoPaciente pacienteActual = infoPacienteRepository.findByPacienteAndEstado(objUsuario, true);
 	    model.addAttribute("pacienteActual", pacienteActual);
 		
 		List<Rutina> listaRutinas;
-	    listaRutinas = rutinaRepository.findByEstado("Activo");
+	    listaRutinas = rutinaRepository.findByEstado(true);
 	    model.addAttribute("listaRutinas", listaRutinas);
 	    
 	    if(pacienteActual!=null && pacienteActual.getObjetivo().equals("Deficit")) {
@@ -399,8 +399,8 @@ public class HomeController {
 	public String verNotis(HttpSession sesion, Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	    	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	    	Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	        
 	        if(esPaciente) {  
@@ -410,7 +410,7 @@ public class HomeController {
 	        	String diaSemana = LocalDate.now().getDayOfWeek().getDisplayName(TextStyle.FULL, new Locale("es", "ES")).toUpperCase();
 	        	List<Notificacion> notificaciones = notificacionRepository.findByRol("Paciente");
 	        	
-	        	List<Horario> horariosUsuario = horarioRepository.findByPacienteAndEstado(objUsuario, "Activo");
+	        	List<Horario> horariosUsuario = horarioRepository.findByPacienteAndEstado(objUsuario, true);
 
 	        		List<Notificacion> notificacionesPorHorario = notificaciones.stream()
 	    	        	    .filter(notificacion -> horariosUsuario.stream()
@@ -430,7 +430,7 @@ public class HomeController {
 	        }
 	        
 	        else{
-	        	List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, "Activo");
+	        	List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, true);
 
 	        	if (objReunion!=null) {
 	        	    List<Transaccion> tipoTransaccion = transaccionRepository.findByTipoAndReunionIn("Acceso a reunión", objReunion);
@@ -454,8 +454,8 @@ public class HomeController {
 	public String regresarMenu(HttpSession sesion, Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	    	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	    	Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }
 	    return "menu";

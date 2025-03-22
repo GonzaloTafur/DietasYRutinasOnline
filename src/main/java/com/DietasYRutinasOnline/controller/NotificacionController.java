@@ -23,14 +23,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.InfoPaciente;
 import com.DietasYRutinasOnline.entity.Notificacion;
-import com.DietasYRutinasOnline.entity.TipoUsuario;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
 import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
 import com.DietasYRutinasOnline.repository.NotificacionRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
-import com.DietasYRutinasOnline.repository.TipoUsuarioRepository;
+import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
 
@@ -55,7 +54,7 @@ public class NotificacionController {
 	UsuarioRepository usuarioRepository;
 	
 	@Autowired
-	TipoUsuarioRepository tipoUsuarioRepository;
+	RolRepository rolRepository;
 	
 	@Autowired
 	InfoPacienteRepository infoPacienteRepository;
@@ -81,7 +80,7 @@ public class NotificacionController {
 		objNotificacion.setMensaje(mensaje);
 		objNotificacion.setRol("Paciente");
 		objNotificacion.setTimestamp(LocalDateTime.now());
-        objNotificacion.setEstado("Activo");
+        objNotificacion.setEstado(true);
         notificacionRepository.save(objNotificacion);
         
         System.out.println("Nueva notificación creada: Todo funciona con exito :)");
@@ -97,7 +96,7 @@ public class NotificacionController {
 	    notificacion.setMensaje("¡Hoy tienes una actividad programada! Ve a tu horario de Rutinas");
 	    notificacion.setDia(diaSemana.toUpperCase());
 	    notificacion.setTimestamp(LocalDateTime.now());
-	    notificacion.setEstado("Activo");
+	    notificacion.setEstado(true);
 
 	    notificacionRepository.save(notificacion);
 	    System.out.println("Notificación automática generada para el día " + diaSemana);
@@ -120,7 +119,7 @@ public class NotificacionController {
 	    notificacion.setMensaje("Hoy tienes una cita programada.");
 	    notificacion.setDia(diaSemana.toUpperCase());
 	    notificacion.setTimestamp(LocalDateTime.now());
-	    notificacion.setEstado("Activo");
+	    notificacion.setEstado(true);
 
 	    notificacionRepository.save(notificacion);
 	    System.out.println("Notificación automática generada para el día " + diaSemana);
@@ -128,7 +127,7 @@ public class NotificacionController {
 
 	@Scheduled(cron = "0 0 0 * * *")
 	public void notisActualizarMedidas() {
-        List<InfoPaciente> registrosActivos = infoPacienteRepository.findByEstado("Activo");
+        List<InfoPaciente> registrosActivos = infoPacienteRepository.findByEstado(true);
 
         for (InfoPaciente info : registrosActivos) {
             LocalDateTime fechaActual = LocalDateTime.now();
@@ -140,7 +139,7 @@ public class NotificacionController {
                 //notificacion.setTransaccion(info.getIdinfopaciente());
                 notificacion.setRol("Paciente");
                 notificacion.setMensaje("Han pasado 7 días desde tu última edición, aprovecha en editarlas si lo necesitas.");
-                notificacion.setEstado("Activo");
+                notificacion.setEstado(true);
                 notificacion.setDia(fechaActual.getDayOfWeek().name().toUpperCase());
                 notificacion.setTimestamp(fechaActual);
 
@@ -156,14 +155,14 @@ public class NotificacionController {
 	    String diaSemana = diaActual.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));
 
 	    // Buscar actividades activas del día
-	    //List<Horario> actividadesHoy = horarioRepository.findByDiaAndEstado(diaSemana, "Activo");
+	    //List<Horario> actividadesHoy = horarioRepository.findByDiaAndEstado(diaSemana, true);
 	    
 	    Notificacion notificacion = new Notificacion();
         notificacion.setRol("Paciente");
         notificacion.setMensaje("¡Hoy tienes rutinas programadas!");
         notificacion.setDia(diaSemana);
         notificacion.setTimestamp(LocalDateTime.now());
-        notificacion.setEstado("Activo");
+        notificacion.setEstado(true);
         notificacionRepository.save(notificacion);
         
 	    System.out.println("Notificaciones generadas para el día " + diaSemana);

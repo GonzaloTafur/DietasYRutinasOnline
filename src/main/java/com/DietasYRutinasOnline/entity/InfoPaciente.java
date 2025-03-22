@@ -4,27 +4,30 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@Data
 @Table(name="InfoPaciente")
 public class InfoPaciente {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idinfopaciente")
-    private int idinfopaciente;
+    private Long idinfopaciente;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "idusuario")
@@ -57,8 +60,8 @@ public class InfoPaciente {
 	@Column(name="objetivo")
 	private String objetivo;
 	
-	@Column(name="estinfo")
-	private String estado;
+	@Column(name="estado")
+	private Boolean estado;
 	
 	@Column(name="fechainfo")
 	private LocalDateTime fecha;
@@ -69,117 +72,5 @@ public class InfoPaciente {
       joinColumns = @JoinColumn(name = "id_paciente", referencedColumnName ="idinfopaciente"), 
       inverseJoinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="iddieta"))
     private List<Dieta> dieta;
-
-	public int getIdinfopaciente() {
-		return idinfopaciente;
-	}
-
-	public void setIdinfopaciente(int idinfopaciente) {
-		this.idinfopaciente = idinfopaciente;
-	}
-
-	public Usuario getPaciente() {
-		return paciente;
-	}
-
-	public void setPaciente(Usuario paciente) {
-		this.paciente = paciente;
-	}
-
-	public String getFrecEjercicios() {
-		return frecEjercicios;
-	}
-
-	public void setFrecEjercicios(String frecEjercicios) {
-		this.frecEjercicios = frecEjercicios;
-	}
-
-	public String getCondicion() {
-		return condicion;
-	}
-
-	public void setCondicion(String condicion) {
-		this.condicion = condicion;
-	}
-
-	public BigDecimal getPesoCorporal() {
-		return pesoCorporal;
-	}
-
-	public void setPesoCorporal(BigDecimal pesoCorporal) {
-		this.pesoCorporal = pesoCorporal;
-	}
-
-	public BigDecimal getEstatura() {
-		return estatura;
-	}
-
-	public void setEstatura(BigDecimal estatura) {
-		this.estatura = estatura;
-	}
-
-	public BigDecimal getPerimCintura() {
-		return perimCintura;
-	}
-
-	public void setPerimCintura(BigDecimal perimCintura) {
-		this.perimCintura = perimCintura;
-	}
-
-	public BigDecimal getPerimCadera() {
-		return perimCadera;
-	}
-
-	public void setPerimCadera(BigDecimal perimCadera) {
-		this.perimCadera = perimCadera;
-	}
-
-	public BigDecimal getPerimMuslo() {
-		return perimMuslo;
-	}
-
-	public void setPerimMuslo(BigDecimal perimMuslo) {
-		this.perimMuslo = perimMuslo;
-	}
-
-	public BigDecimal getPerimBrazo() {
-		return perimBrazo;
-	}
-
-	public void setPerimBrazo(BigDecimal perimBrazo) {
-		this.perimBrazo = perimBrazo;
-	}
-
-	public String getObjetivo() {
-		return objetivo;
-	}
-
-	public void setObjetivo(String objetivo) {
-		this.objetivo = objetivo;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public LocalDateTime getFecha() {
-		return fecha;
-	}
-
-	public void setFecha(LocalDateTime fecha) {
-		this.fecha = fecha;
-	}
-
-	public List<Dieta> getDieta() {
-		return dieta;
-	}
-
-	public void setDieta(List<Dieta> dieta) {
-		this.dieta = dieta;
-	}
 
 }

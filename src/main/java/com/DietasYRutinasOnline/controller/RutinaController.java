@@ -3,8 +3,6 @@ package com.DietasYRutinasOnline.controller;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,18 +18,20 @@ import com.DietasYRutinasOnline.entity.Ejercicio;
 import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.InfoPaciente;
 import com.DietasYRutinasOnline.entity.Notificacion;
+import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
-import com.DietasYRutinasOnline.entity.TipoUsuario;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.EjercicioRepository;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
 import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
 import com.DietasYRutinasOnline.repository.NotificacionRepository;
+import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
-import com.DietasYRutinasOnline.repository.TipoUsuarioRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 @RequestMapping("/rutina")
@@ -56,7 +56,7 @@ public class RutinaController {
 	NotificacionRepository notificacionRepository;
 	
 	@Autowired
-	TipoUsuarioRepository tipoUsuarioRepository;
+	RolRepository rolRepository;
 	
 	
 	// ---- VER EJERCICIOS -------------------------------------------------------------------
@@ -107,7 +107,7 @@ public class RutinaController {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
         if (objUsuario!=null) {
         	objRutina.setNutriologo(objUsuario);
-    		objRutina.setEstado("Activo");
+    		objRutina.setEstado(true);
             rutinaRepository.save(objRutina);
             
             Transaccion objTransaccion = new Transaccion();
@@ -117,11 +117,11 @@ public class RutinaController {
             objTransaccion.setRutina(objRutina);
             transaccionRepository.save(objTransaccion);
            
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = objUsuario.getRol();
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }        
-        List<Rutina> listaRutinas = rutinaRepository.findByEstado("Activo");
+        List<Rutina> listaRutinas = rutinaRepository.findByEstado(true);
         model.addAttribute("finalizado", "Bien hecho, ahora los pacientes podrán ver tu rutina");
         model.addAttribute("listaRutinas", listaRutinas);
 		return "rutinas/menu_rutinas";
@@ -131,14 +131,14 @@ public class RutinaController {
 	@GetMapping("/verDetalleRutina")
 	public String verDetalleRutina(
 			HttpSession sesion,
-			@RequestParam("idrutina") int idrutina,
+			@RequestParam("idrutina") Long idrutina,
 			@ModelAttribute("objRutina") Rutina objRutina,
 			Model model) {
 		
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
         if (objUsuario!=null) {
-        	TipoUsuario vistaUsuario = tipoUsuarioRepository.findByIdtipousu(objUsuario.getTipousuario().getIdtipousu());
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+        	Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    } 
 		
@@ -153,7 +153,7 @@ public class RutinaController {
 	// ---- EDITAR RUTINA -------------------------------------------------------------------
 	@PostMapping("/editarRutina")
 	public String editarRutina(
-			@RequestParam("idrutina")int idrutina, 
+			@RequestParam("idrutina")Long idrutina, 
 			Model model){
 		Rutina objRutina = rutinaRepository.findByIdrutina(idrutina);
 		model.addAttribute("objRutina", objRutina);
@@ -179,11 +179,11 @@ public class RutinaController {
 			rutinaActual.setEjercicio(objRutina.getEjercicio());
 			rutinaRepository.save(rutinaActual);
             
-	        TipoUsuario vistaUsuario = objUsuario.getTipousuario();
-	        boolean esPaciente = vistaUsuario.getNomtipousu().equals("Paciente");
+	        Rol vistaUsuario = objUsuario.getRol();
+	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
 	    }        
-        List<Rutina> listaRutinas = rutinaRepository.findByEstado("Activo");
+        List<Rutina> listaRutinas = rutinaRepository.findByEstado(true);
         model.addAttribute("listaRutinas", listaRutinas);
         return "rutinas/menu_rutinas";
 	}

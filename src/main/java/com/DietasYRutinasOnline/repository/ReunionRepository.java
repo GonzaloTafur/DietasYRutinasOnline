@@ -9,11 +9,11 @@ import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.entity.Usuario;
 
 @Repository
-public interface ReunionRepository extends JpaRepository<Reunion, Integer>{
-	List<Reunion> findByNutriologoAndEstado(Usuario nutriologo, String estado);
-	List<Reunion> findByDiaAndEstado(String dia, String estado);
-	Reunion findByIdreunion(int idreunion);
+public interface ReunionRepository extends JpaRepository<Reunion, Long>{
+	List<Reunion> findByNutriologoAndEstado(Usuario nutriologo, Boolean estado);
+	List<Reunion> findByDiaAndEstado(String dia, Boolean estado);
+	Reunion findByIdreunion(Long idreunion);
 	
 	List<Reunion> findByNutriologo(Usuario nutriologo);
-	Reunion findByNutriologoAndDiaAndEstado(Usuario nutriologo, String dia, String estado);
+	Reunion findByNutriologoAndDiaAndEstado(Usuario nutriologo, String dia, Boolean estado);
 }

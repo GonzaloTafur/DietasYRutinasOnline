@@ -3,27 +3,28 @@ package com.DietasYRutinasOnline.entity;
 import java.time.LocalTime;
 import java.util.List;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
+@NoArgsConstructor
+@Data
 @Table(name="Horario")
 public class Horario {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "idhorario")
-    private int idhorario;
+    private Long idhorario;
 	
 	@OneToOne
 	@JoinColumn(name = "idusuario")
@@ -33,84 +34,19 @@ public class Horario {
 	@JoinColumn(name = "idrutina")
     private Rutina rutina;
     
-	@Column(name="diaSemana")
+	@Column(name="diaSemana", length = 20)
 	private String dia;
 	
-	@Column(name="periodo")
+	@Column(name="periodo", length = 20)
 	private String periodo;
 	
-	@Column(name="esthorario")
-	private String estado;
+	@Column(name="estado")
+	private Boolean estado;
 	
-	@Column(name="descansoSerie")
+	@Column(name="descansoSerie", length = 20)
 	private String descaSerie;
 	
-	@Column(name="descansoEjer")
+	@Column(name="descaEjercicio", length = 20)
 	private String descaEjercicio;
 
-	
-	public int getIdhorario() {
-		return idhorario;
-	}
-
-	public void setIdhorario(int idhorario) {
-		this.idhorario = idhorario;
-	}
-
-	public Usuario getPaciente() {
-		return paciente;
-	}
-
-	public void setPaciente(Usuario paciente) {
-		this.paciente = paciente;
-	}
-
-	public Rutina getRutina() {
-		return rutina;
-	}
-
-	public void setRutina(Rutina rutina) {
-		this.rutina = rutina;
-	}
-
-	public String getDia() {
-		return dia;
-	}
-
-	public void setDia(String dia) {
-		this.dia = dia;
-	}
-
-	public String getPeriodo() {
-		return periodo;
-	}
-
-	public void setPeriodo(String periodo) {
-		this.periodo = periodo;
-	}
-
-	public String getEstado() {
-		return estado;
-	}
-
-	public void setEstado(String estado) {
-		this.estado = estado;
-	}
-
-	public String getDescaSerie() {
-		return descaSerie;
-	}
-
-	public void setDescaSerie(String descaSerie) {
-		this.descaSerie = descaSerie;
-	}
-
-	public String getDescaEjercicio() {
-		return descaEjercicio;
-	}
-
-	public void setDescaEjercicio(String descaEjercicio) {
-		this.descaEjercicio = descaEjercicio;
-	}
-	
 }

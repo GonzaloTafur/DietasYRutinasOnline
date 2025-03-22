@@ -10,7 +10,7 @@ import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.entity.Transaccion;
 
 @Repository
-public interface TransaccionRepository extends JpaRepository<Transaccion, Integer> {
+public interface TransaccionRepository extends JpaRepository<Transaccion, Long> {
 
 	List<Transaccion> findByTipoAndReunionIn(String tipo, List<Reunion> reunion);
 	List<Transaccion> findByTipoAndAsistenciaIn(String tipo, List<Asistencia> asistencia);
