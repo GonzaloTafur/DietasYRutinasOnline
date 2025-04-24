@@ -37,7 +37,7 @@
                             <a href="#" class="pure-menu-link">Dietas</a>
                         </li>
                         <li class="pure-menu-item">
-                            <a th:href="@{/dieta/verAlimentos}" class="pure-menu-link">Alimentos</a>
+                            <a th:href="@{/dieta/ver_alimentos}" class="pure-menu-link">Alimentos</a>
                         </li>
                     </ul>
                 </div>
@@ -55,12 +55,12 @@
             <tbody class="pure-table-border">
                 <tr th:each="dieta: ${listaDietas}">
                 <td><span th:text="${dieta.nombre}"></span></td>
-            	<td><span th:text="${dieta.objetivo}"></span></td>
+            	<td><span th:text="${dieta.objetivo.nombre}"></span></td>
                 <td><span th:text="${dieta.descripcion}"></span></td>
-                <td><a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">Ver detalles</a>
+                <td><a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">Ver detalles</a>
                     <br>
                                         
-                    <form th:if="${esPaciente}" th:action="@{/dieta/seguirDieta(iddieta=${dieta.iddieta})}" method="POST">
+                    <form th:if="${esPaciente}" th:action="@{/dieta/seguirDieta(codigo=${dieta.codigo})}" method="POST">
             			<button type="submit" class="pure-button pure-button-primary">
             			Seguir Dieta</button>
             		</form>
@@ -70,10 +70,10 @@
             </table>
 </div>
 
-			<form th:if="${!esPaciente}" th:action="@{/dieta/crearDieta}" method="POST">
+			<!--<form th:if="${!esPaciente}" th:action="@{/dieta/crear_dieta}" method="POST">
             	<button type="submit" class="pure-button pure-button-primary">
             	Crear Nueva Dieta</button>
-            </form>
+            </form>-->
             
             <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
             

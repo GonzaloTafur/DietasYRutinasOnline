@@ -58,11 +58,14 @@
 					</select>
 					
 					<label for="mensaje">¿Tienes un objetivo?</label>
-                    <select id="percentage" name="objetivo">
-						<option th:value="'Volumen'" selected="selected">Volumen</option>
-    					<option th:value="'Deficit'">Deficit</option>
-    					<option th:value="'Mejorar Habitos'">Ninguno, solo cambiar y mejorar mis habitos</option>
-					</select>
+					<div th:each="objetivo : ${ckbObjetivos}">
+					<label th:text="${objetivo.nombre}"></label>
+    				<input 
+    					type="checkbox" 
+    					th:field="*{objetivo}" 
+    					th:value="${objetivo.codigo}"
+    					/>
+					</div>
 					
 					<br>
 					<span class="span">Si aún no sabe sus medidas, puede saltarte esta parte y luego llenarlas en otro momento.</span>

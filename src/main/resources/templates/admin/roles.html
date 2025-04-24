@@ -1,0 +1,14 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gestionar Roles</title>
+    </head>
+    <body>
+        <h2>El controlador de roles funciona</h2>
+
+        <ul th:each="r: ${lstRoles}">
+            <li><span th:text="${r.idrol}"></span></li>
+            <li><span th:text="${r.nombre}"></span></li>
+            <li><span th:text="${r.estado}"></span></li>
+        </ul>
+    </body>
+</html>

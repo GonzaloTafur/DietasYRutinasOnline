@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @Table(name="TransaccionGeneral")
-public class Transaccion {
+public class Transaccion implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,11 +32,11 @@ public class Transaccion {
 	private String tipo;
 	
 	@ManyToOne
-    @JoinColumn(name = "idusuario")
+    @JoinColumn(name = "id_usuario")
     private Usuario usuario;
 	
 	@ManyToOne
-    @JoinColumn(name = "idrutina")
+    @JoinColumn(name = "id_rutina")
     private Rutina rutina;
 	
 	@ManyToOne
@@ -43,19 +44,19 @@ public class Transaccion {
     private Dieta dieta;
 	
 	@ManyToOne
-    @JoinColumn(name = "idhorario")
+    @JoinColumn(name = "id_horario")
     private Horario horario;
 	
 	@ManyToOne
-    @JoinColumn(name = "idinfopaciente")
-    private InfoPaciente infopaciente;
+    @JoinColumn(name = "id_historial")
+    private HistorialMed historialMedico;
 
 	@ManyToOne
-    @JoinColumn(name = "idreunion")
+    @JoinColumn(name = "id_reunion")
     private Reunion reunion;
 	
 	@ManyToOne
-    @JoinColumn(name = "idasistencia")
+    @JoinColumn(name = "id_asistencia")
     private Asistencia asistencia;
 
 }

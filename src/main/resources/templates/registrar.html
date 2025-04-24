@@ -30,17 +30,6 @@
             	th:object="${objUsuario}"
             	method="POST" >
 
-				<label>¿Eres paciente o nutriólogo?</label>
-					<div th:each="tipos : ${listaTiposUsuario}">
-					<label th:for="'tipoUsuario-' + ${tipos.idtipousu}" 
-           					th:text="${tipos.nomtipousu}">Tipo de Usuario</label>
-    				<input type="radio" 
-           					th:field="*{tipousuario.idtipousu}" 
-           					th:value="${tipos.idtipousu}" 
-           					id="tipoUsuario-[[${tipos.idtipousu}]]" />
-				</div>
-
-
 				<label for="nombres_apellidos">Nombres</label>
 				<input 
                             	type="text" 

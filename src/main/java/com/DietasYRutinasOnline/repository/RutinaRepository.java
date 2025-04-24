@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import com.DietasYRutinasOnline.entity.Objetivo;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Usuario;
 
@@ -13,11 +14,11 @@ public interface RutinaRepository extends JpaRepository<Rutina, Long>{
 	List<Rutina> findByEstado(Boolean estado);
 	
 	List<Rutina> findByNutriologo(Usuario nutriologo);
-	Rutina findByIdrutina(Long idrutina);
-	List<Rutina> findByTipo(String tipo);
+	Rutina findByCodigo(Long codigo);
+	List<Rutina> findByObjetivo(Objetivo objetivo);
 	List<Rutina> findByNivel(String nivel);
-	List<Rutina> findByNivelAndTipo(String nivel, String tipo);
+	List<Rutina> findByNivelAndObjetivo(String nivel, Objetivo objetivo);
 	
-	@Query("SELECT r FROM Rutina r WHERE r.nivel IN :niveles AND r.tipo = :tipo")
-	List<Rutina> findByNivelesAndTipo(@Param("niveles") List<String> niveles, String tipo);
+	@Query("SELECT r FROM Rutina r WHERE r.nivel IN :niveles AND r.objetivo = :objetivo")
+	List<Rutina> findByNivelesAndObjetivo(@Param("niveles") List<String> niveles, Objetivo objetivo);
 }

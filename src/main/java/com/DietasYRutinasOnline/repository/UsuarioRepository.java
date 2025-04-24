@@ -9,10 +9,10 @@ import com.DietasYRutinasOnline.entity.Usuario;
 public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 	Usuario findByCorreoAndPassword(String correo, String password);
 	Usuario findByCorreo(String correo);
-	Usuario findByIdusuario(Long idusuario);
-	Usuario findByRol(Rol rol);
+	Usuario findByCodigo(Long codigo);
+	//Usuario findByRol(Rol rol);
 
-	List<Usuario> findByRolAndEstado(Rol rol, Boolean estado);
+	//List<Usuario> findByRolAndEstado(Rol rol, Boolean estado);
 	Usuario findByEstado(Boolean estado);
 	
 }

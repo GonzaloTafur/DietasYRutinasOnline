@@ -1,7 +1,7 @@
 package com.DietasYRutinasOnline.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name="Notificacion")
-public class Notificacion {
+public class Notificacion implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,7 +26,7 @@ public class Notificacion {
     private int idnoti;
     
 	@ManyToOne
-	@JoinColumn(name = "idtrangeneral")
+	@JoinColumn(name = "trangeneral", referencedColumnName = "idtrangeneral")
     private Transaccion transaccion;
 	
 	@Column(name="rolnoti")

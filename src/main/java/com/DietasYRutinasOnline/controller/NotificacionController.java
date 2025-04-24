@@ -21,12 +21,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.DietasYRutinasOnline.entity.Horario;
-import com.DietasYRutinasOnline.entity.InfoPaciente;
+import com.DietasYRutinasOnline.entity.HistorialMed;
 import com.DietasYRutinasOnline.entity.Notificacion;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
-import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
+import com.DietasYRutinasOnline.repository.HistorialMedRepository;
 import com.DietasYRutinasOnline.repository.NotificacionRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
 import com.DietasYRutinasOnline.repository.RolRepository;
@@ -57,7 +57,7 @@ public class NotificacionController {
 	RolRepository rolRepository;
 	
 	@Autowired
-	InfoPacienteRepository infoPacienteRepository;
+	HistorialMedRepository historialMedRepository;
 	
 	
 	private final List<String> mensajesAleatorios = Arrays.asList(
@@ -125,18 +125,18 @@ public class NotificacionController {
 	    System.out.println("Notificación automática generada para el día " + diaSemana);
 	}
 
-	@Scheduled(cron = "0 0 0 * * *")
+	/*@Scheduled(cron = "0 0 0 * * *")
 	public void notisActualizarMedidas() {
-        List<InfoPaciente> registrosActivos = infoPacienteRepository.findByEstado(true);
+        List<HistorialMed> registrosActivos = historialMedRepository.findByEstado(true);
 
-        for (InfoPaciente info : registrosActivos) {
+        for (HistorialMed info : registrosActivos) {
             LocalDateTime fechaActual = LocalDateTime.now();
             LocalDateTime fechaModificacion = info.getFecha();
 
             if (ChronoUnit.DAYS.between(fechaModificacion, fechaActual) >= 7) {
                 // Crear la notificación
                 Notificacion notificacion = new Notificacion();
-                //notificacion.setTransaccion(info.getIdinfopaciente());
+                //notificacion.setTransaccion(info.getIdHistorialMed());
                 notificacion.setRol("Paciente");
                 notificacion.setMensaje("Han pasado 7 días desde tu última edición, aprovecha en editarlas si lo necesitas.");
                 notificacion.setEstado(true);
@@ -149,7 +149,7 @@ public class NotificacionController {
         }
     }
 	
-	/*@Scheduled(cron = "0 0 7 * * ?") // Ejemplo: Cada día a las 7:00 AM
+	@Scheduled(cron = "0 0 7 * * ?") // Ejemplo: Cada día a las 7:00 AM
 	public void generarNotificaciones() {
 	    DayOfWeek diaActual = LocalDate.now().getDayOfWeek();
 	    String diaSemana = diaActual.getDisplayName(TextStyle.FULL, new Locale("es", "ES"));

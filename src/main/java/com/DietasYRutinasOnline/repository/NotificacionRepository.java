@@ -6,9 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.DietasYRutinasOnline.entity.Notificacion;
-import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Transaccion;
-import com.DietasYRutinasOnline.entity.Usuario;
 
 @Repository
 public interface NotificacionRepository extends JpaRepository<Notificacion, Long>{

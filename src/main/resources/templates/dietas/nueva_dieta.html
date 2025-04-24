@@ -26,26 +26,39 @@
 		<section>
 			<h2>Insertar nueva dieta</h2>
 			<form class="pure-form pure-form-stacked" 
-            	th:action="@{/dieta/grabarDieta}" 
-            	th:object="${objDieta}"
+            	th:action="@{/dieta/grabar_dieta}" 
+            	th:object="${d}"
             	method="POST" >
 
 				<label for="nombres_apellidos">Nombre</label>
-				<input 
-                            	type="text" 
-                            	id="multi-first-name" 
-                            	th:field="*{nombre}"
-                            	required=""
-                            	/>
+				<input type="text" id="multi-first-name" th:field="*{nombre}" required="" />
                 
-                <label for="percentage">Objetivo</label>        
+                <!--<label for="percentage">Objetivo</label>        
     				<select id="percentage" name="objetivo">
         				<option th:value="'Deficit'" selected="selected">Deficit</option>
         				<option th:value="'Volumen'">Volumen</option>
-    				</select>
+					</select>-->
+
+				
+					<!--<div th:each="objetivo : ${lstObjetivo}">
+					<label th:text="${objetivo.nombre}"></label>
+    				<input 
+    					type="radio" 
+    					th:field="*{objetivo}" 
+    					th:value="${objetivo.codigo}"
+						th:text="${objetivo.nombre}"
+    				/>
+				</div>-->
+
+				<label>Objetivo</label>
+				<ul>
+					<li th:each="o : ${lstObjetivo}">
+						<input type="radio" th:field="*{objetivo}" th:value="${o.codigo}" th:text="${o.nombre}"/>
+					</li>
+				</ul>
     				
 				<label for="mensaje">Descripción</label>
-                    <textarea id="mensaje" th:field="*{descripcion}"></textarea>
+                    <textarea id="mensaje" th:field="*{descripcion}" rows="5"></textarea>
 
 				
 				<label>¿Que alimenos incluye?</label>
@@ -72,7 +85,7 @@
                             <td><input
                             	type="checkbox" 
     							th:field="*{alimento}" 
-    							th:value="${alimento.idalimento}"></input></td>
+    							th:value="${alimento.codigo}"></td>
                         </tr> 
                     </tbody>
                  </table>
@@ -84,7 +97,7 @@
     				<input 
     					type="checkbox" 
     					th:field="*{condicion}" 
-    					th:value="${condicion.idcondicion}"
+    					th:value="${condicion.codigo}"
     				/>
 				</div>
 				       	

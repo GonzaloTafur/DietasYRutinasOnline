@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.attoparser.dom.Text;
@@ -22,44 +23,46 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name="Dieta")
-public class Dieta {
+public class Dieta implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@Column(name = "id_dieta")
     @Column(name = "iddieta")
-    private Long iddieta;
+    private Long codigo;
 
-	@Column(name="nombre", length = 50)
+	@Column(name="nombre", length = 50, nullable = false)
 	private String nombre;
 	
-	@Column(name="objetivo", length = 20)
-	private String objetivo;
+	@ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "objetivo", referencedColumnName = "id_objetivo")
+    private Objetivo objetivo;
 	
-	@Column(name="descripcion")
-	private Text descripcion;
+	@Column(name="descripcion", columnDefinition = "TEXT")
+	private String descripcion;
 	
 	@Column(name="estado")
 	private Boolean estado;
 
 	@ManyToOne
-    @JoinColumn(name = "idusuario")
-    private Usuario nutriologo;
+    @JoinColumn(name = "nutriologo", referencedColumnName = "id_usuario")
+    private Nutriologo nutriologo;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
       name = "DietaAlimento", 
-      joinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="iddieta"), 
-      inverseJoinColumns = @JoinColumn(name = "id_alimento", referencedColumnName ="idalimento"))
+      joinColumns = @JoinColumn(name = "dieta", referencedColumnName ="iddieta"), 
+      inverseJoinColumns = @JoinColumn(name = "alimento", referencedColumnName ="id_alimento"))
     private List<Alimento> alimento;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
       name = "DietaCondicion", 
-      joinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="iddieta"), 
-      inverseJoinColumns = @JoinColumn(name = "id_condicion", referencedColumnName ="idcondicion"))
+      joinColumns = @JoinColumn(name = "dieta", referencedColumnName ="iddieta"), 
+      inverseJoinColumns = @JoinColumn(name = "condicion", referencedColumnName ="id_condicion"))
     private List<Condicion> condicion;
 
 	@ManyToMany(mappedBy = "dieta")
-    private List<InfoPaciente> paciente;
+    private List<HistorialMed> historialMedico;
 
 }

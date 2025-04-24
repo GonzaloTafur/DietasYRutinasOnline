@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.Column;
@@ -16,20 +17,17 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name="Condicion")
-public class Condicion {
+public class Condicion implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idcondicion")
-    private Long idcondicion;
+    @Column(name = "id_condicion")
+    private Long codigo;
 
 	@Column(name="nombre", length=20 )
 	private String nombre;
 	
 	@Column(name="estado")
 	private Boolean estado;
-
-	@ManyToMany(mappedBy = "condicion")
-    private List<Dieta> dieta;
 
 }

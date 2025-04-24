@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.DietasYRutinasOnline.entity.Horario;
+import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Transaccion;
@@ -60,7 +61,7 @@ public class HorarioController {
 	        @RequestParam("periodo") String periodo,
 	        Model model) {
 
-	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+	    Paciente objUsuario = (Paciente) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
 	    	objHorario.setPaciente(objUsuario);
 	    	objHorario.setEstado(true);
@@ -97,22 +98,22 @@ public class HorarioController {
 	    return "usuario/horario";
 	}
 	
-	@GetMapping("/eliminarHora/{idhorario}")
+	@GetMapping("/eliminarHora/{id_h}")
 	public String eliminarHora(
 			HttpSession sesion, 
-			@ModelAttribute ("idhorario") Long idhorario, 
+			@ModelAttribute ("id_h") Long codigo, 
 			Model model) {
 		
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
-	    	Horario horaEliminada = horarioRepository.findByIdhorario(idhorario);
+	    	Horario horaEliminada = horarioRepository.findByCodigo(codigo);
 	    	horaEliminada.setEstado(false);
 	    	horarioRepository.save(horaEliminada);
 	    	model.addAttribute("eliminado", "El horario ha eliminado con exito");
 	    	
-	        Rol vistaUsuario = objUsuario.getRol();
+	        /*Rol vistaUsuario = objUsuario.getRol();
 	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);
+	        model.addAttribute("esPaciente", esPaciente);*/
 	    }
 		List<Rutina> listaRutinas = rutinaRepository.findAll();
 		model.addAttribute("listaRutinas", listaRutinas);

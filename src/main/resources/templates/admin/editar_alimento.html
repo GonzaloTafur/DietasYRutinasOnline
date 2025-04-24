@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Editar Alimento</title>
+    </head>
+    <body>
+        <form class="pure-form pure-form-stacked" 
+            	th:action="@{/alimento/actualizar_alimento}" 
+            	th:object="${al}"
+            	method="POST" >
+
+            <div>
+                <label for="codigo">Codigo</label>
+                <input type="text" id="codigo" th:field="*{codigo}" th:value="${codigo}" readonly/>
+            </div>
+
+            <div>
+				<label for="nombre">Nombre</label>
+				<input type="text" id="nombre" th:field="*{nombre}" th:value="${nombre}" required=""/>
+            </div>
+
+            <div>
+				<label for="nutrientes">Nutrientes</label>
+				<input type="text" id="nutrientes" th:field="*{nutrientes}" th:value="${nutrientes}" required=""/>
+            </div>
+
+            <div>
+                <label for="tipo">Tipo</label>        
+				<select id="tipo" name="tipo">
+					<option th:value="Desayuno" selected="selected">Desayuno</option>
+					<option th:value="Almuerzo">Almuerzo</option>
+                    <option th:value="Cena">Cena</option>
+                    <option th:value="Merienda">Merienda</option>
+				</select>
+            </div>
+
+            <div>          
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" th:field="*{descripcion}" th:value="${descripcion}"></textarea>
+            </div>      
+
+                <span class="span" th:if="${error}" th:text="${error}"></span>
+
+				<input type="submit" value="Grabar">
+
+			</form>
+    </body>
+</html>

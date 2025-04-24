@@ -1,6 +1,6 @@
 package com.DietasYRutinasOnline.entity;
 
-import java.sql.Date;
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name="TransaccionUsuario")
-public class TransaccionUsuario {
+public class TransaccionUsuario implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -41,11 +41,11 @@ public class TransaccionUsuario {
 	private LocalDateTime cambioCorreo;
 	
 	@ManyToOne
-    @JoinColumn(name = "idusuario")
+    @JoinColumn(name = "usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
 	
 	@ManyToOne
-    @JoinColumn(name = "idrol")
+    @JoinColumn(name = "rol", referencedColumnName = "id_rol")
     private Rol rol;
 	
 }

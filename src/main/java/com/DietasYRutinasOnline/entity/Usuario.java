@@ -8,6 +8,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -18,25 +20,22 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name="Usuario")
-public class Usuario implements Serializable{
+public abstract class Usuario implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idusuario")
-    private Long idusuario;
-	
-	@ManyToOne
-    @JoinColumn(name = "idrol")
-    private Rol rol;
+    @Column(name = "id_usuario")
+    private Long codigo;
 
-	@Column(name = "nombres", length = 80)
+	@Column(name = "nombres", length = 80, nullable = false)
     private String nombres;
 
-    @Column(name = "apellidos", length = 80)
+    @Column(name = "apellidos", length = 80, nullable = false)
     private String apellidos;
 
-    @Column(name = "fechanacimiento")
+    @Column(name = "fecha_nacimiento")
     private Date fechanacimiento;
 
     @Column(name = "nacionalidad", length = 40)
@@ -45,13 +44,16 @@ public class Usuario implements Serializable{
     @Column(name = "sexo", length = 15)
     private String sexo;
 
-    @Column(name = "biografia")
-    private Text biografia;
+    @Column(name = "biografia", columnDefinition = "TEXT")
+    private String biografia;
     
     @Column(name = "estado")
     private Boolean estado;
 
-    @Column(name = "correo", length = 100)
+    @Column(name = "usuario", length = 80, nullable = false)
+    private String usuario;
+
+    @Column(name = "correo", length = 100, unique = true)
     private String correo;
 
     @Column(name = "password", length = 30)

@@ -1,9 +1,7 @@
 package com.DietasYRutinasOnline.entity;
 
-
-import java.sql.Date;
+import java.io.Serializable;
 import java.time.LocalTime;
-import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,24 +18,24 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name="Reunion")
-public class Reunion {
+public class Reunion implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idreunion")
-    private Long idreunion;
+    @Column(name = "id_reunion")
+    private Long codigo;
 	
 	@ManyToOne
-	@JoinColumn(name = "idusuario")
-    private Usuario nutriologo;
+	@JoinColumn(name = "nutriologo", referencedColumnName = "id_usuario")
+    private Nutriologo nutriologo;
     
 	@Column(name="motivo")
 	private String motivo;
 	
-	@Column(name="diaSemana")
+	@Column(name="dia_semana")
 	private String dia;
 	
-	@Column(name="horaInicio")
+	@Column(name="hora_inicio")
 	private LocalTime hora;
 	
 	@Column(name="enlace")

@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.entity;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.CascadeType;
@@ -18,25 +19,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name="Asistencia")
-public class Asistencia {
+public class Asistencia implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idasistencia")
-    private Long idasistencia;
+    @Column(name = "id_asistencia")
+    private Long codigo;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idreunion")
+    @JoinColumn(name = "reunion", referencedColumnName = "id_reunion")
     private Reunion reunion;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idusuario")
-    private Usuario paciente;
+    @JoinColumn(name = "paciente", referencedColumnName = "id_usuario")
+    private Paciente paciente;
 	
-	@Column(name="fecasistencia")
+	@Column(name="fecha")
 	private LocalDateTime fecha;
 	
-	@Column(name="estasistencia")
+	@Column(name="estado")
 	private Boolean estado;
 
 }

@@ -32,7 +32,7 @@
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list">
                         <li class="pure-menu-item">
-                            <a th:href="@{/home/verRutinas}" class="pure-menu-link">Rutinas</a>
+                            <a th:href="@{/rutina/}" class="pure-menu-link">Rutinas</a>
                         </li>
                         <li class="pure-menu-item pure-menu-selected">
                             <a href="#" class="pure-menu-link">Ejercicios</a>
@@ -63,13 +63,13 @@
                     </thead>
 
                     <tbody class="pure-table-border">
-                        <tr th:each="ejercicio: ${listaEjercicios}">
-                            <td><span th:text="${ejercicio.nombre}"></span></td>
-                            <td><span th:text="${ejercicio.grupomuscular}"></span></td>
-                            <td><span th:text="${ejercicio.tipo}"></span></td>
-                            <td><span th:text="${ejercicio.series}"></span></td>
-                            <td><span th:text="${ejercicio.repeticiones}"></span></td>
-                            <td><span th:text="${ejercicio.descripcion}"></span></td>
+                        <tr th:each="e: ${listaEjercicios}">
+                            <td><span th:text="${e.nombre}"></span></td>
+                            <td><span th:text="${e.grupomuscular}"></span></td>
+                            <td><span th:text="${e.tipo}"></span></td>
+                            <td><span th:text="${e.series}"></span></td>
+                            <td><span th:text="${e.repeticiones}"></span></td>
+                            <td><span th:text="${e.descripcion}"></span></td>
                         </tr> 
                     </tbody>
        

@@ -30,7 +30,7 @@
             	th:object="${objDieta}"
             	method="POST" >
 
-				<input type="hidden" th:field="*{iddieta}">
+				<input type="hidden" th:field="*{codigo}">
 				
 				<label for="nombres_apellidos">Nombre de dieta</label>
 				<input 
@@ -71,7 +71,7 @@
                             <td><input
                             	type="checkbox" 
     							th:field="*{alimento}" 
-    							th:value="${alimento.idalimento}"></input></td>
+    							th:value="${alimento.idalimento}"></td>
                         </tr> 
                     </tbody>
                  </table>

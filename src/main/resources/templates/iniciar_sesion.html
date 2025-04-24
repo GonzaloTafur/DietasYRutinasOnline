@@ -1,0 +1,45 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <link rel="stylesheet" type="text/css" th:href="@{*/style2.css}">
+        <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+        <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+        integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+        <title>Iniciar Sesión</title>
+    </head>
+    <body>
+        <h1>La pagina de inicio funciona con exito</h1>
+
+        <main>
+            <section>
+                <h2>Iniciar Sesión</h2>
+                <form class="pure-form pure-form-stacked"  
+                    th:action="@{/usuario/validarUsuario}" 
+                    method="POST">
+                    
+                    <label for="aligned-email">Correo Electronico</label>
+                    <input type="email" id="aligned-email" name="correo" required=""/>
+    
+                    <label for="aligned-password">Contraseña</label>
+                    <input type="password" id="aligned-password" name="password" required="">
+    
+                    <span class="span" th:if="${error}" th:text="${error}"></span>
+                        
+                    <input type="submit" class="pure-button pure-button-primary" value="Ingresar">
+                </form>
+        
+                <br><br>
+                <!--<form th:action="@{/usuario/registrarCuenta}" method="POST">
+                    <button type="submit" class="btn-link">
+                        ¿Eres nuevo aquí? Regístrate
+                    </button>
+                </form>-->
+                <a th:href="@{/usuario/registrar_usuario}">¿Eres nuevo aquí? Regístrate</a>
+            </section>
+        </main>
+    
+        <footer>
+            <p class="p-footer">2024. Todos los derechos reservados.</p>
+        </footer>
+
+    </body>
+</html>

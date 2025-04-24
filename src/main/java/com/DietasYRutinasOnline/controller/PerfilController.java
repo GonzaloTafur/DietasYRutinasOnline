@@ -19,7 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.DietasYRutinasOnline.entity.Asistencia;
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Horario;
-import com.DietasYRutinasOnline.entity.InfoPaciente;
+import com.DietasYRutinasOnline.entity.Paciente;
+import com.DietasYRutinasOnline.entity.HistorialMed;
 import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
@@ -28,12 +29,14 @@ import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.AsistenciaRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
-import com.DietasYRutinasOnline.repository.InfoPacienteRepository;
+import com.DietasYRutinasOnline.repository.HistorialMedRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
 import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+import com.DietasYRutinasOnline.service.HistorialMedService;
+import com.DietasYRutinasOnline.service.UsuarioService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -51,13 +54,13 @@ public class PerfilController {
 	DietaRepository dietaRepository;
 	
 	@Autowired
-	UsuarioRepository usuarioRepository;
+	private UsuarioService usuarioService;
 	
 	@Autowired
 	RolRepository rolRepository;
 	
 	@Autowired
-	InfoPacienteRepository infoPacienteRepository;
+	HistorialMedService historialMedService;
 	
 	@Autowired
 	TransaccionRepository transaccionRepository;
@@ -77,9 +80,9 @@ public class PerfilController {
 		}  
 	}
 	
-	public boolean puedeEditar(InfoPaciente infoPaciente) {
+	public boolean puedeEditar(HistorialMed HistorialMed) {
 	    LocalDateTime fechaHoy = LocalDateTime.now();
-	    LocalDateTime fechaModificacion = infoPaciente.getFecha();
+	    LocalDateTime fechaModificacion = HistorialMed.getFecha();
 	    return ChronoUnit.DAYS.between(fechaModificacion, fechaHoy) >= 7;
 	}
 	
@@ -87,36 +90,39 @@ public class PerfilController {
 	public String editarInfo(HttpSession sesion, Model model) {
 	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario != null) {
-	        Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        /*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
 	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
+			*/
+	        //HistorialMed infoActiva = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
+			HistorialMed miHistorial = historialMedService.getEstado(true);
+			//Paciente pacienteActual = usuarioService.findByHistorialMed(miHistorial);
 
-	        InfoPaciente infoActiva = infoPacienteRepository.findByPacienteAndEstado(objUsuario, true);
 
-	        if (infoActiva!=null && puedeEditar(infoActiva)) {
-	        	infoActiva.setEstado(false);
-	            infoPacienteRepository.save(infoActiva);
+	        if (miHistorial!=null && puedeEditar(miHistorial)) {
+	        	miHistorial.setEstado(false);
+	            historialMedService.guardar(miHistorial);
 	        	
-	            InfoPaciente nuevaInfo = new InfoPaciente();
-	            nuevaInfo.setFrecEjercicios(infoActiva.getFrecEjercicios());
-	            nuevaInfo.setCondicion(infoActiva.getCondicion());
-	            nuevaInfo.setObjetivo(infoActiva.getObjetivo());
-	            nuevaInfo.setPesoCorporal(infoActiva.getPesoCorporal());
-	            nuevaInfo.setEstatura(infoActiva.getEstatura());
-	            nuevaInfo.setPerimCintura(infoActiva.getPerimCintura());
-	            nuevaInfo.setPerimCadera(infoActiva.getPerimCadera());
-	            nuevaInfo.setPerimMuslo(infoActiva.getPerimMuslo());
-	            nuevaInfo.setPerimBrazo(infoActiva.getPerimBrazo());
+	            HistorialMed nuevaInfo = new HistorialMed();
+	            nuevaInfo.setFrecEjercicios(miHistorial.getFrecEjercicios());
+	            nuevaInfo.setCondicion(miHistorial.getCondicion());
+	            nuevaInfo.setObjetivo(miHistorial.getObjetivo());
+	            nuevaInfo.setPesoCorporal(miHistorial.getPesoCorporal());
+	            nuevaInfo.setEstatura(miHistorial.getEstatura());
+	            nuevaInfo.setPerimCintura(miHistorial.getPerimCintura());
+	            nuevaInfo.setPerimCadera(miHistorial.getPerimCadera());
+	            nuevaInfo.setPerimMuslo(miHistorial.getPerimMuslo());
+	            nuevaInfo.setPerimBrazo(miHistorial.getPerimBrazo());
 
-	            model.addAttribute("infoActiva", infoActiva);
+	            model.addAttribute("infoActiva", miHistorial);
 	            model.addAttribute("nuevaInfo", nuevaInfo);
-	            return "usuario/editar_infopaciente";
+	            return "usuario/editar_HistorialMed";
 	        } 
 	        else {
 	        	model.addAttribute("objUsuario", objUsuario);
 	    	    
-	    	    InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(objUsuario, true);
-	    	    model.addAttribute("miInfo", miInfo);
+	    	    //HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
+	    	    model.addAttribute("miInfo", miHistorial);
 	        	
 	            model.addAttribute("inactivo", "Debe esperar al menos 7 días antes de poder realizar otra modificación.");
 	            return "perfil";
@@ -128,28 +134,31 @@ public class PerfilController {
 	@PostMapping("/actualizarInfo")
 	public String actualizarInfo(
 	        HttpSession sesion,
-	        @ModelAttribute("nuevaInfo") InfoPaciente nuevaInfo,
+	        @ModelAttribute("nuevaInfo") HistorialMed nuevaInfo,
 	        Model model) {
 
-	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario != null) {
-	        Usuario usuRegistrado = usuarioRepository.findById(objUsuario.getIdusuario()).orElse(null);
-	        nuevaInfo.setPaciente(usuRegistrado);
+	    Paciente paciente = (Paciente) sesion.getAttribute("usuario");
+	    if (paciente != null) {
+	        //Paciente usuRegistrado = usuarioService.findById(paciente.getIdusuario()).orElse(null);
+	        //nuevaInfo.setPaciente(usuRegistrado);
 	        nuevaInfo.setEstado(true);
 	        nuevaInfo.setFecha(LocalDateTime.now());
 
-	        infoPacienteRepository.save(nuevaInfo);
+			paciente.setHistorialMedico(nuevaInfo);
+			usuarioService.guardarPaciente(paciente);
 
-	        Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);
+	        historialMedService.guardar(nuevaInfo);
+
+	        //Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
+	        //model.addAttribute("esPaciente", esPaciente);
 	    }
 
 	    model.addAttribute("exito", "Su información se actualizó con éxito");
-	    model.addAttribute("objUsuario", objUsuario);
+	    model.addAttribute("objUsuario", paciente);
 
-	    InfoPaciente miInfo = infoPacienteRepository.findByPacienteAndEstado(objUsuario, true);
-	    model.addAttribute("miInfo", miInfo);
+	    //HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
+	    model.addAttribute("miInfo", nuevaInfo);
 
 	    return "menu";
 	}
@@ -158,7 +167,7 @@ public class PerfilController {
 	public String verSeguimiento(HttpSession sesion, Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 		
-		List<InfoPaciente> listaSeguimiento = infoPacienteRepository.findByPaciente(objUsuario);
+		List<HistorialMed> listaSeguimiento = historialMedService.getEstadoAll(true);
 	    model.addAttribute("listaSeguimiento", listaSeguimiento);
 	    Collections.reverse(listaSeguimiento);
 	    
@@ -174,10 +183,10 @@ public class PerfilController {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
 	    	
-	    	if(objUsuario.getIdusuario() == idusuario) {
-	    		Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
+	    	if(objUsuario.getCodigo() == idusuario) {
+	    		/*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
 	    		boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	    		model.addAttribute("esPaciente", esPaciente);
+	    		model.addAttribute("esPaciente", esPaciente);*/
 	    		
 	    		List<Rutina> misRutinas = rutinaRepository.findByNutriologo(objUsuario);
 	    		model.addAttribute("misRutinas", misRutinas);
@@ -188,8 +197,8 @@ public class PerfilController {
 	    		model.addAttribute("objUsuario", objUsuario);
 	    		return "perfil";
 	    	}
-	    	else {
-	    		Usuario suPerfil = usuarioRepository.findByIdusuario(idusuario);
+	    	/*else {
+	    		Usuario suPerfil = usuarioService.findByIdusuario(idusuario);
 	    		model.addAttribute("suPerfil", suPerfil);
 		
 	    		List<Rutina> susRutinas = rutinaRepository.findByNutriologo(suPerfil);
@@ -198,7 +207,7 @@ public class PerfilController {
 	    		List<Dieta> susDietas = dietaRepository.findByNutriologo(suPerfil);
 	    		model.addAttribute("susDietas", susDietas);
 	    		return "usuario/nutriologo";
-	    	}
+	    	}*/
 	        
 	    }
 	    return "redirect:/login";

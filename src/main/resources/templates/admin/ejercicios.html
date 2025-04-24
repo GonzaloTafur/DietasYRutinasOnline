@@ -1,0 +1,22 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gestionar Ejercicios</title>
+    </head>
+    <body>
+        <h2>El controlador de ejercicios funciona</h2>
+
+        <a type="button" class="pure-button pure-button-secondary" th:href="@{/admin/nuevo_ejercicio}" method="GET">Nuevo Ejercicio</a>
+
+        <ul th:each="e: ${lstEjercicios}">
+            <li><span th:text="${e.codigo}"></span></li>
+            <li><span th:text="${e.nombre}"></span></li>
+            <li><span th:text="${e.grupomuscular}"></span></li>
+            <li><span th:text="${e.tipo}"></span></li>
+            <li><span th:text="${e.series}"></span></li>
+            <li><span th:text="${e.repeticiones}"></span></li>
+            <li><span th:text="${e.descripcion}"></span></li>
+            <li><span th:text="${e.estado}"></span></li>
+            <li><a th:href="@{/admin/editar_ejercicio/{codigo}(codigo=${e.codigo})}">EDITAR</a></li>
+        </ul>
+    </body>
+</html>

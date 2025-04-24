@@ -1,0 +1,28 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gestionar Alimentos</title>
+    </head>
+    <body>
+        <h2>El controlador de ejercicios funciona</h2>
+
+        <a type="button" class="pure-button pure-button-secondary" th:href="@{/alimento/nuevo_alimento}" method="GET">Nuevo Alimento</a>
+
+        <ul th:each="al: ${lstAlimentos}">
+            <li><span th:text="${al.codigo}"></span></li>
+            <li><span th:text="${al.nombre}"></span></li>
+            <li><span th:text="${al.tipo}"></span></li>
+            <!--<li><span th:text="${al.condicion.nombre}"></span></li>-->
+            <li><span th:text="${al.nutrientes}"></span></li>
+            <li><span th:text="${al.descripcion}"></span></li>
+            <li><span th:text="${al.estado}"></span></li>
+            <li><a th:href="@{/alimento/editar_alimento/{codigo}(codigo=${al.codigo})}">EDITAR</a></li>
+        
+        </ul>
+        <hr>
+        <ul th:each="c: ${lstCondicion}">
+            <li><span th:text="${c.codigo}"></span></li>
+            <li><span th:text="${c.nombre}"></span></li>
+            <li><span th:text="${c.estado}"></span></li>
+        </ul>
+    </body>
+</html>

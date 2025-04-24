@@ -1,9 +1,11 @@
 package com.DietasYRutinasOnline.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.attoparser.dom.Text;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -21,18 +23,19 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 @Table(name="Rutina")
-public class Rutina {
+public class Rutina implements Serializable {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idrutina")
-    private Long idrutina;
+    @Column(name = "id_rutina")
+    private Long codigo;
 	
-	@Column(name = "nombre", length=50)
+	  @Column(name = "nombre", length=50, nullable = false)
     private String nombre;
 	
-    @Column(name = "tipo", length = 20)
-    private String tipo;
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "objetivo", referencedColumnName = "id_objetivo")
+    private Objetivo objetivo;
     
     @Column(name = "parteCuerpo", length = 20)
     private String parteCuerpo;
@@ -40,8 +43,8 @@ public class Rutina {
     @Column(name = "nivel", length=25)
     private String nivel;
 
-    @Column(name = "descripcion")
-    private Text descripcion;
+    @Column(name = "descripcion", columnDefinition = "TEXT")
+    private String descripcion;
 
     @Column(name = "estado")
     private Boolean estado;
@@ -49,12 +52,12 @@ public class Rutina {
     @ManyToMany
     @JoinTable(
       name = "RutinaEjercicio", 
-      joinColumns = @JoinColumn(name = "id_rutina", referencedColumnName ="idrutina"), 
-      inverseJoinColumns = @JoinColumn(name = "id_ejercicio", referencedColumnName ="idejercicio"))
+      joinColumns = @JoinColumn(name = "rutina", referencedColumnName ="id_rutina"), 
+      inverseJoinColumns = @JoinColumn(name = "ejercicio", referencedColumnName ="id_ejercicio"))
     private List<Ejercicio> ejercicio;
     
     @ManyToOne
-    @JoinColumn(name = "idusuario")
-    private Usuario nutriologo;
+    @JoinColumn(name = "nutriologo", referencedColumnName = "id_usuario")
+    private Nutriologo nutriologo;
 
 }

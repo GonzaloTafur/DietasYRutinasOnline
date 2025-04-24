@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.entity;
 
+import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -21,56 +22,54 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @Data
-@Table(name="InfoPaciente")
-public class InfoPaciente {
-
-	@Id
+@Table(name="HistorialMedico")
+public class HistorialMed implements Serializable{
+    
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idinfopaciente")
-    private Long idinfopaciente;
+    @Column(name = "id_historial")
+    private Long codigo;
 
-    @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "idusuario")
-    private Usuario paciente;
-
-	@Column(name="frecEjercicios")
+	@Column(name="frecuencia_ejercicios")
 	private String frecEjercicios;
 	
-	@Column(name="condicion")
-	private String condicion;
+	@ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "condicion", referencedColumnName = "id_condicion")
+    private Condicion condicion;
 	
-	@Column(name="pesoCorporal")
+	@Column(name="peso_corporal")
 	private BigDecimal pesoCorporal;
 	
 	@Column(name="estatura")
 	private BigDecimal estatura;
 	
-	@Column(name="perimCintura")
+	@Column(name="perimetro_cintura")
 	private BigDecimal perimCintura;
 	
-	@Column(name="perimCadera")
+	@Column(name="perimetro_cadera")
 	private BigDecimal perimCadera;
 	
-	@Column(name="perimMuslo")
+	@Column(name="perimetro_muslo")
 	private BigDecimal perimMuslo;
 	
-	@Column(name="perimBrazo")
+	@Column(name="perimetro_brazo")
 	private BigDecimal perimBrazo;
 	
-	@Column(name="objetivo")
-	private String objetivo;
+	@ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "objetivo", referencedColumnName = "id_objetivo")
+    private Objetivo objetivo;
 	
 	@Column(name="estado")
 	private Boolean estado;
 	
-	@Column(name="fechainfo")
+	@Column(name="fecha")
 	private LocalDateTime fecha;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
-      name = "PacienteDieta", 
-      joinColumns = @JoinColumn(name = "id_paciente", referencedColumnName ="idinfopaciente"), 
-      inverseJoinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="iddieta"))
+      name = "HistorialDieta", 
+      joinColumns = @JoinColumn(name = "historial_medico", referencedColumnName ="id_historial"), 
+      inverseJoinColumns = @JoinColumn(name = "dieta", referencedColumnName ="iddieta"))
     private List<Dieta> dieta;
 
 }

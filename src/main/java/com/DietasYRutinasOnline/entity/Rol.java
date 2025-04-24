@@ -2,6 +2,8 @@ package com.DietasYRutinasOnline.entity;
 
 import java.io.Serializable;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -19,13 +21,13 @@ public class Rol implements Serializable {
     
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idrol")
-    private Long idrol;
+    @Column(name = "id_rol")
+    private Long codigo;
 
 	@Column(name = "nombre", length=50)
     private String nombre;
 
     @Column(name = "estado")
+    //@ColumnDefault("True")
     private Boolean estado;
-
 }

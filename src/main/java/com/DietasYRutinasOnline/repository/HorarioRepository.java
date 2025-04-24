@@ -15,7 +15,7 @@ public interface HorarioRepository extends JpaRepository<Horario, Long>{
 	Horario findByPaciente(Usuario paciente);
 	Horario findByPacienteAndDiaAndEstado(Usuario paciente, String dia, Boolean estado);
 	Horario findByPacienteAndDiaAndPeriodoAndEstado(Usuario paciente, String dia, String periodo, Boolean estado);
-	Horario findByIdhorario(Long idhorario);
+	Horario findByCodigo(Long codigo);
 
 	List<Horario> findByDiaAndEstado(String dia, Boolean estado);
 }

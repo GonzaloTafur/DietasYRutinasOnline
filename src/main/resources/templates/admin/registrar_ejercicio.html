@@ -1,0 +1,52 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Registrar Ejercicios</title>
+    </head>
+    <body>
+        <h2>El controlador de ejercicios funciona</h2>
+
+        <form class="pure-form pure-form-stacked" 
+            	th:action="@{/admin/grabar_ejercicio}" 
+            	th:object="${e}"
+            	method="POST" >
+
+            <div>
+				<label for="nombre">Nombre</label>
+				<input type="text" id="nombre" th:field="*{nombre}" required=""/>
+            </div>
+
+            <div>
+				<label for="grupo_muscular">Grupo Muscular</label>
+				<input type="text" id="grupomuscular" th:field="*{grupomuscular}" required=""/>
+            </div>
+
+            <div>
+                <label for="tipo">Tipo</label>        
+					<select id="tipo" name="tipo">
+						<option th:value="Superior" selected="selected">Tren Superior</option>
+						<option th:value="Inferior">Tren Inferior</option>
+				    </select>
+            </div>
+
+            <div>
+                <label for="grupo_muscular">Series</label>
+                <input type="number" id="series" th:field="*{series}" required=""/>
+            </div>
+
+            <div>
+                <label for="grupo_muscular">Repeticiones</label>
+                <input type="text" id="repeticiones" th:field="*{repeticiones}" required=""/>
+            </div>
+                
+            <div>          
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" th:field="*{descripcion}"></textarea>
+            </div>      
+
+                <span class="span" th:if="${error}" th:text="${error}"></span>
+
+				<input type="submit" value="Grabar">
+
+			</form>
+    </body>
+</html>
