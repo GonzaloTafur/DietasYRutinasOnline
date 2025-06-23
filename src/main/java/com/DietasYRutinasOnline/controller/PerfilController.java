@@ -101,7 +101,7 @@ public class PerfilController {
 
 	        if (miHistorial!=null && puedeEditar(miHistorial)) {
 	        	miHistorial.setEstado(false);
-	            historialMedService.guardar(miHistorial);
+	            historialMedService.guardarHistorial(miHistorial);
 	        	
 	            HistorialMed nuevaInfo = new HistorialMed();
 	            nuevaInfo.setFrecEjercicios(miHistorial.getFrecEjercicios());
@@ -145,9 +145,9 @@ public class PerfilController {
 	        nuevaInfo.setFecha(LocalDateTime.now());
 
 			paciente.setHistorialMedico(nuevaInfo);
-			usuarioService.guardarPaciente(paciente);
+			//usuarioService.guardarPaciente(paciente);
 
-	        historialMedService.guardar(nuevaInfo);
+	        historialMedService.guardarHistorial(nuevaInfo);
 
 	        //Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
 	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
@@ -177,13 +177,13 @@ public class PerfilController {
 	@GetMapping("/verSuPerfil")
 	public String verSuPerfil(
 			HttpSession sesion,
-			@RequestParam("idusuario") Long idusuario,
+			@RequestParam("id_usuario") Long codigo,
 			Model model) {
 		
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {
 	    	
-	    	if(objUsuario.getCodigo() == idusuario) {
+	    	if(objUsuario.getCodigo() == codigo) {
 	    		/*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
 	    		boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	    		model.addAttribute("esPaciente", esPaciente);*/

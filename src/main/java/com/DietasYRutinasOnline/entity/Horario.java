@@ -36,8 +36,8 @@ public class Horario implements Serializable{
 	@Column(name="dia_semana", length = 20)
 	private String dia;
 	
-	@Column(name="periodo", length = 20)
-	private String periodo;
+	@Column(name="parte_dia", length = 20)
+	private String parte;
 	
 	@Column(name="estado")
 	private Boolean estado;

@@ -6,7 +6,8 @@
     <body>
         <h1>¿Como que usuario va a registrarse?</h1>
 
-        <a th:href="@{/registrar_usuario_paciente/}">Paciente</a>
-        <a th:href="@{/registrar_usuario_paciente/}">Nutriologo</a>
+        <a th:href="@{/usuario/registrar_usuario_paciente}" method="GET">Paciente</a>
+        
+        <a th:href="@{/usuario/registrar_usuario_nutriologo}" method="GET">Nutriologo</a>
     </body>
 </html>

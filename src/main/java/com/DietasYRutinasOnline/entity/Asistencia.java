@@ -27,11 +27,11 @@ public class Asistencia implements Serializable{
     private Long codigo;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "reunion", referencedColumnName = "id_reunion")
+    @JoinColumn(name = "id_reunion", referencedColumnName = "id_reunion")
     private Reunion reunion;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "paciente", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_paciente", referencedColumnName = "id_usuario")
     private Paciente paciente;
 	
 	@Column(name="fecha")

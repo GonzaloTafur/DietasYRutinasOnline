@@ -24,69 +24,69 @@
 <body>
     <main>
 		<section>
-    <div>
+            <div>
+                <div class="mb-3" th:value="${detDieta}">
+                    <!--<div class="mb-3" th:object="${detDieta}">-->
+                    <h2 th:text="${detDieta.nombre}"></h2>
+                    <br>
+                                
+                    <label class="form-label">Objetivo:</label>
+                    <span th:text="${detDieta.objetivo.nombre}"></span>
+                    <br>
+                                
+                    <label class="form-label">Descripción:</label>
+                    <span th:text="${detDieta.descripcion}"></span>
+                    <br>
+                                
+                        <!--<label class="form-label">Creado por:</label>
+                                <a th:href="@{/perfil/verSuPerfil(codigo=${detDieta.nutriologo.codigo})}">
+                                        <i class="bx bx-edit-alt me-2"></i>
+                                        <span th:text="${detDieta.nutriologo.nombres}"></span>
+                                        <span th:text="${detDieta.nutriologo.apellidos}"></span>
+                        </a>-->  
+                            
+                            <div><h3>Condicion</h3>
+                                <div th:each="condicion : ${detDieta.condicion}">
+                                    <p th:text="${condicion.nombre}"></p>
+                                </div>
+                            </div>
+                            
+                            <div><h3>Alimentos incluidos</h3></div>
+                            <table class="pure-table">
+                                <thead>
+                                    <tr>
+                                        <th>Alimento</th>
+                                        <th>Nutrientes</th>
+                                        <th>Tipo</th>
+                                        <th>Descripción</th>
+                                    </tr>
+                                </thead>
 
-                <div class="mb-3" th:value="${detalleDieta}">
-                
-                    <h2 th:text="${detalleDieta.nombre}"></h2>
-          			<br>
-          			
-          			<label class="form-label">Objetivo:</label>
-          			<span th:text="${detalleDieta.objetivo}"></span>
-          			<br>
-          			
-                	<label class="form-label">Descripción:</label>
-                	<span th:text="${detalleDieta.descripcion}"></span>
-                	<br>
-                	
-                	<label class="form-label">Creado por:</label>
-                	<a th:href="@{/perfil/verSuPerfil(idusuario=${detalleDieta.nutriologo.idusuario})}">
-                            <i class="bx bx-edit-alt me-2"></i>
-                            <span th:text="${detalleDieta.nutriologo.nombres}"></span>
-                        	<span th:text="${detalleDieta.nutriologo.apellidos}"></span>
-                    </a>  
+                                <tbody class="pure-table-border">
+                                    <tr th:each="al: ${detDieta.alimento}">
+                                        <td><span th:text="${al.nombre}"></span></td>
+                                        <td><span th:text="${al.nutrientes}"></span></td>
+                                        <td><span th:text="${al.tipo}"></span></td>
+                                        <td><span th:text="${al.descripcion}"></span></td>
+                                    </tr> 
+                                </tbody>
+                            </table>
+                        
+                        <!--<form th:if="${esCreador}" th:action="@{/dieta/editarDieta}" th:method="POST">
+                            <input type="hidden" name="codigo" th:value="${detalleDieta.codigo}" />
+                            <button type="submit" class="pure-button pure-button-primary">
+                                Editar Dieta
+                            </button>
+                        </form>-->
+
+                        <a th:href="@{/dieta/editar_dieta/{codigo}(codigo=${detDieta.codigo})}">Editar Dieta</a>
                 </div>
-                
-                <div><h3>Condicion</h3>
-    				<div th:each="condicion : ${detalleDieta.condicion}">
-    					<p th:text="${condicion.nombre}"></p>
-    				</div>
-				</div>
-                
-                <div><h3>Alimentos incluidos</h3></div>
-                <table class="pure-table">
-                    <thead>
-                        <tr>
-                            <th>Alimento</th>
-                            <th>Nutrientes</th>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
-                        </tr>
-                    </thead>
+            </div>
+        </section>
+    </main>
 
-                    <tbody class="pure-table-border">
-                        <tr th:each="alimento: ${detalleDieta.alimento}">
-                            <td><span th:text="${alimento.nombre}"></span></td>
-                            <td><span th:text="${alimento.nutrientes}"></span></td>
-                            <td><span th:text="${alimento.tipo}"></span></td>
-                            <td><span th:text="${alimento.descripcion}"></span></td>
-                        </tr> 
-                    </tbody>
-                </table>
-			
-            <form th:if="${esCreador}" th:action="@{/dieta/editarDieta}" th:method="POST">
-            	<input type="hidden" name="iddieta" th:value="${detalleDieta.iddieta}" />
-            	<button type="submit" class="pure-button pure-button-primary">
-        			Editar Dieta
-        		</button>
-			</form>
-
-    </div>
-</section>
-</main>
-
-<footer>
-    <p class="p-footer">2024. Todos los derechos reservados.</p>
-</footer>
+    <footer>
+        <p class="p-footer">2024. Todos los derechos reservados.</p>
+    </footer>
 
 </body>

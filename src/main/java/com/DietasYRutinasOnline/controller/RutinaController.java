@@ -15,10 +15,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Ejercicio;
-import com.DietasYRutinasOnline.entity.Horario;
-import com.DietasYRutinasOnline.entity.HistorialMed;
-import com.DietasYRutinasOnline.entity.Notificacion;
-import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Objetivo;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
@@ -32,6 +28,8 @@ import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+import com.DietasYRutinasOnline.service.EjercicioService;
+import com.DietasYRutinasOnline.service.HorarioService;
 import com.DietasYRutinasOnline.service.ObjetivoService;
 import com.DietasYRutinasOnline.service.RutinaService;
 
@@ -42,7 +40,7 @@ import jakarta.servlet.http.HttpSession;
 public class RutinaController {
 	
 	@Autowired
-	EjercicioRepository ejercicioRepository;
+	private EjercicioService ejercicioService;
 	
 	@Autowired
 	private RutinaService rutinaService;
@@ -54,7 +52,7 @@ public class RutinaController {
 	HistorialMedRepository historialMedRepository;
 	
 	@Autowired
-	HorarioRepository horarioRepository;
+	private HorarioService horarioService;
 	
 	@Autowired
 	TransaccionRepository transaccionRepository;
@@ -144,10 +142,10 @@ public class RutinaController {
 	// ---- VER EJERCICIOS -------------------------------------------------------------------
 	@GetMapping("ver_ejercicios")
 	public String verEjercicios(Model model) {
-		List<Ejercicio> listaEjercicios = ejercicioRepository.findAll();
+		List<Ejercicio> listaEjercicios = ejercicioService.getEstado(true);
 		model.addAttribute("listaEjercicios", listaEjercicios);
 		
-		List<String> cbxEjercicios = ejercicioRepository.findDistinctGrupomuscular();
+		List<String> cbxEjercicios = ejercicioService.cbxEjercicio();
 		if (cbxEjercicios.size() > 5) {
 			cbxEjercicios = cbxEjercicios.subList(0, 5);
 	    }
@@ -156,14 +154,14 @@ public class RutinaController {
 	}
 	
 	@GetMapping("/buscarEjercicios")
-	public String buscarEjercicios(String grupomuscular, Model model) {
+	public String buscarEjercicios(String gm, Model model) {
 		
-		List<String> cbxEjercicios = ejercicioRepository.findDistinctGrupomuscular();
+		List<String> cbxEjercicios = ejercicioService.cbxEjercicio();
 		if (cbxEjercicios.size() > 5) {
 			cbxEjercicios = cbxEjercicios.subList(0, 5);
 	    }
 		
-		List<Ejercicio> listaEjercicios = ejercicioRepository.findByGrupomuscular(grupomuscular);
+		List<Ejercicio> listaEjercicios = ejercicioService.getGrupomuscular(gm);
 		model.addAttribute("listaEjercicios", listaEjercicios);
 		
 		model.addAttribute("cbxEjercicios", cbxEjercicios);
@@ -173,8 +171,9 @@ public class RutinaController {
 	// ---- VENTANA CREAR RUTINA -------------------------------------------------------------------
 	@GetMapping("crear_rutina")
 	public String crearRutina(Model model) {
-		List<Ejercicio> listaEjercicios = ejercicioRepository.findAll();
+		List<Ejercicio> listaEjercicios = ejercicioService.getEstado(true);
 		model.addAttribute("listaEjercicios", listaEjercicios);
+		
 		List<Objetivo> lstObjetivo = objetivoService.getEstado(true);
 		model.addAttribute("lstObjetivo", lstObjetivo);
 		Rutina ru = new Rutina();
@@ -222,8 +221,9 @@ public class RutinaController {
 	@GetMapping("verDetalleRutina/{codigo}")
 	public String verDetalleRutina(
 			HttpSession sesion,
-			@RequestParam("id_rut") Long codigo,
-			@ModelAttribute("objRutina") Rutina objRutina,
+			//@RequestParam("id_rut") Long codigo,
+			//@ModelAttribute("ru") Rutina ru,
+			@PathVariable Long codigo,
 			Model model) {
 		
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
@@ -235,8 +235,10 @@ public class RutinaController {
 		
 		//Rutina detalleRutina = rutinaRepository.findByCodigo(codigo);
 		//model.addAttribute("detalleRutina", detalleRutina);
+		Rutina detRutina = rutinaService.getCodigo(codigo);
+		model.addAttribute("detRutina", detRutina);
 		
-		Usuario nutriActual = (Usuario) sesion.getAttribute("usuario");
+		//Usuario nutriActual = (Usuario) sesion.getAttribute("usuario");
 		//model.addAttribute("esCreador", nutriActual.getCodigo() == detalleRutina.getNutriologo().getCodigo());
 		return "rutinas/detalle_rutina";
 	}
@@ -249,7 +251,7 @@ public class RutinaController {
 		//Rutina objRutina = rutinaRepository.findByCodigo(codigo);
 		//model.addAttribute("objRutina", objRutina);
 		
-		List<Ejercicio> listaEjercicios = ejercicioRepository.findAll();
+		List<Ejercicio> listaEjercicios = ejercicioService.getEstado(true);
 		model.addAttribute("listaEjercicios", listaEjercicios);
 		return "rutinas/editar_rutina";			
 	}
@@ -257,7 +259,7 @@ public class RutinaController {
 	@PostMapping("actualizar_rutina")
 	public String actualizarRutina(
 			HttpSession sesion,
-			@ModelAttribute("objRutina") Rutina objRutina, 
+			@ModelAttribute("objRutina") Rutina ru, 
 			Model model) {
 		
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
@@ -273,10 +275,9 @@ public class RutinaController {
 	        /*Rol vistaUsuario = objUsuario.getRol();
 	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);*/
+			rutinaService.actualizarRutina(ru);
 	    }        
-        List<Rutina> listaRutinas = rutinaService.getEstado(true);
-        model.addAttribute("listaRutinas", listaRutinas);
-        return "rutinas/menu_rutinas";
+        return "redirect:/rutina/";
 	}
 
 }

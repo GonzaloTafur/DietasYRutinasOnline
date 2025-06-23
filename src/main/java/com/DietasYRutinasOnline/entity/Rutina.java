@@ -30,14 +30,14 @@ public class Rutina implements Serializable {
     @Column(name = "id_rutina")
     private Long codigo;
 	
-	  @Column(name = "nombre", length=50, nullable = false)
+	  @Column(name = "nombre", length=60, nullable = false)
     private String nombre;
 	
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "objetivo", referencedColumnName = "id_objetivo")
+    @JoinColumn(name = "id_objetivo", referencedColumnName = "id_objetivo")
     private Objetivo objetivo;
     
-    @Column(name = "parteCuerpo", length = 20)
+    @Column(name = "parte_cuerpo", length = 20)
     private String parteCuerpo;
 
     @Column(name = "nivel", length=25)
@@ -52,12 +52,12 @@ public class Rutina implements Serializable {
     @ManyToMany
     @JoinTable(
       name = "RutinaEjercicio", 
-      joinColumns = @JoinColumn(name = "rutina", referencedColumnName ="id_rutina"), 
-      inverseJoinColumns = @JoinColumn(name = "ejercicio", referencedColumnName ="id_ejercicio"))
+      joinColumns = @JoinColumn(name = "id_rutina", referencedColumnName ="id_rutina"), 
+      inverseJoinColumns = @JoinColumn(name = "id_ejercicio", referencedColumnName ="id_ejercicio"))
     private List<Ejercicio> ejercicio;
     
     @ManyToOne
-    @JoinColumn(name = "nutriologo", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_nutriologo", referencedColumnName = "id_usuario")
     private Nutriologo nutriologo;
 
 }

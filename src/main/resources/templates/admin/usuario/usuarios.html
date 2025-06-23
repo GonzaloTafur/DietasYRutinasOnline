@@ -1,0 +1,38 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Gestionar Usuarios</title>
+    </head>
+    <body>
+        <h2>El controlador funciona</h2>
+        <div>
+            <!--<ul th:each="n: ${lstNutri}">
+                
+                <li><span th:text="${n.rol}"></span></li>
+            </ul>-->
+            <ul th:each="u: ${lstUsuarios}">
+                <li><span th:text="${u.codigo}"></span></li>
+                <li><span th:text="${u.nombres}"></span></li>
+                <li><span th:text="${u.apellidos}"></span></li>
+                <li><span th:text="${u.fechanacimiento}"></span></li>
+                <li><span th:text="${u.nacionalidad}"></span></li>
+                <li><span th:text="${u.sexo}"></span></li>
+                <li><span th:text="${u.usuario}"></span></li>
+                <li><span th:text="${u.correo}"></span></li>
+                <li><span th:text="${u.estado}"></span></li>
+                <!--<li><span th:text="${u.rol}"></span></li>-->
+            </ul>
+            <!--<a type="button" class="pure-button pure-button-secondary" th:href="@{/admin/nuevo_rol}" method="GET">Nuevo Usuario</a>-->
+        </div>
+        
+        <div>
+            <ul th:each="rol: ${lstRoles}">
+                <li><span th:text="${rol.codigo}"></span></li>
+                <li><span th:text="${rol.nombre}"></span></li>
+                <li><span th:text="${rol.descripcion}"></span></li>
+                <li><span th:text="${rol.estado}"></span></li>
+            </ul>
+            <a type="button" class="pure-button pure-button-secondary" th:href="@{/admin/nuevo_rol}" method="GET">Nuevo Rol</a>
+        </div>
+        
+    </body>
+</html>

@@ -30,11 +30,11 @@ public class HistorialMed implements Serializable{
     @Column(name = "id_historial")
     private Long codigo;
 
-	@Column(name="frecuencia_ejercicios")
+	@Column(name="frec_ejercicios")
 	private String frecEjercicios;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "condicion", referencedColumnName = "id_condicion")
+    @JoinColumn(name = "id_condicion", referencedColumnName = "id_condicion")
     private Condicion condicion;
 	
 	@Column(name="peso_corporal")
@@ -56,20 +56,20 @@ public class HistorialMed implements Serializable{
 	private BigDecimal perimBrazo;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "objetivo", referencedColumnName = "id_objetivo")
+    @JoinColumn(name = "id_objetivo", referencedColumnName = "id_objetivo")
     private Objetivo objetivo;
 	
 	@Column(name="estado")
 	private Boolean estado;
 	
-	@Column(name="fecha")
+	@Column(name="fecha_modif")
 	private LocalDateTime fecha;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
       name = "HistorialDieta", 
-      joinColumns = @JoinColumn(name = "historial_medico", referencedColumnName ="id_historial"), 
-      inverseJoinColumns = @JoinColumn(name = "dieta", referencedColumnName ="iddieta"))
+      joinColumns = @JoinColumn(name = "id_histotial", referencedColumnName ="id_historial"), 
+      inverseJoinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="id_dieta"))
     private List<Dieta> dieta;
 
 }

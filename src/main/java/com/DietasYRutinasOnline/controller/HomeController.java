@@ -72,14 +72,16 @@ public class HomeController {
 	        //Rol vistaUsuario = rolService.getId(objUsuario.getRol().getCodigo());
 	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        //model.addAttribute("esPaciente", esPaciente);
-	    }
-	    //Rol rolNutriologo = rolService.getNombre("Nutriologo");
+
+			//Rol rolNutriologo = rolService.getNombre("Nutriologo");
 	   
-	    //List<Usuario> listaNutriologos = usuarioService.getRol(rolNutriologo);
-		List<Nutriologo> listaNutriologos = usuarioService.getEstadoNutriologo(true);
-	    model.addAttribute("listaNutriologos", listaNutriologos);
-	    
-	    return "usuario/lista_nutriologos";
+			//List<Usuario> listaNutriologos = usuarioService.getRol(rolNutriologo);
+			List<Nutriologo> listaNutriologos = usuarioService.getEstadoNutriologo(true);
+			model.addAttribute("listaNutriologos", listaNutriologos);
+			
+			return "usuario/lista_nutriologos";
+	    }
+	    return "iniciar_sesion";
 	}
 	
 	/*@GetMapping("/verPerfil")
@@ -126,7 +128,7 @@ public class HomeController {
 
 	/* VER HORARO EN MANTENIMIENTO */
 
-	/*@GetMapping("/verHorario")
+	/*@GetMapping("/ver_horario")
 	public String verHorario(HttpSession sesion, Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	    if (objUsuario!=null) {

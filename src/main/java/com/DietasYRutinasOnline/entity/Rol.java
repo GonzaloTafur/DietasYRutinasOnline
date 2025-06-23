@@ -22,10 +22,14 @@ public class Rol implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_rol")
+    //@Column(name = "id_r")
     private Long codigo;
 
 	@Column(name = "nombre", length=50)
     private String nombre;
+
+    @Column(name = "descripcion", columnDefinition = "TEXT")
+    private String descripcion;
 
     @Column(name = "estado")
     //@ColumnDefault("True")

@@ -1,0 +1,27 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>Registrar Rol</title>
+        <body>
+            <form class="pure-form pure-form-stacked" 
+            	th:action="@{/admin/grabar_rol}" 
+            	th:object="${rol}"
+            	method="POST" >
+
+            <div>
+				<label for="nombre">Nombre</label>
+				<input type="text" id="nombre" th:field="*{nombre}" required=""/>
+            </div>
+
+            <div>          
+                <label for="descripcion">Descripción</label>
+                <textarea id="descripcion" th:field="*{descripcion}"></textarea>
+            </div>      
+
+                <span class="span" th:if="${error}" th:text="${error}"></span>
+
+				<input type="submit" value="Grabar">
+
+		</form>
+        </body>
+    </head>
+</html>

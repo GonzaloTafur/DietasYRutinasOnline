@@ -22,30 +22,30 @@ public class TransaccionUsuario implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idtransaccion")
-    private long idtransaccion;
+    @Column(name = "id_transusu")
+    private long codigo;
 
-	@Column(name="fecharegistro")
+	@Column(name="fecha")
 	private LocalDateTime registro;
 	
-	@Column(name="fechalogin")
+	@Column(name="login")
 	private LocalDateTime login;
 	
-	@Column(name="fechalogout")
+	@Column(name="logout")
 	private LocalDateTime logout;
 	
-	@Column(name="cambioPassword")
+	@Column(name="cambio_password")
 	private LocalDateTime cambioPassword;
 	
-	@Column(name="cambioCorreo")
+	@Column(name="cambio_correo")
 	private LocalDateTime cambioCorreo;
 	
 	@ManyToOne
-    @JoinColumn(name = "usuario", referencedColumnName = "id_usuario")
+    @JoinColumn(name = "id_usuario", referencedColumnName = "id_usuario")
     private Usuario usuario;
 	
-	@ManyToOne
-    @JoinColumn(name = "rol", referencedColumnName = "id_rol")
-    private Rol rol;
+	/*@ManyToOne
+    @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
+    private Rol rol;*/
 	
 }

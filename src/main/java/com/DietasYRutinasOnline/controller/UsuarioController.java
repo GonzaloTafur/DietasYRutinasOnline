@@ -76,61 +76,6 @@ public class UsuarioController {
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
-	
-	@RequestMapping(value="/validarUsuario", method= RequestMethod.POST)
-	public String validarUsuario(
-			HttpServletRequest request, 
-			@RequestParam("correo")String correo, 
-			@RequestParam("password")String password, 
-			Model model) {
-		
-		//Usuario objUsuario = usuarioRepository.findByCorreoAndPassword(correo, password);
-		Nutriologo nutriologo = usuarioService.getCorreoNutriologos(correo);
-		Paciente paciente = usuarioService.getCorreoPaciente(correo);
-		if (nutriologo!=null && passwordEncoder.matches(password, nutriologo.getPassword())) {
-		//if (objUsuario!=null) {
-			HttpSession sesion = request.getSession();
-			sesion.setAttribute("nutriologo", nutriologo);
-			
-			//Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-	        
-	        TransaccionUsuario objTransUsuario = new TransaccionUsuario();
-	        objTransUsuario.setLogin(LocalDateTime.now());
-	        //objTransUsuario.setUsuario(objUsuario);
-	        //objTransUsuario.setRol(vistaUsuario);
-            transUsuarioRepository.save(objTransUsuario);
-	        
-			return "menu";
-		}
-		else if (paciente!=null && passwordEncoder.matches(password, paciente.getPassword())) {
-			//if (objUsuario!=null) {
-				HttpSession sesion = request.getSession();
-				sesion.setAttribute("paciente", paciente);
-				
-				//Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-				/*if(vistaUsuario!=null && vistaUsuario.getNombre().equals("Paciente")) {
-					
-					TransaccionUsuario objTransUsuario = new TransaccionUsuario();
-					objTransUsuario.setLogin(LocalDateTime.now());
-					//objTransUsuario.setUsuario(objUsuario);
-					//objTransUsuario.setRol(vistaUsuario);
-					transUsuarioRepository.save(objTransUsuario);
-					
-					return "menu";
-				}*/
-				
-				TransaccionUsuario objTransUsuario = new TransaccionUsuario();
-				objTransUsuario.setLogin(LocalDateTime.now());
-				//objTransUsuario.setUsuario(objUsuario);
-				//objTransUsuario.setRol(vistaUsuario);
-				transUsuarioRepository.save(objTransUsuario);
-				
-				return "menu";
-			}
-		model.addAttribute("error", "El correo electronico y la contraseña no coinciden. Intenta de nuevo.");
-		return "index";
-	}
-	
 	@GetMapping("registrar_usuario")
 	public String registraCuenta(HttpServletRequest request, Model model) {
 		//List<Rol> listaTiposUsuario = rolRepository.findAll();
@@ -146,12 +91,13 @@ public class UsuarioController {
 		//List<Rol> listaTiposUsuario = rolRepository.findAll();
 		//model.addAttribute("listaTiposUsuario", listaTiposUsuario);
 		
-		Nutriologo nutriologo = new Nutriologo();
+		//Nutriologo nutriologo = new Nutriologo();
+		Usuario nutriologo = new Nutriologo();
 		model.addAttribute("nutriologo", nutriologo);
 		
 		//List<String> listaPaises = nacionalidadService.obtenerTodosLosPaises();
         //model.addAttribute("listaPaises", listaPaises);
-		return "registrar";
+		return "registrar_nutriologo";
 	}
 
 	@GetMapping("registrar_usuario_paciente")
@@ -164,16 +110,17 @@ public class UsuarioController {
 		
 		//List<String> listaPaises = nacionalidadService.obtenerTodosLosPaises();
         //model.addAttribute("listaPaises", listaPaises);
-		return "registrar";
+		return "registrar_paciente";
 	}
-	
+
 	// ---- VENTANA REGISTRAR -------------------------------------------------------------------
-	@PostMapping("grabar_usuario")
+	@PostMapping("grabar_nutriologo")
     public String grabarUsuario(
     		HttpServletRequest request,
     		@RequestParam("correo") String correo,
-    		@ModelAttribute("objUsuario") Usuario objUsuario,
-    		//@ModelAttribute("nombre") String nombre,
+    		//@ModelAttribute("objUsuario") Usuario objUsuario,
+    		@ModelAttribute("nutriologo") Usuario nutriologo,
+			//@ModelAttribute("nombre") String nombre,
     		Model model) {
 
 		try {
@@ -181,14 +128,14 @@ public class UsuarioController {
 			if (correoExiste!=null) {
 				model.addAttribute("error", "Hubo un error al llenar correo electronico, intente de nuevo.");
 				
-				model.addAttribute("objUsuario", objUsuario);
+				model.addAttribute("objUsuario", nutriologo);
 				return "registrar";
 	        }
-			String encryptedPassword = passwordEncoder.encode(objUsuario.getPassword());
-		    objUsuario.setPassword(encryptedPassword);
+			String encryptedPassword = passwordEncoder.encode(nutriologo.getPassword());
+		    nutriologo.setPassword(encryptedPassword);
 			
-			objUsuario.setEstado(true);
-	        usuarioRepository.save(objUsuario);
+			nutriologo.setEstado(true);
+	        usuarioRepository.save(nutriologo);
 	        
 	        /*Transaccion objTransaccion = new Transaccion();
 	        objTransaccion.setFecha(LocalDateTime.now());
@@ -197,7 +144,7 @@ public class UsuarioController {
 	        transaccionRepository.save(objTransaccion);*/
 	        
 	        HttpSession sesion = request.getSession();
-			sesion.setAttribute("usuario", objUsuario);
+			sesion.setAttribute("usuario", nutriologo);
 			
 			/*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
 	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
@@ -210,7 +157,7 @@ public class UsuarioController {
 	            
 	            TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 	            //objTransUsuario.setRegistro(LocalDateTime.now());
-	            objTransUsuario.setUsuario(objUsuario);
+	            objTransUsuario.setUsuario(nutriologo);
 	            //objTransUsuario.setRol(vistaUsuario);
 	            transUsuarioRepository.save(objTransUsuario);
 	            
@@ -236,7 +183,6 @@ public class UsuarioController {
     		HttpServletRequest request,
     		@RequestParam("correo") String correo,
     		@ModelAttribute("paciente") Paciente paciente,
-    		@ModelAttribute("nomrol") String nomrol,
     		Model model) {
 
 		try {
@@ -251,7 +197,7 @@ public class UsuarioController {
 		    paciente.setPassword(encryptedPassword);
 			
 			paciente.setEstado(true);
-	        usuarioService.guardarPaciente(paciente);
+	        //usuarioService.guardarPaciente(paciente);
 	        
 	        /*Transaccion objTransaccion = new Transaccion();
 	        objTransaccion.setFecha(LocalDateTime.now());
@@ -281,7 +227,7 @@ public class UsuarioController {
 	    }
 	        
 		catch(Exception ex) {
-			return "registrar";
+			return "iniciar_sesion";
 		}
 		
     }
@@ -306,7 +252,8 @@ public class UsuarioController {
 				historialMedRepository.save(cuestionario);
 
 				paciente.setHistorialMedico(cuestionario);
-				usuarioService.guardarPaciente(paciente);
+				//usuarioService.guardarPaciente(paciente);
+				
 				//Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
 				//boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 				//model.addAttribute("esPaciente", esPaciente);

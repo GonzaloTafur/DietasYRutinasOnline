@@ -58,7 +58,7 @@
                 	<td><span th:text="${ru.parteCuerpo}"></span></td>
                 	<td><span th:text="${ru.nivel}"></span></td>
                 	<td><span th:text="${ru.descripcion}"></span></td>
-                <td><a th:href="@{/rutina/verDetalleRutina(codigo=${ru.codigo})}">Ver detalles</a><br>
+                <td><a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${ru.codigo})}" method="GET">Ver detalles</a><br>
                 </td>
                 </tr> 
             </tbody>

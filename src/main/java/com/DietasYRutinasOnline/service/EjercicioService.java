@@ -39,4 +39,12 @@ public class EjercicioService {
         
         return ejercicioRepository.save(e);
     }
+
+    public List<String> cbxEjercicio(){
+        return ejercicioRepository.findDistinctGrupomuscular();
+    }
+
+    public List<Ejercicio> getGrupomuscular(String gm){
+        return ejercicioRepository.findByGrupomuscular(gm);
+    }
 }

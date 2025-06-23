@@ -26,29 +26,24 @@
 		<section>
 			<h2>Registrate</h2>
 			<form class="pure-form pure-form-stacked" 
-            	th:action="@{/usuario/grabarUsuario}" 
-            	th:object="${objUsuario}"
+            	th:action="@{/usuario/grabar_paciente}" 
+            	th:object="${paciente}"
             	method="POST" >
 
-				<label for="nombres_apellidos">Nombres</label>
-				<input 
-                            	type="text" 
+				<label for="nombres">Nombres</label>
+				<input type="text" 
                             	id="multi-first-name" 
                             	th:field="*{nombres}" 
-                            	required=""
-                            	/>
+                            	required="" />
 
-				<label for="nombres_apellidos">Apellidos</label>
-				<input 
-                            	type="text" 
-                            	id="multi-last-name" 
-                            	th:field="*{apellidos}" 
-                            	required=""
-                            	/>
+				<label for="apellidos">Apellidos</label>
+				<input type="text" id="multi-last-name" th:field="*{apellidos}"/>
+				
+				<label for="usuario">Usuario</label>
+				<input type="text" id="multi-last-name" th:field="*{usuario}" />
 
 				<label for="nombres_apellidos">Fecha nacimiento</label>
-				<input 
-                                type="date" 
+				<input type="date" 
                                 id="multi-fecha-nacimiento" 
                                 th:field="*{fechanacimiento}" 
                                 required="" />
@@ -76,22 +71,18 @@
 				</select>
 
 				<label for="nombres_apellidos">Correo Electronico</label>
-				<input 
-                            	type="email" 
+				<input type="email" 
                             	id="multi-email" 
                             	class="pure-u-23-24" 
                             	th:field="*{correo}" 
-                            	required="" 
-                            	/>
+                            	required="" />
 
 				<label for="nombres_apellidos">Contraseña</label>
-				<input 
-                            	type="password" 
+				<input type="password" 
                             	id="aligned-password" 
                             	th:field="*{password}"
                             	minlength="8" 
-                            	required="" 
-                            	/>
+                            	required="" />
                             	
                 <span class="span" th:if="${error}" th:text="${error}"></span>
 

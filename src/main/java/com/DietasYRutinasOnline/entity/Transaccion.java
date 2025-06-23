@@ -17,12 +17,12 @@ import lombok.NoArgsConstructor;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name="TransaccionGeneral")
+@Table(name="Transaccion")
 public class Transaccion implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idtrangeneral")
+    @Column(name = "id_transaccion")
     private int idregistro;
 
 	@Column(name="fecha")
@@ -40,7 +40,7 @@ public class Transaccion implements Serializable{
     private Rutina rutina;
 	
 	@ManyToOne
-	@JoinColumn(name = "iddieta")
+	@JoinColumn(name = "id_dieta")
     private Dieta dieta;
 	
 	@ManyToOne

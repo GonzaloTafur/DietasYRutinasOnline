@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.DietasYRutinasOnline.entity.Ejercicio;
+import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.service.EjercicioService;
@@ -30,19 +31,6 @@ public class AdminController {
     @Autowired
     EjercicioService ejercicioService;
 
-    @GetMapping("gestion_usuarios")
-    public String gestionUsuarios(Model model){
-        List<Usuario> lstUsuarios = usuarioService.getEstado(true);
-        model.addAttribute("lstUsuarios", lstUsuarios);
-        return "admin/usuarios.html";
-    }
-
-    @GetMapping("gestion_roles")
-    public String gestionRol(Model model){
-        List<Rol> lstRoles = rolService.getEstado(true);
-        model.addAttribute("lstRoles", lstRoles);
-        return "admin/roles.html";
-    }
 
     @GetMapping("gestion_ejercicios")
     public String gestionEjercicio(Model model){
@@ -78,5 +66,33 @@ public class AdminController {
         ejercicioService.actualizaEjercicio(e);
         return "redirect:/admin/gestion_ejercicios";
         
+    }
+
+    //---------------------------------------------------------------------------------------------
+    @GetMapping("gestion_usuarios")
+    public String gestionUsuarios(Model model){
+        List<Usuario> lstUsuarios = usuarioService.getEstado(true);
+        model.addAttribute("lstUsuarios", lstUsuarios);
+        //List<Nutriologo> lstNutri = usuarioService.getEstadoNutriologo(true);
+        //model.addAttribute("lstNutri", lstNutri);
+
+        List<Rol> lstRoles = rolService.getEstado(true);
+        model.addAttribute("lstRoles", lstRoles);
+        return "admin/usuario/usuarios.html";
+    }
+    
+    @GetMapping("nuevo_rol")
+    public String nuevoRol(Model model){
+        Rol rol = new Rol();
+        model.addAttribute("rol", rol); 
+        return "admin/usuario/registrar_rol.html";
+    }
+
+    @PostMapping("grabar_rol")
+    public String grabarRol(Model model, Rol rol){
+        //e.setEstado(true);
+        rolService.guardaRol(rol);
+        //redirect:"ejercicios";
+        return "redirect:/admin/gestion_usuarios";
     }
 }

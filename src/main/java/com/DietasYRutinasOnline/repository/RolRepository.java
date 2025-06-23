@@ -7,6 +7,6 @@ import com.DietasYRutinasOnline.entity.Rol;
 
 @Repository
 public interface RolRepository extends JpaRepository<Rol, Long>{
-	Rol findByCodigo(Long idrol);
+	Rol findByCodigo(long codigo);
 	Rol findByNombre(String nombre);
 }

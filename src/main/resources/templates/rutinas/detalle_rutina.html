@@ -25,25 +25,25 @@
 <body>
     <main>
 		<section>
-            <div class="mb-3" th:value="${detalleRutina}">
-            			<h2 th:text="${detalleRutina.nombre}"></h2>
+            <div class="mb-3" th:value="${detRutina}">
+            			<h2 th:text="${detRutina.nombre}"></h2>
                         <br>
                         <label class="form-label">Tipo de Rutina:</label>
-                        <span th:text="${detalleRutina.tipo}"></span>
+                        <span th:text="${detRutina.objetivo.nombre}"></span>
                         <br>
                         <label class="form-label">Descripción:</label>
-                        <span th:text="${detalleRutina.descripcion}"></span>
+                        <span th:text="${detRutina.descripcion}"></span>
                         <br>
                         <label class="form-label">Nivel:</label>
-                        <span th:text="${detalleRutina.nivel}"></span>
+                        <span th:text="${detRutina.nivel}"></span>
                         <br>
-                        <label class="form-label">Creado por:</label>
-                        <a th:href="@{/perfil/verSuPerfil(idusuario=${detalleRutina.nutriologo.idusuario})}">
-                            <span th:text="${detalleRutina.nutriologo.nombres}"></span>
-                        	<span th:text="${detalleRutina.nutriologo.apellidos}"></span>
+                        <!--<label class="form-label">Creado por:</label>
+                        <a th:href="@{/perfil/verSuPerfil(codigo=${detRutina.nutriologo.codigo})}">
+                            <span th:text="${detRutina.nutriologo.nombres}"></span>
+                        	<span th:text="${detRutina.nutriologo.apellidos}"></span>
                         </a>
                             
-                        <!--<span th:text="${detalleRutina.nutriologo.nombres}"></span>
+                        <span th:text="${detalleRutina.nutriologo.nombres}"></span>
                         <span th:text="${detalleRutina.nutriologo.apellidos}"></span>-->
                     </div>
                     <div>
@@ -63,24 +63,24 @@
                         </thead>
     
                         <tbody class="pure-table-border">
-                            <tr th:each="ejercicio: ${detalleRutina.ejercicio}">
-                                <td><span th:text="${ejercicio.nombre}"></span></td>
-                                <td><span th:text="${ejercicio.grupomuscular}"></span></td>
-                                <td><span th:text="${ejercicio.tipo}"></span></td>
-                                <td><span th:text="${ejercicio.series}"></span></td>
-                                <td><span th:text="${ejercicio.repeticiones}"></span></td>
-                                <td><span th:text="${ejercicio.descripcion}"></span></td>
+                            <tr th:each="e: ${detRutina.ejercicio}">
+                                <td><span th:text="${e.nombre}"></span></td>
+                                <td><span th:text="${e.grupomuscular}"></span></td>
+                                <td><span th:text="${e.tipo}"></span></td>
+                                <td><span th:text="${e.series}"></span></td>
+                                <td><span th:text="${e.repeticiones}"></span></td>
+                                <td><span th:text="${e.descripcion}"></span></td>
                             </tr> 
                         </tbody>
                     </table>
 
                 
-                <form th:if="${esCreador}" th:action="@{/rutina/editarRutina}" th:method="POST">
+                <!--<form th:if="${esCreador}" th:action="@{/rutina/editarRutina}" th:method="POST">
                     <input type="hidden" name="idrutina" th:value="${detalleRutina.idrutina}" />
                     <button type="submit" class="pure-button pure-button-primary">
                         Editar Rutina
                     </button>
-                </form>
+                </form>-->
     </section>
 </main>
 

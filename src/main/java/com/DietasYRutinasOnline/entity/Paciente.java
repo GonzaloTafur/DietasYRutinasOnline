@@ -59,7 +59,7 @@ public class Paciente extends Usuario{
     private Boolean estado;*/
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "historial_medico", referencedColumnName = "id_historial")
+    @JoinColumn(name = "id_historial", referencedColumnName = "id_historial")
     private HistorialMed historialMedico;
 
 }

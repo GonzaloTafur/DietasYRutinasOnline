@@ -57,10 +57,10 @@
                 <td><span th:text="${dieta.nombre}"></span></td>
             	<td><span th:text="${dieta.objetivo.nombre}"></span></td>
                 <td><span th:text="${dieta.descripcion}"></span></td>
-                <td><a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">Ver detalles</a>
+                <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}" method="GET">Ver detalles</a>
                     <br>
                                         
-                    <form th:if="${esPaciente}" th:action="@{/dieta/seguirDieta(codigo=${dieta.codigo})}" method="POST">
+                    <form th:if="${paciente}" th:action="@{/dieta/seguirDieta(codigo=${dieta.codigo})}" method="POST">
             			<button type="submit" class="pure-button pure-button-primary">
             			Seguir Dieta</button>
             		</form>

@@ -46,12 +46,14 @@ public class Nutriologo extends Usuario{
     @Column(name = "estado")
     private Boolean estado;*/
 
+    @Column(name = "cargo")
+    private String cargo;
 
     @Column(name = "CV")
     private File CV;
 
     @ManyToOne
-    @JoinColumn(name = "rol", referencedColumnName = "id_rol")
+    @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
     private Rol rol;
 
 }

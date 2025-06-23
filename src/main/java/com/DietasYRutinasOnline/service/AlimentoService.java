@@ -3,6 +3,7 @@ package com.DietasYRutinasOnline.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.DietasYRutinasOnline.entity.Alimento;
@@ -23,8 +24,7 @@ public class AlimentoService {
     }
 
     public Alimento grabarAlimento(Alimento al){
-        //e = new Ejercicio();
-        al.setEstado(true);
+        //al.setEstado(true);
         return alimentoRepository.save(al);
     }
     
@@ -37,5 +37,13 @@ public class AlimentoService {
         al.setEstado(true);
         
         return alimentoRepository.save(al);
+    }
+
+    public List<String> cbxAlimento(){
+        return alimentoRepository.findDistinctTipos();
+    }
+
+    public List<Alimento> getTipo(String tipo){
+        return alimentoRepository.findByTipo(tipo);
     }
 }

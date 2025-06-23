@@ -3,6 +3,8 @@ package com.DietasYRutinasOnline.entity;
 import java.io.Serializable;
 import java.sql.Date;
 import org.attoparser.dom.Text;
+import org.springframework.security.core.userdetails.UserDetails;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -47,16 +49,16 @@ public abstract class Usuario implements Serializable{
     @Column(name = "biografia", columnDefinition = "TEXT")
     private String biografia;
     
-    @Column(name = "estado")
-    private Boolean estado;
-
     @Column(name = "usuario", length = 80, nullable = false)
     private String usuario;
 
     @Column(name = "correo", length = 100, unique = true)
     private String correo;
 
-    @Column(name = "password", length = 30)
+    @Column(name = "password", length = 225)
     private String password;
+
+    @Column(name = "estado")
+    private Boolean estado;
     
 }

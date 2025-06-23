@@ -8,8 +8,6 @@ import org.springframework.stereotype.Service;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.repository.RolRepository;
 
-
-
 @Service
 public class RolService {
 
@@ -24,8 +22,13 @@ public class RolService {
         return rolRepository.findByNombre(nombre);
     }
 
-    public Rol getId(Long idrol){
-        return rolRepository.findByCodigo(idrol);
+    public Rol getId(Long codigo){
+        return rolRepository.findById(codigo).get();
+    }
+
+    public Rol guardaRol(Rol rol){
+        rol.setEstado(true);
+        return rolRepository.save(rol);
     }
 
 }

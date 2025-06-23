@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<title>Menú Principal</title>
 	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{static/css/style2.css}">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
@@ -27,11 +27,11 @@
 		<ul>
             <li><a th:href="@{/home/verPerfil}">
             	Perfil<i class="fa-solid fa-user"></i></a></li>
-            <li><a th:href="@{/home/ajustesCuenta}">
+            <li><a th:href="@{/home/ajustes_cuenta}">
             	Ajustes<i class="fa-solid fa-cog"></i></a></li>
             <li><a th:href="@{/home/verNotis}">
             	Notificaciones<i class="fa-solid fa-bell"></i></a></li>
-            <li><a th:if="${esPaciente}" th:href="@{/home/verHorario}">
+            <li><a th:if="${paciente}" th:href="@{/home/ver_horario}">
             	Mi horario<i class="fa-regular fa-calendar-days"></i></a></li>
           </ul>
 		
@@ -39,10 +39,10 @@
 	<main>
 		<section id="intro">
 			<h1>Bienvenido</h1>
-			<b th:if="${esPaciente}">En esta aplicación podrás mejorar tu estilo de vida, con rutinas y dietas que puedes descubrir tu mismo o por recomendación.</b>
+			<b th:if="${paciente}">En esta aplicación podrás mejorar tu estilo de vida, con rutinas y dietas que puedes descubrir tu mismo o por recomendación.</b>
 		</section>
 		
-		<section style="background-color: #d7ebee;" th:if="${esPaciente}">
+		<section style="background-color: #d7ebee;" th:if="${paciente}">
             <h2>Nutriologos</h2>
             <img style="width: 500px;" th:src="@{/images/nutricionista.jpg}">
             
@@ -58,8 +58,8 @@
         </section>
 		
 		<section>
-			<h2 th:if="${esPaciente}">Nuestras Recomendaciones</h2>
-			<p th:if="${esPaciente}">Estas son listas creadas por usuarios nutriologos/instructores y están ajustada según tu información como paciente</p>
+			<h2 th:if="${paciente}">Nuestras Recomendaciones</h2>
+			<p th:if="${paciente}">Estas son listas creadas por usuarios nutriologos/instructores y están ajustada según tu información como paciente</p>
 			<div class="container-01">
 				<div>
 					<a th:href="@{/home/verRutinas}" class="enlace-imagen">
@@ -70,7 +70,7 @@
 				</div>
 				<div>
 					<a th:href="@{/home/verDietas}" class="enlace-imagen" >
-						<img th:src="@{/images/dieta.png}">
+						<img th:src="@{static/images/dieta.png}">
 					</a>
 					<h3>Dietas</h3>
 					<p>Hecha un vistazo a nuestras dietas para organizarlas y ver sus detalles en cualquier momento</p>

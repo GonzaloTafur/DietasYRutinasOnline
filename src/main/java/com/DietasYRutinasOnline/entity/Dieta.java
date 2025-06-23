@@ -3,8 +3,6 @@ package com.DietasYRutinasOnline.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import org.attoparser.dom.Text;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -27,15 +25,14 @@ public class Dieta implements Serializable{
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //@Column(name = "id_dieta")
-    @Column(name = "iddieta")
+    @Column(name = "id_dieta")
     private Long codigo;
 
 	@Column(name="nombre", length = 50, nullable = false)
 	private String nombre;
 	
 	@ManyToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "objetivo", referencedColumnName = "id_objetivo")
+    @JoinColumn(name = "id_objetivo", referencedColumnName = "id_objetivo")
     private Objetivo objetivo;
 	
 	@Column(name="descripcion", columnDefinition = "TEXT")
@@ -45,21 +42,21 @@ public class Dieta implements Serializable{
 	private Boolean estado;
 
 	@ManyToOne
-    @JoinColumn(name = "nutriologo", referencedColumnName = "id_usuario")
-    private Nutriologo nutriologo;
+    @JoinColumn(name = "id_nutriologo", referencedColumnName = "id_usuario")
+    private Usuario nutriologo;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
       name = "DietaAlimento", 
-      joinColumns = @JoinColumn(name = "dieta", referencedColumnName ="iddieta"), 
-      inverseJoinColumns = @JoinColumn(name = "alimento", referencedColumnName ="id_alimento"))
+      joinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="id_dieta"), 
+      inverseJoinColumns = @JoinColumn(name = "id_alimento", referencedColumnName ="id_alimento"))
     private List<Alimento> alimento;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
       name = "DietaCondicion", 
-      joinColumns = @JoinColumn(name = "dieta", referencedColumnName ="iddieta"), 
-      inverseJoinColumns = @JoinColumn(name = "condicion", referencedColumnName ="id_condicion"))
+      joinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="id_dieta"), 
+      inverseJoinColumns = @JoinColumn(name = "id_condicion", referencedColumnName ="id_condicion"))
     private List<Condicion> condicion;
 
 	@ManyToMany(mappedBy = "dieta")

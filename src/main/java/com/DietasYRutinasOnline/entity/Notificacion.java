@@ -22,17 +22,17 @@ public class Notificacion implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "idnoti")
-    private int idnoti;
+    @Column(name = "id_notificacion")
+    private Long codigo;
     
 	@ManyToOne
-	@JoinColumn(name = "trangeneral", referencedColumnName = "idtrangeneral")
+	@JoinColumn(name = "id_transaccion", referencedColumnName = "id_transaccion")
     private Transaccion transaccion;
 	
-	@Column(name="rolnoti")
+	@Column(name="rol_noti")
 	private String rol;
 	
-	@Column(name="mensaje")
+	@Column(name="mensaje", columnDefinition = "TEXT")
 	private String mensaje;
 	
 	@Column(name="estnoti")

@@ -22,8 +22,8 @@ public class HistorialMedService {
         return historialMedRepository.findAll();
     }
 
-    public HistorialMed guardar(HistorialMed historial){
-        return historialMedRepository.save(historial);
+    public HistorialMed guardarHistorial(HistorialMed hm){
+        return historialMedRepository.save(hm);
     }
     
 }
