@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<title>Ajustes de usuario</title>
 	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
@@ -19,13 +19,15 @@
 	<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
     
 </head>
 <body>
 	<main>
 		<section>
 		
-			<a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}"> <- Retroceder</a>
+			<a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}"> <- Retroceder</a>
 		
 			<h2>Ajustes de cuenta</h2>
 			<br>
@@ -33,7 +35,7 @@
 			<h3>Cambiar contraseña</h3>
 			<form class="pure-form pure-form-stacked"  
 					th:action="@{/usuario/nuevaContraseña}" 
-					th:object="${objUsuario}" 
+					th:object="${u}" 
 					method="POST">
 					
 				<!--  <label for="aligned-email">Correo Electronico</label>
@@ -53,7 +55,7 @@
 			<h3>Cambiar Correo electronico</h3>
 			<form class="pure-form pure-form-stacked" 
 			 	th:action="@{/usuario/cambiarCorreo}" 
-			 	th:object="${objUsuario}" 
+			 	th:object="${u}" 
 			 	method="POST">
 			 
 				<label for="aligned-email">Correo Electronico</label>

@@ -4,14 +4,19 @@ import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import com.DietasYRutinasOnline.entity.Dieta;
+import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Objetivo;
 import com.DietasYRutinasOnline.entity.Usuario;
 
 
 public interface DietaRepository extends JpaRepository<Dieta, Long>{
+
 	List<Dieta> findByEstado(Boolean estado);
+
 	Dieta findByCodigo(Long codigo);
-	List<Dieta> findByNutriologo(Usuario nutriologo);
+
+	List<Dieta> findByNutriologo(Nutriologo nutriologo);
+	
 	List<Dieta> findByObjetivo(Objetivo objetivo);
 	
 	/*List<Dieta> findByCondicion(Condicion condicion);

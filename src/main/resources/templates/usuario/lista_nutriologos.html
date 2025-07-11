@@ -24,7 +24,7 @@
             <h2>Nuestros doctores</h2>  
 
         <div>
-            <table class="pure-table">
+            <table class="pure-table pure-table-bordered">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -35,14 +35,14 @@
                 </tr>
             </thead>
         
-            <tbody class="pure-table-border">
+            <tbody>
                 <tr th:each="nutriologo: ${listaNutriologos}">
                 	<td><span th:text="${nutriologo.nombres}"></span></td>
                 	<td><span th:text="${nutriologo.apellidos}"></span></td>
                 	<td><span th:text="${nutriologo.biografia}"></span></td>
-					<td><a th:href="@{/reunion/verReuniones(idusuario=${nutriologo.idusuario})}">Ver Reuniones</a></td>
+					<td><a th:href="@{/reunion/verReuniones(codigo=${nutriologo.codigo})}">Ver Reuniones</a></td>
 					
-                	<td><a th:href="@{/reunion/perfilNutriologo(idusuario=${nutriologo.idusuario})}">Ver su Perfil</a></td>
+                	<td><a th:href="@{/reunion/perfilNutriologo(codigo=${nutriologo.codigo})}">Ver su Perfil</a></td>
                 	
                 </tr>
                 
@@ -50,7 +50,7 @@
             </table>
 
         </div>
-        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
+        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}">Retroceder</a>
     </section>
 	</main>
     <footer>

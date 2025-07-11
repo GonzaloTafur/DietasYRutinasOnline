@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.DietasYRutinasOnline.entity.HistorialMed;
@@ -12,10 +13,13 @@ import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.DTO.UsuarioDTO;
 import com.DietasYRutinasOnline.repository.NutriologoRepository;
 import com.DietasYRutinasOnline.repository.PacienteRepository;
 import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Service
 public class UsuarioService {
@@ -74,7 +78,10 @@ public class UsuarioService {
         return nutriologoRepository.save(n);
     }
 
-    public Usuario nuevaContraseña(Usuario u){
+    public Usuario nuevaContraseña(Usuario u, UsuarioDTO password){
+        String encryptedPassword = passwordEncoder.encode(password.getPassword());
+        // Pasarle la contraseña encriptada al usuario
+        u.setPassword(encryptedPassword);
         return usuarioRepository.save(u);
     }
 

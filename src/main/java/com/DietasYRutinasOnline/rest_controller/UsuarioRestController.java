@@ -59,14 +59,14 @@ public class UsuarioRestController {
     
     @PutMapping("actualizar_password/{codigo}")
     public Usuario actualizarPassword(@PathVariable Long codigo, @RequestBody UsuarioDTO password){
-        String encryptedPassword = passwordEncoder.encode(password.getPassword());
+        //String encryptedPassword = passwordEncoder.encode(password.getPassword());
         
         // Obtener el id del usuario al que le vas a cambiar la contraseña
         Usuario u = usuarioService.getCodigo(codigo);
         
         // Pasarle la contraseña encriptada al usuario
-        u.setPassword(encryptedPassword);
+        //u.setPassword(encryptedPassword);
         
-        return usuarioService.nuevaContraseña(u);
+        return usuarioService.nuevaContraseña(u, password);
     }
 }

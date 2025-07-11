@@ -3,7 +3,9 @@
      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{../style2.css}">
+    <title>Ejercicios</title>
+    
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
@@ -18,64 +20,69 @@
 	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
 
 	<script src="https://kit.fontawesome.com/dcce108ca1.js" crossorigin="anonymous"></script>
-    <title>Alimentos</title>
 </head>
 <body>
-    <main>
+	<main>
 		<section>
-            <h2>Alimentos</h2>
-
+            <h2>Ejercicios</h2>
+            
         <div>
-            <table class="pure-table pure-table-bordered">
+            <table class="pure-table">
                 
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list">
                         <li class="pure-menu-item">
-                            <a th:href="@{/dieta/}" class="pure-menu-link">Dieta</a>
+                            <a th:href="@{/rutina/}" class="pure-menu-link">Rutinas</a>
                         </li>
                         <li class="pure-menu-item pure-menu-selected">
-                            <a href="#" class="pure-menu-link">Alimentos</a>
+                            <a href="#" class="pure-menu-link">Ejercicios</a>
                         </li>
-                    </ul>
-                    
-                    <form th:action="@{/dieta/buscarAlimentos}" method="GET">
-    						<select class="form-select" name="tipo">
-        						<option th:each="alimento : ${cbxAlimentos}"
-               						 th:value="${alimento}"
-                					th:text="${alimento}">
+
+                        <form th:action="@{/rutina/buscarEjercicios}" method="GET">
+    						<select class="form-select" name="grupomuscular">
+        						<option th:each="ejercicio : ${cbxEjercicios}"
+                				th:value="${ejercicio}"
+                				th:text="${ejercicio}">
         						</option>
     						</select>
     						<button type="submit" class="pure-button pure-button-secondary">Buscar</button>
-					</form>
-					
+						</form>
+
+                    </ul>
                 </div>
 
            		 	<thead>
                         <tr>
-                            <th>Alimento</th>
-                            <th>Nutrientes</th>
+                            <th>Nombre del Ejercicio</th>
+                            <th>Grupo Muscular</th>
                             <th>Tipo</th>
+                            <th>Número de Series</th>
+                            <th>Número de Repeticiones</th>
                             <th>Descripción</th>
                         </tr>
                     </thead>
 
-                    <tbody>
-                        <tr th:each="alimento: ${listaAlimentos}">
-                            <td><span th:text="${alimento.nombre}"></span></td>
-                            <td><span th:text="${alimento.nutrientes}"></span></td>
-                            <td><span th:text="${alimento.tipo}"></span></td>
-                            <td><span th:text="${alimento.descripcion}"></span></td>
+                    <tbody class="pure-table-border">
+                        <tr th:each="e: ${listaEjercicios}">
+                            <td><span th:text="${e.nombre}"></span></td>
+                            <td><span th:text="${e.grupomuscular}"></span></td>
+                            <td><span th:text="${e.tipo}"></span></td>
+                            <td><span th:text="${e.series}"></span></td>
+                            <td><span th:text="${e.repeticiones}"></span></td>
+                            <td><span th:text="${e.descripcion}"></span></td>
                         </tr> 
                     </tbody>
+       
             </table>
 
+            
         </div>
 
-</section>
+	</section>
 </main>
 	<footer>
 		<p class="p-footer">2024. Todos los derechos reservados.</p>
 	</footer>
-	
+
 </body>
 </html>

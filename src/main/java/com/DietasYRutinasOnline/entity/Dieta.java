@@ -43,7 +43,7 @@ public class Dieta implements Serializable{
 
 	@ManyToOne
     @JoinColumn(name = "id_nutriologo", referencedColumnName = "id_usuario")
-    private Usuario nutriologo;
+    private Nutriologo nutriologo;
 	
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
@@ -59,7 +59,7 @@ public class Dieta implements Serializable{
       inverseJoinColumns = @JoinColumn(name = "id_condicion", referencedColumnName ="id_condicion"))
     private List<Condicion> condicion;
 
-	@ManyToMany(mappedBy = "dieta")
-    private List<HistorialMed> historialMedico;
+	//@ManyToMany(mappedBy = "dieta")
+    //private List<HistorialMed> historialMedico;
 
 }

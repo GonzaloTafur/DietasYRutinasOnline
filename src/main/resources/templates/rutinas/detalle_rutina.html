@@ -50,7 +50,7 @@
                     <br>
                         <h3>Ejercicios</h3>
                     </div>
-                    <table class="pure-table">
+                    <table class="pure-table pure-table-bordered">
                         <thead>
                             <tr>
                                 <th>Nombre del Ejercicio</th>
@@ -62,7 +62,7 @@
                             </tr>
                         </thead>
     
-                        <tbody class="pure-table-border">
+                        <tbody>
                             <tr th:each="e: ${detRutina.ejercicio}">
                                 <td><span th:text="${e.nombre}"></span></td>
                                 <td><span th:text="${e.grupomuscular}"></span></td>

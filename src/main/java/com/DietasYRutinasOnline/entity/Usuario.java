@@ -31,10 +31,10 @@ public abstract class Usuario implements Serializable{
     @Column(name = "id_usuario")
     private Long codigo;
 
-	@Column(name = "nombres", length = 80, nullable = false)
+	@Column(name = "nombres", length = 80)
     private String nombres;
 
-    @Column(name = "apellidos", length = 80, nullable = false)
+    @Column(name = "apellidos", length = 80)
     private String apellidos;
 
     @Column(name = "fecha_nacimiento")
@@ -49,7 +49,7 @@ public abstract class Usuario implements Serializable{
     @Column(name = "biografia", columnDefinition = "TEXT")
     private String biografia;
     
-    @Column(name = "usuario", length = 80, nullable = false)
+    @Column(name = "usuario", length = 80)
     private String usuario;
 
     @Column(name = "correo", length = 100, unique = true)

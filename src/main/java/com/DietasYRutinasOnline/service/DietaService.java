@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.DTO.AlimentoDTO;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 
 @Service
@@ -21,6 +22,10 @@ public class DietaService {
 
     public Dieta getCodigo(Long codigo){
         return dietaRepository.findById(codigo).get();
+    }
+
+    public Dieta getDetalle(Long codigo, AlimentoDTO al){
+        return dietaRepository.findByCodigo(codigo);
     }
 
     public Dieta grabarDieta(Dieta d){

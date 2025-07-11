@@ -7,6 +7,8 @@ import java.util.Collections;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.DietasYRutinasOnline.entity.Asistencia;
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Horario;
+import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.HistorialMed;
 import com.DietasYRutinasOnline.entity.Reunion;
@@ -36,6 +39,9 @@ import com.DietasYRutinasOnline.repository.RutinaRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
 import com.DietasYRutinasOnline.service.HistorialMedService;
+import com.DietasYRutinasOnline.service.NutriologoService;
+import com.DietasYRutinasOnline.service.PacienteService;
+import com.DietasYRutinasOnline.service.ReunionService;
 import com.DietasYRutinasOnline.service.UsuarioService;
 
 import jakarta.servlet.http.HttpSession;
@@ -55,6 +61,12 @@ public class PerfilController {
 	
 	@Autowired
 	private UsuarioService usuarioService;
+
+	@Autowired
+	private NutriologoService nutriologoService;
+
+	@Autowired
+	private PacienteService pacienteService;
 	
 	@Autowired
 	RolRepository rolRepository;
@@ -64,7 +76,56 @@ public class PerfilController {
 	
 	@Autowired
 	TransaccionRepository transaccionRepository;
-	
+
+	@Autowired
+	private ReunionService reunionService;
+
+
+	@GetMapping("/")
+	public String verPerfil(HttpSession sesion, Long codigo, Model model) {
+
+		try {
+			Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+			Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+			//Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+			if (paciente!=null) {
+
+				model.addAttribute("paciente", paciente); 
+				HistorialMed miInfo = historialMedService.getPaciente(paciente, true);
+				//HistorialMed hm = historialMedService.getCodigo(codigo);
+				//Paciente miInfo = pacienteService.getHistorial(hm);
+				if(miInfo==null){
+					HistorialMed cuestionario = new HistorialMed();
+					model.addAttribute("cuestionario", cuestionario);
+					return "cuestionario";
+				}
+				
+				model.addAttribute("miInfo", miInfo);
+				return "perfil/perfil";
+			}
+			//model.addAttribute("objUsuario", objUsuario);
+			else if(nutriologo!=null){
+				model.addAttribute("nutriologo", nutriologo);
+				//List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, true);
+				List<Reunion> re = reunionService.getNutriologo(nutriologo, true);
+				model.addAttribute("objReunion", re);
+				
+				List<Rutina> misRutinas = rutinaRepository.findByNutriologo(nutriologo);
+				model.addAttribute("misRutinas", misRutinas);
+				
+				List<Dieta> misDietas = dietaRepository.findByNutriologo(nutriologo);
+				model.addAttribute("misDietas", misDietas);
+			
+				return "perfil/perfil_nutriologo";
+			}
+			return "iniciar_sesion";
+		} 
+		catch (Exception e) {
+			ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			return "redirect:/home/";
+		}
+
+	}
 	
 	@PostMapping("/editarPerfil")
 	public String editarPerfil(
@@ -79,17 +140,19 @@ public class PerfilController {
 			return "index";
 		}  
 	}
-	
+
+
+	/* EDICIÓN DE HISTORIAL MEDICO */	
 	public boolean puedeEditar(HistorialMed HistorialMed) {
 	    LocalDateTime fechaHoy = LocalDateTime.now();
 	    LocalDateTime fechaModificacion = HistorialMed.getFecha();
 	    return ChronoUnit.DAYS.between(fechaModificacion, fechaHoy) >= 7;
 	}
-	
+
 	@GetMapping("/editarInfo")
 	public String editarInfo(HttpSession sesion, Model model) {
-	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario != null) {
+	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+	    if (paciente != null) {
 	        /*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
 	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);
@@ -104,9 +167,7 @@ public class PerfilController {
 	            historialMedService.guardarHistorial(miHistorial);
 	        	
 	            HistorialMed nuevaInfo = new HistorialMed();
-	            nuevaInfo.setFrecEjercicios(miHistorial.getFrecEjercicios());
-	            nuevaInfo.setCondicion(miHistorial.getCondicion());
-	            nuevaInfo.setObjetivo(miHistorial.getObjetivo());
+	            //nuevaInfo.setFrecEjercicios(miHistorial.getFrecEjercicios());
 	            nuevaInfo.setPesoCorporal(miHistorial.getPesoCorporal());
 	            nuevaInfo.setEstatura(miHistorial.getEstatura());
 	            nuevaInfo.setPerimCintura(miHistorial.getPerimCintura());
@@ -119,13 +180,13 @@ public class PerfilController {
 	            return "usuario/editar_HistorialMed";
 	        } 
 	        else {
-	        	model.addAttribute("objUsuario", objUsuario);
+	        	model.addAttribute("paciente", paciente);
 	    	    
 	    	    //HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
 	    	    model.addAttribute("miInfo", miHistorial);
 	        	
 	            model.addAttribute("inactivo", "Debe esperar al menos 7 días antes de poder realizar otra modificación.");
-	            return "perfil";
+	            return "redirect:/perfil/";
 	        }
 	    }
 	    return "redirect:/index";
@@ -144,7 +205,7 @@ public class PerfilController {
 	        nuevaInfo.setEstado(true);
 	        nuevaInfo.setFecha(LocalDateTime.now());
 
-			paciente.setHistorialMedico(nuevaInfo);
+			//paciente.setHistorialMedico(nuevaInfo);
 			//usuarioService.guardarPaciente(paciente);
 
 	        historialMedService.guardarHistorial(nuevaInfo);
@@ -152,15 +213,17 @@ public class PerfilController {
 	        //Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
 	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        //model.addAttribute("esPaciente", esPaciente);
+
+			model.addAttribute("exito", "Su información se actualizó con éxito");
+			model.addAttribute("objUsuario", paciente);
+
+			//HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
+			model.addAttribute("miInfo", nuevaInfo);
+
+			return "redirect:/perfil/";
 	    }
 
-	    model.addAttribute("exito", "Su información se actualizó con éxito");
-	    model.addAttribute("objUsuario", paciente);
-
-	    //HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
-	    model.addAttribute("miInfo", nuevaInfo);
-
-	    return "menu";
+	    return "iniciar_sesion";
 	}
 	
 	@GetMapping("/verSeguimiento")
@@ -186,7 +249,7 @@ public class PerfilController {
 	    	if(objUsuario.getCodigo() == codigo) {
 	    		/*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
 	    		boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	    		model.addAttribute("esPaciente", esPaciente);*/
+	    		model.addAttribute("esPaciente", esPaciente);
 	    		
 	    		List<Rutina> misRutinas = rutinaRepository.findByNutriologo(objUsuario);
 	    		model.addAttribute("misRutinas", misRutinas);
@@ -194,7 +257,7 @@ public class PerfilController {
 	    		List<Dieta> misDietas = dietaRepository.findByNutriologo(objUsuario);
 	    		model.addAttribute("misDietas", misDietas);
 	    		
-	    		model.addAttribute("objUsuario", objUsuario);
+	    		model.addAttribute("objUsuario", objUsuario);*/
 	    		return "perfil";
 	    	}
 	    	/*else {

@@ -27,7 +27,7 @@
             <h2>Ejercicios</h2>
             
         <div>
-            <table class="pure-table">
+            <table class="pure-table pure-table-bordered">
                 
                 <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list">
@@ -62,7 +62,7 @@
                         </tr>
                     </thead>
 
-                    <tbody class="pure-table-border">
+                    <tbody>
                         <tr th:each="e: ${listaEjercicios}">
                             <td><span th:text="${e.nombre}"></span></td>
                             <td><span th:text="${e.grupomuscular}"></span></td>

@@ -39,7 +39,7 @@
                     </ul>
                 </div>
                 
-		<table class="pure-table pure-table-bordered">
+		<table class="pure-table">
             <thead>
                 <tr>
                     <th>Nombre de la Rutina</th>
@@ -51,7 +51,7 @@
                 </tr>
             </thead>
         
-            <tbody>
+            <tbody class="pure-table-border">
                 <tr th:each="ru: ${listaRutinas}">
                 	<td><span th:text="${ru.nombre}"></span></td>
                 	<td><span th:text="${ru.objetivo.nombre}"></span></td>

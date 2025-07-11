@@ -28,6 +28,7 @@ import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.TransaccionUsuario;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.DTO.UsuarioDTO;
 import com.DietasYRutinasOnline.repository.CondicionRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.HistorialMedRepository;
@@ -213,8 +214,8 @@ public class UsuarioController {
 	        //model.addAttribute("esPaciente", esPaciente);
 	        
 	       
-	        HistorialMed cuestionario = new HistorialMed();
-	        model.addAttribute("cuestionario", cuestionario);
+	        //HistorialMed cuestionario = new HistorialMed();
+	        //model.addAttribute("cuestionario", cuestionario);
 	        //model.addAttribute("usuRegistrado", objUsuario.getIdusuario());
 	            
 	        TransaccionUsuario objTransUsuario = new TransaccionUsuario();
@@ -247,11 +248,15 @@ public class UsuarioController {
 			if (paciente!=null) {
 				//Paciente usuRegistrado = pacienteRepository.findById(paciente.getIdusuario()).orElse(null);
 				//cuestionario.setPaciente(usuRegistrado);
+				paciente.setFrecEjercicios(null);
+				paciente.setObjetivo(null);
+				paciente.setCondicion(null);
+
 				cuestionario.setEstado(true);
 				cuestionario.setFecha(LocalDateTime.now());
 				historialMedRepository.save(cuestionario);
 
-				paciente.setHistorialMedico(cuestionario);
+				//paciente.setHistorialMedico(cuestionario);
 				//usuarioService.guardarPaciente(paciente);
 				
 				//Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
@@ -417,34 +422,43 @@ public class UsuarioController {
 	
 	@GetMapping("cerrarSesion")
 	public String cerrarSesion(HttpSession sesion, Model model) {
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+		/*Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	
 		TransaccionUsuario objTransUsuario = new TransaccionUsuario();
         objTransUsuario.setLogout(LocalDateTime.now());
         objTransUsuario.setUsuario(objUsuario);
         //objTransUsuario.setRol(objUsuario.getRol());
-        transUsuarioRepository.save(objTransUsuario);
+        transUsuarioRepository.save(objTransUsuario);*/
 		
         sesion.invalidate();
 		return "index";
 	}
 	
 	@RequestMapping(value = "/nuevaContraseña", method = RequestMethod.POST)
-	public String nuevaContraseña(
-	        HttpSession sesion,
-	        @ModelAttribute("objUsuario") Usuario objUsuario,
+	public String nuevaContraseña(HttpSession sesion, UsuarioDTO password, Usuario u,
 	        @RequestParam(value="repetirPassword") String repetirPassword,
 	        Model model) {
 
-	    Usuario nuevaPassword = (Usuario) sesion.getAttribute("usuario");
-	    if (nuevaPassword!=null && objUsuario.getPassword().equals(repetirPassword)) {
-	        String encryptedPassword = passwordEncoder.encode(objUsuario.getPassword());
-	        nuevaPassword.setPassword(encryptedPassword);
-	        usuarioRepository.save(nuevaPassword);
+	    //Usuario nuevaPassword = (Usuario) sesion.getAttribute("usuario");
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("u");
+		Paciente paciente = (Paciente) sesion.getAttribute("u");
+
+		if (nutriologo!=null && password.getPassword().equals(repetirPassword)) {
+	        //String encryptedPassword = passwordEncoder.encode(password.getPassword());
+	        //password.setPassword(encryptedPassword);
+	        //usuarioService.nuevaContraseña(nutriologo);
+			usuarioService.nuevaContraseña(nutriologo, password);
 
 	        sesion.invalidate();
 	        return "index";
 	    }
+		
+		else if(paciente!=null && password.getPassword().equals(repetirPassword)){
+			usuarioService.nuevaContraseña(paciente, password);
+
+	        sesion.invalidate();
+	        return "index";
+		}
 	    model.addAttribute("errorcontraseña", "Hubo un error al actualizar la nueva contraseña.");
 	    return "seguridad";
 	}
@@ -501,11 +515,11 @@ public class UsuarioController {
 	    //HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(perfilActual, true);
 	    //model.addAttribute("miInfo", miInfo);
 	    
-	    List<Rutina> misRutinas = rutinaRepository.findByNutriologo(perfilActual);
+	    /*List<Rutina> misRutinas = rutinaRepository.findByNutriologo(perfilActual);
 	    model.addAttribute("misRutinas", misRutinas);
 	    
 	    List<Dieta> misDietas = dietaRepository.findByNutriologo(perfilActual);
-	    model.addAttribute("misDietas", misDietas);
+	    model.addAttribute("misDietas", misDietas);*/
 	    
 	    return "menu";
 	}

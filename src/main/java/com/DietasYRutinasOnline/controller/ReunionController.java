@@ -236,8 +236,8 @@ public class ReunionController {
 	
 	/* NUTRIOLOGOS */
 	
-	@GetMapping("/crearReunion")
-	public String crearReunion(HttpSession sesion, Model model) {
+	@GetMapping("/nueva_reunion")
+	public String nuevaReunion(HttpSession sesion, Model model) {
 		Reunion re = new Reunion();
 		model.addAttribute("re", re);
 		return "usuario/programar_reunion";
@@ -297,8 +297,15 @@ public class ReunionController {
 
 	@PostMapping("grabar_reunion")
 	public String grabarReunion(HttpSession sesion, Model model, String dia, Reunion re){
-		reunionService.grabarReunion(sesion, dia, re);
-		return "perfil";
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+		if (nutriologo!=null){
+			//re.setNutriologo(nutriologo);
+			reunionService.grabarReunion(sesion, dia, re);
+			return "redirect:/perfil";
+		}
+		else{
+			return "iniciar_sesion";
+		}
 	}
 
 	@GetMapping("/desactivarReunion/{codigo}")

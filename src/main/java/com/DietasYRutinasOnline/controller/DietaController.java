@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +19,7 @@ import com.DietasYRutinasOnline.entity.Alimento;
 import com.DietasYRutinasOnline.entity.Condicion;
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.HistorialMed;
+import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Objetivo;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Rol;
@@ -24,6 +27,7 @@ import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.repository.AlimentoRepository;
 import com.DietasYRutinasOnline.repository.CondicionRepository;
+import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.NotificacionRepository;
 import com.DietasYRutinasOnline.repository.PacienteRepository;
 import com.DietasYRutinasOnline.repository.RolRepository;
@@ -38,7 +42,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 @Controller
-@RequestMapping("/dieta/")
+@RequestMapping("/dieta")
 public class DietaController {
 	
 	@Autowired
@@ -49,6 +53,9 @@ public class DietaController {
 	
 	@Autowired
 	private DietaService dietaService;
+
+	@Autowired
+	private DietaRepository dietaRepository;
 	
 	@Autowired
 	private HistorialMedService historialMedService;
@@ -70,24 +77,33 @@ public class DietaController {
 	
 	@Autowired
 	RolRepository rolRepository;
+
 	
 	@GetMapping("/")
 	public String verDietas(
 			HttpSession sesion, 
 			@ModelAttribute("objDieta") Dieta objDieta,
 			Model model) {
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
-	    	Rol vistaUsuario = new Rol();
-	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);
+		//Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+		
+		if(paciente!=null || nutriologo!=null){
+	    	//Rol vistaUsuario = new Rol();
+	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
+	        //model.addAttribute("esPaciente", esPaciente);
+
+			List<Dieta> listaDietas = dietaService.getEstado(true);
+	    	model.addAttribute("listaDietas", listaDietas);
+
+			return "dietas/menu_dietas";
 	    }
 
 	    //HistorialMed pacienteActual = HistorialMedRepository.findByPacienteAndEstado(objUsuario, true);
 	    //model.addAttribute("pacienteActual", pacienteActual);
 	    
-	    List<Dieta> listaDietas = dietaService.getEstado(true);
-	    model.addAttribute("listaDietas", listaDietas);
+	    //List<Dieta> listaDietas = dietaService.getEstado(true);
+	    //model.addAttribute("listaDietas", listaDietas);
 	    
 	    /* VISTA PARA LOS PACIENTES*/
 	    /*if(pacienteActual!=null && pacienteActual.getObjetivo().equals("Deficit")) {
@@ -158,7 +174,7 @@ public class DietaController {
 		    }
 	    }*/
 	    
-	    return "dietas/menu_dietas";
+	    return "iniciar_sesion";
 	}
 	
 
@@ -191,8 +207,8 @@ public class DietaController {
 		return "dietas/lista_alimentos";
 	}
 	
-	@PostMapping("/seguirDieta")
-	public String seguirDieta(
+	//@PostMapping("/seguirDieta")
+	/*public String seguirDieta(
 	        HttpSession sesion,
 	        @ModelAttribute("objDieta") Dieta objDieta,
 	        Model model) {
@@ -242,12 +258,12 @@ public class DietaController {
 	            else if (pacienteActual != null && "Volumen".equals(miHistorial.getObjetivo())) {
 	                listaDietas = dietaRepository.findByObjetivo("Volumen");
 	                model.addAttribute("listaDietas", listaDietas);
-	            }*/
+	            }
 	            return "dietas/menu_dietas";
 	        }
 	    }
 	    return "index";
-	}
+	}*/
 
 	
 	@PostMapping("/dejarSeguirDieta")
@@ -263,7 +279,7 @@ public class DietaController {
 	        //model.addAttribute("esPaciente", esPaciente);
 	        
 	        HistorialMed miInfo = historialMedService.getEstado(true);
-			Paciente pacienteActual = pacienteRepository.findByHistorialMedico(miInfo);
+			//Paciente pacienteActual = pacienteRepository.findByHistorialMedico(miInfo);
 		    model.addAttribute("miInfo", miInfo);
 		    
 		    if(miInfo!=null) {
@@ -293,27 +309,33 @@ public class DietaController {
 
 	
 	// ---- VENTANA CREAR DIETA -------------------------------------------------------------------
-	@GetMapping("crear_dieta")
-	public String crearDieta(Model model) {
-		//List<Alimento> listaAlimentos = alimentoRepository.findAll();
-		List<Alimento> listaAlimentos = alimentoService.getEstado(true);
-		model.addAttribute("listaAlimentos", listaAlimentos);
+	@GetMapping("/crear_dieta")
+	public String crearDieta(HttpSession session, Model model) {
+		Nutriologo nutriologo = (Nutriologo) session.getAttribute("nutriologo");
+	    if (nutriologo!=null) {
+			//List<Alimento> listaAlimentos = alimentoRepository.findAll();
+			List<Alimento> listaAlimentos = alimentoService.getEstado(true);
+			model.addAttribute("listaAlimentos", listaAlimentos);
 
-		List<Condicion> listaCondiciones = condicionRepository.findAll();
-		model.addAttribute("listaCondiciones", listaCondiciones);
-		List<Objetivo> lstObjetivo = objetivoService.getEstado(true);
-		model.addAttribute("lstObjetivo", lstObjetivo);
-		
-		//List<String> cbxAlimentos = alimentoRepository.findDistinctTipos();
-		List<String> cbxAlimentos = alimentoService.cbxAlimento();
-		if (cbxAlimentos.size() > 4) {
-			cbxAlimentos = cbxAlimentos.subList(0, 4);
-	    }
-		model.addAttribute("cbxAlimentos", cbxAlimentos);
-		
-		Dieta d = new Dieta();
-		model.addAttribute("d", d);
-		return "dietas/nueva_dieta";
+			List<Condicion> listaCondiciones = condicionRepository.findAll();
+			model.addAttribute("listaCondiciones", listaCondiciones);
+			List<Objetivo> lstObjetivo = objetivoService.getEstado(true);
+			model.addAttribute("lstObjetivo", lstObjetivo);
+			
+			//List<String> cbxAlimentos = alimentoRepository.findDistinctTipos();
+			List<String> cbxAlimentos = alimentoService.cbxAlimento();
+			if (cbxAlimentos.size() > 4) {
+				cbxAlimentos = cbxAlimentos.subList(0, 4);
+			}
+			model.addAttribute("cbxAlimentos", cbxAlimentos);
+			
+			Dieta d = new Dieta();
+			model.addAttribute("d", d);
+			return "dietas/nueva_dieta";
+		}
+		else{
+			return "iniciar_sesion";
+		}
 	}
 	
 	//@PostMapping("grabar_dieta")
@@ -351,12 +373,17 @@ public class DietaController {
 	}*/
 
 	@PostMapping("grabar_dieta")
-	public String grabarDieta(HttpSession sesion, Dieta d, Model model) {	
-	    //d.setNutriologo(objUsuario);
-	    //d.setEstado(true);
-	    dietaService.grabarDieta(d);
-		return "redirect:/dieta/";
-	
+	public String grabarDieta(HttpSession session, Dieta d, Model model) {
+		Nutriologo nutriologo = (Nutriologo) session.getAttribute("nutriologo");
+	    if (nutriologo!=null) {
+			d.setNutriologo(nutriologo);
+			//d.setEstado(true);
+			dietaService.grabarDieta(d);
+			return "redirect:/perfil/";
+		}
+		else{
+			return "iniciar_sesion";
+		}
 	}
 
 	// ---- VER DETALLE DIETA -------------------------------------------------------------------
@@ -392,19 +419,27 @@ public class DietaController {
 
 	@GetMapping("/verDetalleDieta/{codigo}")
 	public String verDetalleDieta(
-			//HttpSession sesion,
-			//@RequestParam("iddieta") Long codigo,
+			HttpSession sesion,
+			//@RequestParam("codigo") Long codigo,
 			//@ModelAttribute("objDieta") Dieta objDieta,
-			@PathVariable Long codigo, Model model) {
+			@PathVariable Long codigo,
+			Model model) {
 		
 		try {
-			Dieta detDieta = dietaService.getCodigo(codigo);
-			model.addAttribute("detDieta", detDieta);
-			return "dietas/detalle_dieta";
+			Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+			Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+			if(paciente!=null || nutriologo!=null){
+				Dieta detDieta = dietaService.getCodigo(codigo);
+				model.addAttribute("detDieta", detDieta);
+				return "dietas/detalle_dieta";
+			}
+			else{
+				return "iniciar_sesion";
+			}
 		} 
 		catch (Exception e) {
-			System.out.println("No se ha podido realizar la petición");
-			return "redirect:/dieta/";
+			ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			return "redirect:/dieta";
 		}
 		
 	}	
@@ -425,12 +460,12 @@ public class DietaController {
 	        */
 	        
 	        HistorialMed miHistorial = historialMedService.getEstado(true);
-			Paciente pacienteActual = pacienteRepository.findByHistorialMedico(miHistorial);
-		    model.addAttribute("pacienteActual", pacienteActual);
+			//Paciente pacienteActual = pacienteRepository.findByHistorialMedico(miHistorial);
+		    //model.addAttribute("pacienteActual", pacienteActual);
 		    
 		    /*if(pacienteActual.getObjetivo().equals("Volumen") && objDieta.getObjetivo().equals("Volumen")) {
 		    	
-		    }*/
+		    }
 	        if(pacienteActual!=null) {
 
 				//HistorialMed dietaPaciente = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
@@ -444,7 +479,7 @@ public class DietaController {
 	        	objTransaccion.setUsuario(objUsuario);
 	        	objTransaccion.setDieta(objDieta);
 	        	transaccionRepository.save(objTransaccion);
-	        }
+	        }*/
 	        //dietaPaciente.setDieta(objDieta);
 	        
 	    	/*Horario conflictoHorario = horarioRepository.findByPacienteAndDiaAndPeriodo(objUsuario, dia, periodo);
@@ -464,7 +499,7 @@ public class DietaController {
 	}
 	
 	// ---- EDITAR DIETA -------------------------------------------------------------------
-	@PostMapping("editar_dieta/{codigo}")
+	@PostMapping("/editar_dieta/{codigo}")
 	public String editarDieta(
 			//@RequestParam("id_dieta") Long codigo, 
 			@PathVariable Long codigo, Model model){
@@ -480,7 +515,7 @@ public class DietaController {
 		return "dietas/editar_dieta";			
 	}
 	
-	@PostMapping("actualizar_dieta")
+	@PostMapping("/actualizar_dieta")
 	public String actualizarDieta(
 			HttpSession sesion,
 			@ModelAttribute("objDieta") Dieta d,

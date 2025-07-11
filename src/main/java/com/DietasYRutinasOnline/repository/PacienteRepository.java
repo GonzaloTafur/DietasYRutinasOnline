@@ -9,7 +9,7 @@ public interface PacienteRepository extends JpaRepository<Paciente, Long>{
 
     Paciente findByCorreo(String correo);
 
-    Paciente findByHistorialMedico(HistorialMed historialMedico);
+    //Paciente findByHistorialMedico(HistorialMed historialMedico);
 
     Paciente findByCodigo(Long codigo);
     

@@ -42,7 +42,7 @@
                     </ul>
                 </div>
                 
-            <table class="pure-table">
+            <table class="pure-table pure-table-bordered">
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -52,12 +52,12 @@
                 </tr>
             </thead>
         
-            <tbody class="pure-table-border">
+            <tbody>
                 <tr th:each="dieta: ${listaDietas}">
                 <td><span th:text="${dieta.nombre}"></span></td>
             	<td><span th:text="${dieta.objetivo.nombre}"></span></td>
                 <td><span th:text="${dieta.descripcion}"></span></td>
-                <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}" method="GET">Ver detalles</a>
+                <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}">Ver detalles</a>
                     <br>
                                         
                     <form th:if="${paciente}" th:action="@{/dieta/seguirDieta(codigo=${dieta.codigo})}" method="POST">
@@ -75,7 +75,7 @@
             	Crear Nueva Dieta</button>
             </form>-->
             
-            <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
+            <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}">Retroceder</a>
             
         
     </div>

@@ -7,6 +7,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.DietasYRutinasOnline.entity.Alimento;
+import com.DietasYRutinasOnline.entity.DTO.AlimentoDTO;
 import com.DietasYRutinasOnline.repository.AlimentoRepository;
 
 @Service
@@ -18,7 +19,7 @@ public class AlimentoService {
     public List<Alimento> getEstado(Boolean estado){
         return alimentoRepository.findAll();
     }
-
+    
     public Alimento getCodigo(Long codigo){
         return alimentoRepository.findById(codigo).get();
     }

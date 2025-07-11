@@ -26,7 +26,7 @@ public class Reunion implements Serializable{
     private Long codigo;
 	
 	@ManyToOne
-	@JoinColumn(name = "nutriologo", referencedColumnName = "id_usuario")
+	@JoinColumn(name = "id_nutriologo", referencedColumnName = "id_usuario")
     private Nutriologo nutriologo;
     
 	@Column(name="motivo")

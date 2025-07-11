@@ -25,7 +25,7 @@ public class RutinaService {
     }*/
 
     public Rutina getCodigo(Long codigo){
-        return rutinaRepository.findById(codigo).get();
+        return rutinaRepository.findByCodigo(codigo);
     }
 
     public Rutina grabarRutina(Rutina ru){

@@ -11,10 +11,14 @@ import com.DietasYRutinasOnline.entity.Usuario;
 
 @Repository
 public interface ReunionRepository extends JpaRepository<Reunion, Long>{
-	List<Reunion> findByNutriologoAndEstado(Usuario nutriologo, Boolean estado);
+
+	List<Reunion> findByNutriologoAndEstado(Nutriologo nutriologo, Boolean estado);
+	
 	List<Reunion> findByDiaAndEstado(String dia, Boolean estado);
+
 	Reunion findByCodigo(Long codigo);
 	
-	List<Reunion> findByNutriologo(Usuario nutriologo);
+	List<Reunion> findByNutriologo(Nutriologo nutriologo);
+	
 	Reunion findByNutriologoAndDiaAndEstado(Nutriologo nutriologo, String dia, Boolean estado);
 }

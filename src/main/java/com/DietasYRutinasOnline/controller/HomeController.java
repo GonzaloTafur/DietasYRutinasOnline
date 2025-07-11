@@ -21,6 +21,7 @@ import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.HistorialMed;
 import com.DietasYRutinasOnline.entity.Notificacion;
 import com.DietasYRutinasOnline.entity.Nutriologo;
+import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
@@ -60,6 +61,20 @@ public class HomeController {
 
 	@Autowired
 	private RutinaService rutinaService;
+
+	@GetMapping("/")
+	public String irAMenu(HttpSession sesion, Model model){
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+
+		
+		if(paciente!=null || nutriologo!=null){
+			model.addAttribute("paciente", paciente);
+			return "menu";
+		}
+
+		return "iniciar_sesion";
+	}
 	
 	@GetMapping("ver_nutriologos")
 	public String verNutriologos(
@@ -67,8 +82,9 @@ public class HomeController {
 			//@ModelAttribute("nutriologo") Nutriologo nutriologo,
 			Model model) {
 
-	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
+	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+
+	    if (paciente!=null) {
 	        //Rol vistaUsuario = rolService.getId(objUsuario.getRol().getCodigo());
 	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        //model.addAttribute("esPaciente", esPaciente);
@@ -84,45 +100,19 @@ public class HomeController {
 	    return "iniciar_sesion";
 	}
 	
-	/*@GetMapping("/verPerfil")
-	public String verPerfil(
-			HttpSession sesion,  
-			Model model) {
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
-	    	Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-	    	boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente); 
-	    }
-	    model.addAttribute("objUsuario", objUsuario);
-	    
-	    /* SI ES PACIENTE*/
-	    /*HistorialMed miInfo = HistorialMedRepository.findByPacienteAndEstado(objUsuario, true);
-	    model.addAttribute("miInfo", miInfo);
-	    
-	    
-	    /* SI ES NUTRIOLOGO */
-	    /*List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, true);
-	    model.addAttribute("objReunion", objReunion);
-	    
-	    List<Rutina> misRutinas = rutinaRepository.findByNutriologo(objUsuario);
-	    model.addAttribute("misRutinas", misRutinas);
-	    
-	    List<Dieta> misDietas = dietaRepository.findByNutriologo(objUsuario);
-	    model.addAttribute("misDietas", misDietas);
-	    
-	    return "perfil";
-	}*/
-	
-	@GetMapping("ajustes_cuenta")
+	@GetMapping("ajustes_cuenta/{codigo}")
 	public String ajustesCuenta(HttpSession sesion, Model model){
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-		if (objUsuario!=null) {
-			model.addAttribute("objUsuario", objUsuario);
+		//Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+		
+		if (paciente!=null || nutriologo!=null) {
+			model.addAttribute("u", paciente);
+			model.addAttribute("u", nutriologo);
 			return "usuario/seguridad";
 		}
 		else {
-			return "index";
+			return "iniciar_sesion";
 		}
 	}
 

@@ -4,6 +4,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +17,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Ejercicio;
+import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Objetivo;
+import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Transaccion;
@@ -36,7 +40,7 @@ import com.DietasYRutinasOnline.service.RutinaService;
 import jakarta.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping("/rutina/")
+@RequestMapping("/rutina")
 public class RutinaController {
 	
 	@Autowired
@@ -69,17 +73,25 @@ public class RutinaController {
 			HttpSession sesion,
 			@ModelAttribute("objRutina") Rutina objRutina,
 			Model model) {
-	    Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
+	    //Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+		if (paciente!=null || nutriologo!=null) {
 	        //Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
 	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        //model.addAttribute("esPaciente", esPaciente);
+			model.addAttribute("paciente", paciente);
+
+			List<Rutina> listaRutinas = rutinaService.getEstado(true);
+	    	model.addAttribute("listaRutinas", listaRutinas);
+
+			return "rutinas/menu_rutinas";
 	    }
 	    //HistorialMed pacienteActual = HistorialMedRepository.findByPacienteAndEstado(objUsuario, true);
 	    //model.addAttribute("pacienteActual", pacienteActual);
 	   
-	    List<Rutina> listaRutinas = rutinaService.getEstado(true);
-	    model.addAttribute("listaRutinas", listaRutinas);
+	    //List<Rutina> listaRutinas = rutinaService.getEstado(true);
+	    //model.addAttribute("listaRutinas", listaRutinas);
 	    
 	    
 	    /* VISTA PARA LOS PACIENTES*/
@@ -133,14 +145,13 @@ public class RutinaController {
 		    }
 	    }*/
 	    	
-	    
-	    return "rutinas/menu_rutinas";
+		return "iniciar_sesion";
 	}
 
 	
 	
 	// ---- VER EJERCICIOS -------------------------------------------------------------------
-	@GetMapping("ver_ejercicios")
+	@GetMapping("/ver_ejercicios")
 	public String verEjercicios(Model model) {
 		List<Ejercicio> listaEjercicios = ejercicioService.getEstado(true);
 		model.addAttribute("listaEjercicios", listaEjercicios);
@@ -212,9 +223,11 @@ public class RutinaController {
 
 	@PostMapping("grabar_rutina")
 	public String grabarRutina(HttpSession sesion, Rutina ru, Model model) {
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+		ru.setNutriologo(nutriologo);
         rutinaService.grabarRutina(ru);  
         model.addAttribute("finalizado", "Bien hecho, ahora los pacientes podrán ver tu rutina");
-		return "redirect:/rutina/";
+		return "redirect:/perfil/";
 	}
 	
 	// ---- VER DETALLE RUTINA -------------------------------------------------------------------
@@ -225,22 +238,34 @@ public class RutinaController {
 			//@ModelAttribute("ru") Rutina ru,
 			@PathVariable Long codigo,
 			Model model) {
-		
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-        if (objUsuario!=null) {
-        	/*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
-	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);*/
-	    } 
+		try {
+			Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+			Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+			if (paciente!=null || nutriologo!=null) {
+				/*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
+				boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
+				model.addAttribute("esPaciente", esPaciente);*/
+				Rutina detRutina = rutinaService.getCodigo(codigo);
+				model.addAttribute("detRutina", detRutina);
+
+				return "rutinas/detalle_rutina";
+			} 
+			else{
+				return "iniciar_sesion";
+			}
+		} 
+		catch (Exception e) {
+			ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			return "redirect:/rutina";
+		}
 		
 		//Rutina detalleRutina = rutinaRepository.findByCodigo(codigo);
 		//model.addAttribute("detalleRutina", detalleRutina);
-		Rutina detRutina = rutinaService.getCodigo(codigo);
-		model.addAttribute("detRutina", detRutina);
+		
 		
 		//Usuario nutriActual = (Usuario) sesion.getAttribute("usuario");
 		//model.addAttribute("esCreador", nutriActual.getCodigo() == detalleRutina.getNutriologo().getCodigo());
-		return "rutinas/detalle_rutina";
+		
 	}
 	
 	// ---- EDITAR RUTINA -------------------------------------------------------------------

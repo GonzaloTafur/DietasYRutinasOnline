@@ -64,12 +64,12 @@ public class ReunionService {
 
     }
 
-    public List<Reunion> getNutriologo(Nutriologo suPerfil, boolean estado) {
-        return reunionRepository.findByNutriologoAndEstado(suPerfil, true);
+    public List<Reunion> getNutriologo(Nutriologo nutriologo,  Boolean estado) {
+        return reunionRepository.findByNutriologoAndEstado(nutriologo, true);
     }
 
     public Reunion grabarReunion(HttpSession sesion, String dia, Reunion re){
-        Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("usuario");
+        Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 
         Reunion reunionUsuario = reunionRepository.findByNutriologoAndDiaAndEstado(nutriologo, dia, true);
 

@@ -58,8 +58,19 @@ public class Paciente extends Usuario{
     @Column(name = "estado")
     private Boolean estado;*/
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    /*@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_historial", referencedColumnName = "id_historial")
-    private HistorialMed historialMedico;
+    private HistorialMed historialMedico;*/
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_objetivo", referencedColumnName = "id_objetivo")
+    private Objetivo objetivo;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "id_condicion", referencedColumnName = "id_condicion")
+    private Condicion condicion;
+
+	@Column(name="frec_ejercicios")
+	private String frecEjercicios;
 
 }

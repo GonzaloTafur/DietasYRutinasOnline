@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en"
+xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Perfil</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" th:href="@{https://www.w3schools.com/w3css/4/w3.css}">
+<link rel='stylesheet' th:href='@{https://fonts.googleapis.com/css?family=Roboto}'>
+<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+<link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
+    <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+
+<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
+</head>
+
+<body>
+<!-- Page Container -->
+<div class="w3-content w3-margin-top" style="max-width:1400px;">
+
+  <!-- The Grid -->
+  <div class="w3-row-padding">
+  
+    <!-- PERFIL -->
+    <div class="w3-third">
+    <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}"> <- Retroceder</a>
+      <div class="w3-white w3-text-grey w3-card-4" th:value="nutriologo">
+      
+        <div class="perfil">
+          <img style="width:100%" alt="Avatar">
+          <div class="w3-text-black">
+            <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+            <span th:text="${nutriologo.nombres}"></span>
+            <span th:text="${nutriologo.apellidos}"></span>
+            </h2>
+            <p class="w3-text-grey" th:text="${nutriologo.biografia}"></p>     
+          </div>
+          <br>
+          
+          <!--<a th:href="@{/home/editarPerfil}" th:method="POST">Editar perfil</a>-->
+          <form th:action="@{/perfil/editarPerfil}" th:method="POST">
+            	<!--  <input type="hidden" name="idcuestionario" th:value="${miInfo.idcuestionario}" />-->
+            	<button type="submit" class="pure-button pure-button-primary">
+        			Editar Perfil
+        		</button>
+			</form> 
+            
+          <span class="span" th:if="${actualizado}" th:text="${actualizado}"></span>
+        </div>
+        
+        <div class="w3-container">
+        
+          <p>Fecha de nacimiento: 
+          <span th:text="${nutriologo.fechanacimiento}"></span></p>
+          <br>
+          
+          <p>Nacionalidad: 
+          <span th:text="${nutriologo.nacionalidad}"></span></p>
+          <br>
+          
+          <p>Sexo: 
+          <span th:text="${nutriologo.sexo}"></span></p>
+          <br>
+          
+          <!--<p>Me uní en: </p>
+           <p th:each="transaccion: ${nutriologo.transaccion}">
+    		<span th:text="${transaccion.registro}"></span>  
+    		<span th:text="${#dates.format(transaccion.registro, 'yyyy-MM-dd')}"></span>
+			</p>--> 
+			<br>
+          
+        </div>
+      </div><br>
+		
+	  <div class="w3-white w3-text-grey w3-card-4" th:if="${nutriologo}">
+              
+                <div class="perfil">
+                  <div class="w3-text-black">
+                    <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+                        Reuniones
+                    </h2>
+                    
+                    <div th:each="reunion: ${objReunion}">
+                    	<p th:text="${reunion.motivo}"></p>
+                    	<p th:text="${reunion.dia}"></p>  
+                    	<p th:text="${reunion.hora}"></p>                 
+                    	<!--  <button class="pure-button pure-button-primary">Ingresar vía Zoom</button>-->
+                    	<a type="button" class="pure-button pure-button-primary" th:href="${reunion.enlace}">Enlace de la reunión</a>
+                    	<!--<a type="button" class="pure-button pure-button-secondary" th:href="@{/reunion/nutriologosAsistidos}">nutriologos asistidos</a>
+                    	<a type="button" class="pure-button pure-button-secondary" 
+                    		th:href="@{/reunion/nutriologosAsistidos(codigo=${objReunion.codigo})}">nutriologos asistidos</a>-->
+                    	<a th:href="@{/reunion/desactivarReunion/{codigo} (codigo=${reunion.codigo})}" 
+                    		class="btn btn-danger btn-circle btn-sm">Desactivar Reunion</a>
+                    	<hr>
+                    	<br>
+                    </div>
+                    <a type="button" class="pure-button pure-button-secondary" th:href="@{/reunion/pacientesAsistidos}">Pacientes asistidos</a>
+                    
+                    <a th:href="@{/reunion/nueva_reunion}">Programar una nueva reunión</a>
+                  </div>
+                  <br>
+                  
+                </div>
+                
+              </div><br>
+              
+              <div class="w3-white w3-text-grey w3-card-4" th:if="${nutriologo}">
+            <div class="perfil">
+              <div class="w3-text-black">
+                <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
+                    Medidas de seguimiento
+                </h2>
+                <a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/verSeguimiento}">Ver seguimiento</a>
+              </div>
+              <br>
+            </div>
+          </div><br>
+            
+              
+    <!-- End Left Column -->
+    </div>
+
+
+    <!-- Right Column -->
+    
+    <div class="w3-twothird">
+      <div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${nutriologo}">
+        <h2 class="w3-text-grey w3-padding-16">Rutinas creadas</h2>
+        <a th:href="@{/rutina/crear_rutina}" class="pure-button pure-button-primary">Crear Nueva rutina</a>
+
+        <div class="w3-container" >
+        <table class="pure-table">
+            <thead>
+                <tr>
+                    <th>Nombre de la Rutina</th>
+                    <th>Tipo</th>
+                    <th>Parte del cuerpo</th>
+                    <th>Nivel</th>
+                    <th>Descripción</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+        
+            <tbody class="pure-table-border">
+                <tr th:each="rutina: ${misRutinas}">
+                <td><span th:text="${rutina.nombre}"></span></td>
+                <td><span th:text="${rutina.objetivo.nombre}"></span></td>
+                <td><span th:text="${rutina.parteCuerpo}"></span></td>
+                <td><span th:text="${rutina.nivel}"></span></td>
+                <td><span th:text="${rutina.descripcion}"></span></td>
+                <!--<td>
+                    <div class="dropdown">
+                        <a th:href="@{/ordenCompra/ver/{id} (id=${ordenCompra.id})}">
+                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                    </div>
+                </td>-->
+                <td>
+                    <div class="dropdown">
+                        <a th:href="@{/rutina/verDetalleRutina(codigo=${rutina.codigo})}">
+                            <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                    </div>
+                </td>
+                </tr> 
+            </tbody>
+            </table>
+
+            
+
+        </div>
+
+      </div>
+
+      <div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${nutriologo}">
+        <h2 class="w3-text-grey w3-padding-16">
+          <div style="display: flex;">  
+            <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>
+            Dietas creadas</h2>
+            <a class="pure-button pure-button-primary" th:href="@{/dieta/crear_dieta}">Crear Nueva Dieta</a>
+          
+
+            <div class="w3-container">
+            <table class="pure-table pure-table-bordered">
+              <thead>
+                  <tr>
+                      <th>Nombre</th>
+                      <th>Objetivo</th>
+                      <th>Descripción</th>
+                      <th>Acciones</th>
+                  </tr>
+              </thead>
+          
+              <tbody>
+                  <tr th:each="dieta: ${misDietas}">
+                  <td><span th:text="${dieta.nombre}"></span></td>
+                  <td><span th:text="${dieta.objetivo.nombre}"></span></td>
+                  <td><span th:text="${dieta.descripcion}"></span></td>
+                  <!--<td>
+                      <div class="dropdown">
+                          <a th:href="@{/ordenCompra/ver/{id} (id=${ordenCompra.id})}">
+                              <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
+                      </div>
+                  </td>-->
+                  <td>
+                      <div class="dropdown">
+                          <a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">Ver detalles</a>
+                      </div>
+                  </td>
+                  
+                  </tr> 
+              </tbody>
+   
+            </table>
+        </div>
+      </div>
+      </div>
+
+    <!-- End Right Column -->
+    </div>
+    
+  <!-- End Grid -->
+  </div>
+  
+  <!-- End Page Container -->
+</div>
+</div>
+
+<footer>
+  <p class="p-footer">2024. Todos los derechos reservados.</p>
+</footer>
+
+</body>
+</html>

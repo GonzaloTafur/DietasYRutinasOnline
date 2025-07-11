@@ -26,17 +26,17 @@ xmlns:th="http://www.thymeleaf.org">
   
     <!-- PERFIL -->
     <div class="w3-third">
-    <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}"> <- Retroceder</a>
-      <div class="w3-white w3-text-grey w3-card-4" th:value="objUsuario">
+    <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}"> <- Retroceder</a>
+      <div class="w3-white w3-text-grey w3-card-4" th:value="paciente">
       
         <div class="perfil">
-          <img src="/images/ave.jpg" style="width:100%" alt="Avatar">
+          <img style="width:100%" alt="Avatar">
           <div class="w3-text-black">
             <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
-            <span th:text="${objUsuario.nombres}"></span>
-            <span th:text="${objUsuario.apellidos}"></span>
+            <span th:text="${paciente.nombres}"></span>
+            <span th:text="${paciente.apellidos}"></span>
             </h2>
-            <p class="w3-text-grey" th:text="${objUsuario.biografia}"></p>     
+            <p class="w3-text-grey" th:text="${paciente.biografia}"></p>     
           </div>
           <br>
           
@@ -54,28 +54,43 @@ xmlns:th="http://www.thymeleaf.org">
         <div class="w3-container">
         
           <p>Fecha de nacimiento: 
-          <span th:text="${objUsuario.fechanacimiento}"></span></p>
+          <span th:text="${paciente.fechanacimiento}"></span></p>
           <br>
           
           <p>Nacionalidad: 
-          <span th:text="${objUsuario.nacionalidad}"></span></p>
+          <span th:text="${paciente.nacionalidad}"></span></p>
           <br>
           
           <p>Sexo: 
-          <span th:text="${objUsuario.sexo}"></span></p>
+          <span th:text="${paciente.sexo}"></span></p>
           <br>
           
           <!--<p>Me uní en: </p>
-           <p th:each="transaccion: ${objUsuario.transaccion}">
+           <p th:each="transaccion: ${paciente.transaccion}">
     		<span th:text="${transaccion.registro}"></span>  
     		<span th:text="${#dates.format(transaccion.registro, 'yyyy-MM-dd')}"></span>
 			</p>--> 
 			<br>
           
         </div>
+
+        <div class="w3-container">
+          <h3>Objetivo nutricional:</h3>
+			    <p th:text="${paciente.objetivo.nombre}">
+            <hr>
+        
+          <h3>Frecuencia de ejercicios:</h3>        
+    	    <p th:text="${paciente.frecEjercicios}">
+    	    <hr>
+    	  
+					<h3>Condición alimenticia:</h3>
+    				<p th:text="${paciente.condicion.nombre}">
+    				<hr>
+        </div> 
+        </div>
       </div><br>
 		
-	  <div class="w3-white w3-text-grey w3-card-4" th:if="${!esPaciente}">
+	  <div class="w3-white w3-text-grey w3-card-4" th:if="${nutriologo}">
               
                 <div class="perfil">
                   <div class="w3-text-black">
@@ -91,8 +106,8 @@ xmlns:th="http://www.thymeleaf.org">
                     	<a type="button" class="pure-button pure-button-primary" th:href="${reunion.enlace}">Enlace de la reunión</a>
                     	<!--<a type="button" class="pure-button pure-button-secondary" th:href="@{/reunion/pacientesAsistidos}">Pacientes asistidos</a>
                     	<a type="button" class="pure-button pure-button-secondary" 
-                    		th:href="@{/reunion/pacientesAsistidos(idreunion=${objReunion.idreunion})}">Pacientes asistidos</a>-->
-                    	<a th:href="@{/reunion/desactivarReunion/{idreunion} (idreunion=${reunion.idreunion})}" 
+                    		th:href="@{/reunion/pacientesAsistidos(codigo=${objReunion.codigo})}">Pacientes asistidos</a>-->
+                    	<a th:href="@{/reunion/desactivarReunion/{codigo} (codigo=${reunion.codigo})}" 
                     		class="btn btn-danger btn-circle btn-sm">Desactivar Reunion</a>
                     	<hr>
                     	<br>
@@ -107,7 +122,7 @@ xmlns:th="http://www.thymeleaf.org">
                 
               </div><br>
               
-              <div class="w3-white w3-text-grey w3-card-4" th:if="${esPaciente}">
+              <div class="w3-white w3-text-grey w3-card-4" th:if="${paciente}">
             <div class="perfil">
               <div class="w3-text-black">
                 <h2 class="w3-text-grey w3-padding-16 w3-margin-right">
@@ -125,9 +140,8 @@ xmlns:th="http://www.thymeleaf.org">
 
 
     <!-- Right Column -->
-    
     <div class="w3-twothird">
-    	<div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${esPaciente}" th:value="miInfo">
+    	<div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${paciente}" th:value="miInfo">
     	
         <h2 class="w3-text-grey w3-padding-16">
             <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>Información</h2>
@@ -139,73 +153,60 @@ xmlns:th="http://www.thymeleaf.org">
         <div th:if="${miInfo==null}">
         <h3>¿Aún no has tienes información sobre ti? <br>
         Recuerda llenar y actualizar nuestro cuestionario</h3>
-        <form th:action="@{/perfil/llenarCuestionario}" th:method="POST">
-            	<button type="submit" class="pure-button pure-button-primary">
+        <!--<form th:action="@{/perfil/llenarCuestionario}" th:method="POST">
+            	<button type="submit" >
         			Hacer cuestionario
-        		</button>
+        		</button>-->
+            <a th:href="@{/cuestionario/}" class="pure-button pure-button-primary">Hacer Cuestionario</a>
 			</form>
         </div>
           
         <!-- SI EL PACIENTE TIENE INFO -->
         <div th:if="${miInfo!=null}">
  
-    <div class="w3-container w3-card w3-white w3-margin-bottom">
+          <div class="w3-container w3-card w3-white w3-margin-bottom">
    	<span th:if="${mensaje}" th:text="${mensaje}"></span>
    	
       <h2 class="w3-text-grey w3-padding-16">
           Dieta(s) que estoy haciendo</h2>
-        <!--<div class="w3-container" th:if="${miInfo.dieta!=null}">-->
       
-        <table class="pure-table">
-      <thead>
-          <tr>
-              <th>Nombre</th>
-              <th>Objetivo</th>
-              <th>Descripción</th>
-              <th>Acciones</th>
-          </tr>
-      </thead>
-  
-      <tbody class="pure-table-border">
-          <tr th:each="dieta: ${miInfo.dieta}">
-          <td><span th:text="${dieta.nombre}"></span></td>
-          <td><span th:text="${dieta.objetivo}"></span></td>
-          <td><span th:text="${dieta.descripcion}"></span></td>
-          <td>
-              <div class="dropdown">
-                  <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">Ver detalles</a>
-              </div>
-              <br>
+        <!--<table class="pure-table">
+          <thead>
+              <tr>
+                  <th>Nombre</th>
+                  <th>Objetivo</th>
+                  <th>Descripción</th>
+                  <th>Acciones</th>
+              </tr>
+          </thead>
+      
+          <tbody class="pure-table-border">
+              <tr th:each="dieta: ${paciente.historialMedico.dieta}">
+              <td><span th:text="${dieta.nombre}"></span></td>
+              <td><span th:text="${dieta.objetivo}"></span></td>
+              <td><span th:text="${dieta.descripcion}"></span></td>
+              <td>
+                  <div class="dropdown">
+                      <a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">Ver detalles</a>
+                  </div>
+                  <br>
+                  
+                  <form th:action="@{/dieta/dejarSeguirDieta(codigo=${dieta.codigo})}" method="POST">
+                      <button type="submit" class="pure-button pure-button-secondary">
+                      Dejar de seguir Dieta</button>
+                    </form>
+              </td>
               
-              <form th:action="@{/dieta/dejarSeguirDieta(iddieta=${dieta.iddieta})}" method="POST">
-            			<button type="submit" class="pure-button pure-button-secondary">
-            			Dejar de seguir Dieta</button>
-            		</form>
-          </td>
-          
-          </tr> 
-      </tbody>
- 
-          </table> 
+              </tr> 
+          </tbody>
+        </table>-->
           
         <a th:href="@{/home/verDietas}" type="button">
 			Seguir otras dietas
 		</a>         
-    </div>
-    
-    		<h3>Objetivo nutricional:</h3>
-			<p th:text="${miInfo.objetivo}">
-            <hr>
-        
-          <h3>Frecuencia de ejercicios:</h3>        
-    	  <p th:text="${miInfo.frecEjercicios}">
-    	  <hr>
-    	  
-					<h3>Condición alimenticia:</h3>
-    				<p th:text="${miInfo.condicion}">
-    				<hr>
-    				
-                    <h3>Peso corporal:</h3>
+          </div>
+    <div>	
+          <h3>Peso corporal:</h3>
 					<p th:text="${miInfo.pesoCorporal}">
     				<hr>
     				
@@ -253,7 +254,7 @@ xmlns:th="http://www.thymeleaf.org">
     	
     	
     	
-      <div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${!esPaciente}">
+      <div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${nutriologo}">
         <h2 class="w3-text-grey w3-padding-16">Rutinas creadas</h2>
 
         <div class="w3-container" >
@@ -284,7 +285,7 @@ xmlns:th="http://www.thymeleaf.org">
                 </td>-->
                 <td>
                     <div class="dropdown">
-                        <a th:href="@{/rutina/verDetalleRutina(idrutina=${rutina.idrutina})}">
+                        <a th:href="@{/rutina/verDetalleRutina(codigo=${rutina.codigo})}">
                             <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
                     </div>
                 </td>
@@ -300,7 +301,7 @@ xmlns:th="http://www.thymeleaf.org">
 
       </div>
 
-      <div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${!esPaciente}">
+      <div class="w3-container w3-card w3-white w3-margin-bottom" th:if="${nutriologo}">
         <h2 class="w3-text-grey w3-padding-16">
             <i class="fa fa-certificate fa-fw w3-margin-right w3-xxlarge w3-text-teal"></i>
             Dietas creadas</h2>
@@ -328,7 +329,7 @@ xmlns:th="http://www.thymeleaf.org">
             </td>-->
             <td>
                 <div class="dropdown">
-                    <a th:href="@{/dieta/verDetalleDieta(iddieta=${dieta.iddieta})}">
+                    <a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">
                         <i class="bx bx-edit-alt me-2"></i>Ver detalles</a>
                 </div>
             </td>
