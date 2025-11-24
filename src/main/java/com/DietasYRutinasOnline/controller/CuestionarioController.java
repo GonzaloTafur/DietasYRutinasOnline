@@ -29,6 +29,14 @@ public class CuestionarioController {
     @Autowired
     HistorialMedService historialMedService;
 
+
+    @GetMapping("/")
+    public String completarCuestionario(HttpSession session, Model model){
+        HistorialMed hm = new HistorialMed();
+        model.addAttribute("medidas", hm);
+        return "cuestionario";
+    }
+
     @PostMapping("/grabar_cuestionario")
     public String grabarCuestionario(HttpSession session, Model model){
         Paciente paciente = (Paciente) session.getAttribute("paciente");
@@ -38,17 +46,10 @@ public class CuestionarioController {
             HistorialMed medidas = new HistorialMed();
             model.addAttribute("medidas", medidas);
 
-            return "cuestionario_medidas";
+            return "cuestionario";
         }
         
         return "iniciar_sesion";
-    }
-
-    @GetMapping("/")
-    public String completarCuestionario(HttpSession session, Model model){
-        HistorialMed hm = new HistorialMed();
-        model.addAttribute("medidas", hm);
-        return "cuestionario_medidas";
     }
 
     @PostMapping("/grabar_medidas")
@@ -60,7 +61,7 @@ public class CuestionarioController {
 	        hm.setFecha(LocalDateTime.now());
             hm.setPaciente(paciente);
             historialMedService.guardarHistorial(hm);
-            return "redirect:/perfil/";
+            return "redirect:/menu/";
         }
         return "iniciar_sesion";
         

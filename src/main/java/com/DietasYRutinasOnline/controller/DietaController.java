@@ -25,6 +25,7 @@ import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
 import com.DietasYRutinasOnline.repository.AlimentoRepository;
 import com.DietasYRutinasOnline.repository.CondicionRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
@@ -319,8 +320,10 @@ public class DietaController {
 
 			List<Condicion> listaCondiciones = condicionRepository.findAll();
 			model.addAttribute("listaCondiciones", listaCondiciones);
-			List<Objetivo> lstObjetivo = objetivoService.getEstado(true);
-			model.addAttribute("lstObjetivo", lstObjetivo);
+
+			/*List<Objetivo> lstObjetivo = objetivoService.getEstado(true);
+			model.addAttribute("lstObjetivo", lstObjetivo);*/
+			model.addAttribute("rbtObjetivo", ObjetivoEnum.values());
 			
 			//List<String> cbxAlimentos = alimentoRepository.findDistinctTipos();
 			List<String> cbxAlimentos = alimentoService.cbxAlimento();

@@ -3,7 +3,6 @@
      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
@@ -16,7 +15,9 @@
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
 	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
-
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+   <!--<link rel="stylesheet" href="../../static/css/style2.css">-->
+    
 	<script src="https://kit.fontawesome.com/dcce108ca1.js" crossorigin="anonymous"></script>
     <title>Lista de Dietas</title>
 </head>
@@ -31,7 +32,7 @@
         
         <div class="deslisable">
         
-        <div class="pure-menu pure-menu-horizontal">
+            <div class="pure-menu pure-menu-horizontal">
                     <ul class="pure-menu-list">
                         <li class="pure-menu-item pure-menu-selected">
                             <a href="#" class="pure-menu-link">Dietas</a>
@@ -40,35 +41,35 @@
                             <a th:href="@{/dieta/ver_alimentos}" class="pure-menu-link">Alimentos</a>
                         </li>
                     </ul>
-                </div>
+            </div>
                 
             <table class="pure-table pure-table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Objetivo</th>
-                    <th>Descripción</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-        
-            <tbody>
-                <tr th:each="dieta: ${listaDietas}">
-                <td><span th:text="${dieta.nombre}"></span></td>
-            	<td><span th:text="${dieta.objetivo.nombre}"></span></td>
-                <td><span th:text="${dieta.descripcion}"></span></td>
-                <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}">Ver detalles</a>
-                    <br>
-                                        
-                    <form th:if="${paciente}" th:action="@{/dieta/seguirDieta(codigo=${dieta.codigo})}" method="POST">
-            			<button type="submit" class="pure-button pure-button-primary">
-            			Seguir Dieta</button>
-            		</form>
-                </td>
-                </tr> 
-            </tbody>
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Objetivo</th>
+                        <th>Descripción</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+            
+                <tbody>
+                    <tr th:each="dieta: ${listaDietas}">
+                    <td><span th:text="${dieta.nombre}"></span></td>
+                    <td><span th:text="${dieta.objetivo.nombre}"></span></td>
+                    <td><span th:text="${dieta.descripcion}"></span></td>
+                    <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}">Ver detalles</a>
+                        <br>
+                                            
+                        <form th:if="${paciente}" th:action="@{/dieta/seguirDieta(codigo=${dieta.codigo})}" method="POST">
+                            <button type="submit" class="pure-button pure-button-primary">
+                            Seguir Dieta</button>
+                        </form>
+                    </td>
+                    </tr> 
+                </tbody>
             </table>
-</div>
+        </div>
 
 			<!--<form th:if="${!esPaciente}" th:action="@{/dieta/crear_dieta}" method="POST">
             	<button type="submit" class="pure-button pure-button-primary">

@@ -3,6 +3,8 @@ package com.DietasYRutinasOnline.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Objetivo;
@@ -26,4 +28,5 @@ public interface DietaRepository extends JpaRepository<Dieta, Long>{
 
 	//@Query("SELECT d FROM Dieta d WHERE d.alimento.condicion == 1")
 	//List<Dieta> findByDietas();
+	
 }

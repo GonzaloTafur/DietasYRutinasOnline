@@ -73,7 +73,13 @@ xmlns:th="http://www.thymeleaf.org">
     	</select>
     	
         <label for="dia">Día:</label>
-        		<select name="dia">
+        		<select name="dia" th:field="*{dia}">
+					<option th:each="d : ${cbxDias}"
+							th:value="${d}"
+							th:text="${d.nombre}">
+					</option>
+				</select>
+        		<!--<select name="dia">
             		<option th:value="'LUNES'">Lunes</option>
             		<option th:value="'MARTES'">Martes</option>
             		<option th:value="'MIERCOLES'">Miércoles</option>
@@ -81,7 +87,7 @@ xmlns:th="http://www.thymeleaf.org">
             		<option th:value="'VIERNES'">Viernes</option>
             		<option th:value="'SABADO'">Sábado</option>
             		<option th:value="'DOMINGO'">Domingo</option>
-        		</select>
+        		</select>-->
 
 		<label for="periodo">Periodo de día:</label>
         <select name="periodo">

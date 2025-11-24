@@ -3,9 +3,13 @@ package com.DietasYRutinasOnline.entity;
 import java.io.Serializable;
 import java.util.List;
 
+import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -31,9 +35,13 @@ public class Dieta implements Serializable{
 	@Column(name="nombre", length = 50, nullable = false)
 	private String nombre;
 	
-	@ManyToOne(cascade = CascadeType.ALL)
+	/*@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_objetivo", referencedColumnName = "id_objetivo")
-    private Objetivo objetivo;
+    private Objetivo objetivo;*/
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "objetivo")
+    private ObjetivoEnum objetivo;
 	
 	@Column(name="descripcion", columnDefinition = "TEXT")
 	private String descripcion;

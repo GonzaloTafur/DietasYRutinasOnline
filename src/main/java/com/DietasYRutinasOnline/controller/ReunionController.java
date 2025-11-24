@@ -28,6 +28,7 @@ import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.ENUM.Dia;
 import com.DietasYRutinasOnline.repository.AsistenciaRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
@@ -240,7 +241,8 @@ public class ReunionController {
 	public String nuevaReunion(HttpSession sesion, Model model) {
 		Reunion re = new Reunion();
 		model.addAttribute("re", re);
-		return "usuario/programar_reunion";
+		model.addAttribute("cbxDias", Dia.values());
+		return "reuniones/programar_reunion";
 	}
 	
 	/*@PostMapping("/grabarReunion")
@@ -296,12 +298,12 @@ public class ReunionController {
 	*/
 
 	@PostMapping("grabar_reunion")
-	public String grabarReunion(HttpSession sesion, Model model, String dia, Reunion re){
+	public String grabarReunion(HttpSession sesion, Model model, Dia dia, Reunion re){
 		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 		if (nutriologo!=null){
 			//re.setNutriologo(nutriologo);
 			reunionService.grabarReunion(sesion, dia, re);
-			return "redirect:/perfil";
+			return "redirect:/perfil/";
 		}
 		else{
 			return "iniciar_sesion";
@@ -366,7 +368,7 @@ public class ReunionController {
 	    Collections.reverse(listaPacientes);
 	    model.addAttribute("listaPacientes", listaPacientes);
 
-	    return "usuario/lista_pacientes2";
+	    return "reuniones/pacientes_asistidos";
 	}
 	
 	@GetMapping("/perfilPaciente")

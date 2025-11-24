@@ -76,8 +76,8 @@ public class AdminController {
         //List<Nutriologo> lstNutri = usuarioService.getEstadoNutriologo(true);
         //model.addAttribute("lstNutri", lstNutri);
 
-        List<Rol> lstRoles = rolService.getEstado(true);
-        model.addAttribute("lstRoles", lstRoles);
+        //List<Rol> lstRoles = rolService.getEstado(true);
+        //model.addAttribute("lstRoles", lstRoles);
         return "admin/usuario/usuarios.html";
     }
     
@@ -91,7 +91,7 @@ public class AdminController {
     @PostMapping("grabar_rol")
     public String grabarRol(Model model, Rol rol){
         //e.setEstado(true);
-        rolService.guardaRol(rol);
+        //rolService.guardaRol(rol);
         //redirect:"ejercicios";
         return "redirect:/admin/gestion_usuarios";
     }

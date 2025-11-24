@@ -3,8 +3,12 @@ package com.DietasYRutinasOnline.entity;
 import java.io.Serializable;
 import java.time.LocalTime;
 
+import com.DietasYRutinasOnline.entity.ENUM.Dia;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,8 +36,10 @@ public class Reunion implements Serializable{
 	@Column(name="motivo")
 	private String motivo;
 	
+	@Enumerated(EnumType.STRING)
 	@Column(name="dia_semana")
-	private String dia;
+	private Dia dia;
+	//private String dia;
 	
 	@Column(name="hora_inicio")
 	private LocalTime hora;

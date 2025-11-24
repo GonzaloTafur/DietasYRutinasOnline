@@ -2,8 +2,12 @@ package com.DietasYRutinasOnline.entity;
 
 import java.io.Serializable;
 
+import com.DietasYRutinasOnline.entity.ENUM.Dia;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,9 +36,10 @@ public class Horario implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "rutina", referencedColumnName = "id_rutina")
     private Rutina rutina;
-    
+
+	@Enumerated(EnumType.STRING)
 	@Column(name="dia_semana", length = 20)
-	private String dia;
+	private Dia dia;
 	
 	@Column(name="parte_dia", length = 20)
 	private String parte;

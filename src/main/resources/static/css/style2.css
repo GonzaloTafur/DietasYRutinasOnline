@@ -28,15 +28,16 @@ header img {
 }
 main {
 	width: 80%;
-	height: 100%;
+	padding: 6%;
+	height: auto;
 	overflow: hidden;
 	margin: 0 auto;
-	background-color: #FFFFFF;
+	background-color: #edfac9;
 }
 footer {
-	width: 80%;
+	width: auto;
 	height: auto;
-	margin: 0 auto;
+	margin: auto;
 	padding: 1% 0;
 	background-color: #dadada;
 	display: flex;
@@ -44,12 +45,10 @@ footer {
 }
 section {
 	width: 96%;
-	/*height: 100%;*/
-	min-height: 520px;
+	min-height: 770px;
 	overflow: hidden;
 	margin: 0 auto;
-	background-color: #edfac9;
-	padding: 4% 2%;
+	/*padding: 4% 2%;*/
 }
 section h2 {
 	margin-bottom: 20px;
@@ -313,6 +312,23 @@ p {
 	width: 54%;
 	margin:  0 auto;
   }
+
+  .formulario{
+	background-color: white;
+	padding: 15px;
+	border-radius: 15px;
+	box-shadow: 1px 1px 10px 1px #00000044;
+	width: 900px;
+	height: auto;
+	margin: 0 auto;
+	margin-top: 100px;
+  }
+
+  .formulario a{
+	text-decoration: none;
+	color:cornflowerblue;
+  }
+
   label, input, textarea, select{
 	margin: 5px 0;
 	color: rgb(0, 0, 0);
@@ -338,7 +354,13 @@ p {
 	resize: vertical;
 	min-height: 200px;
   }
-  input[type=submit]{
+  
+/* == BUTTON == */
+input[type=submit]{
+	width: 170px;
+}
+
+  /*input[type=submit]{
 	color: rgb(255, 255, 255);
 	background: #013354;
 	font-family: 'Kumbh Sans', sans-serif;
@@ -355,10 +377,11 @@ p {
 	width: 170px;
 	cursor: pointer;
   }
+
   input[type=submit]:hover {
 	color: #013354;
 	background: rgb(180, 180, 180);
-  }
+  }*/
 
 /* == MEDIA QUERIES TABLET == */
 @media screen and (max-width:768px) {
@@ -450,6 +473,10 @@ p {
 .alert{
     font-style: italic;
     color: red;
+}
+
+.exito{
+	color: green;
 }
 
 .btn-link{

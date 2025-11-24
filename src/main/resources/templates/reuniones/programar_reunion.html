@@ -38,16 +38,23 @@
                             	/>
 
 				<label for="dia">Día</label>
-        		<select name="dia">
-            		<option th:value="'LUNES'">Lunes</option>
-            		<option th:value="'MARTES'">Martes</option>
-            		<option th:value="'MIERCOLES'">Miércoles</option>
-            		<option th:value="'JUEVES'">Jueves</option>
-            		<option th:value="'VIERNES'">Viernes</option>
-            		<option th:value="'SABADO'">Sábado</option>
-            		<option th:value="'DOMINGO'">Domingo</option>
-        		</select>
-                          
+        		<select name="dia" th:field="*{dia}">
+					<option th:each="d : ${cbxDias}"
+							th:value="${d}"
+							th:text="${d.nombre}">
+					</option>
+				</select>
+
+				<!--<select name="dia">
+            		<option th:value="'LU'">Lunes</option>
+            		<option th:value="'MA'">Martes</option>
+            		<option th:value="'MI'">Miércoles</option>
+            		<option th:value="'JU'">Jueves</option>
+            		<option th:value="'VI'">Viernes</option>
+            		<option th:value="'SA'">Sábado</option>
+            		<option th:value="'DO'">Domingo</option>
+        		</select>-->
+
                	<label for="hora">Hora</label>
         		<input type="time" min="08:00" max="23:00" th:field="*{hora}" />
                 

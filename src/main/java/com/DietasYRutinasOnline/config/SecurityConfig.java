@@ -11,15 +11,25 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class SecurityConfig {
 
+    /*protected void configure(HttpSecurity http) throws Exception {
+        http
+            .authorizeRequests()
+                .requestMatchers("/css/**", "/js/**", "/images/**").permitAll()
+            .anyRequest().authenticated();
+    }*/
+
 	@Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-            .authorizeRequests()
-            .anyRequest().permitAll() 
-            .and()
-            .csrf().disable();
+            .authorizeHttpRequests(auth -> auth
+            .requestMatchers("/css/**","/js/**","/images/**","/webjars/**").permitAll()
+                .anyRequest().permitAll()
+            )
+            .csrf(csrf -> csrf.disable());
+
         return http.build();
     }
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {

@@ -85,7 +85,7 @@ xmlns:th="http://www.thymeleaf.org">
                     
                     <div th:each="reunion: ${objReunion}">
                     	<p th:text="${reunion.motivo}"></p>
-                    	<p th:text="${reunion.dia}"></p>  
+                    	<p th:text="${reunion.dia.nombre}"></p>  
                     	<p th:text="${reunion.hora}"></p>                 
                     	<!--  <button class="pure-button pure-button-primary">Ingresar vía Zoom</button>-->
                     	<a type="button" class="pure-button pure-button-primary" th:href="${reunion.enlace}">Enlace de la reunión</a>

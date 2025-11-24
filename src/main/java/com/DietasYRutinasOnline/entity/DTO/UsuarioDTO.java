@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Data
 public class UsuarioDTO {
+
+    private Long codigo;
     
     private String password;
 

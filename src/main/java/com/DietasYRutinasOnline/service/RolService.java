@@ -14,7 +14,7 @@ public class RolService {
     @Autowired
     RolRepository rolRepository;
 
-    public List<Rol> getEstado(Boolean estado){
+    /*public List<Rol> getEstado(Boolean estado){
         return rolRepository.findAll();
     }
 
@@ -29,6 +29,6 @@ public class RolService {
     public Rol guardaRol(Rol rol){
         rol.setEstado(true);
         return rolRepository.save(rol);
-    }
+    }*/
 
 }

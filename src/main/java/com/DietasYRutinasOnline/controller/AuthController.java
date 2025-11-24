@@ -16,9 +16,11 @@ import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.TransaccionUsuario;
+import com.DietasYRutinasOnline.entity.ENUM.RolEnum;
 import com.DietasYRutinasOnline.repository.NutriologoRepository;
 import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.TransUsuarioRepository;
+import com.DietasYRutinasOnline.service.NutriologoService;
 import com.DietasYRutinasOnline.service.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -43,6 +45,9 @@ public class AuthController {
     @Autowired
     private TransUsuarioRepository transUsuarioRepository;
 
+	@Autowired
+	private NutriologoService nutriologoService;
+
 
     @RequestMapping(value="/validar_usuario", method= RequestMethod.POST)
 	public String validarUsuario(
@@ -55,15 +60,16 @@ public class AuthController {
 			Nutriologo nutriologo = usuarioService.getCorreoNutriologos(correo);
 			Paciente paciente = usuarioService.getCorreoPaciente(correo);
 
+			// SI EL NUTRIOLOGO INICIA SESIÓN
 			if (nutriologo!=null && passwordEncoder.matches(password, nutriologo.getPassword())) {
 			//if (objUsuario!=null) {
 				
 				HttpSession sesion = request.getSession();
 				sesion.setAttribute("nutriologo", nutriologo);
 
-				// Buscando el rol "Superusuario" para redirigir al nutriologo a otra ventana
-				Nutriologo superusuario = nutriologoRepository.findByRol(rolRepository.findByCodigo(1));
-
+				// BUSCANDO EL ROL DE "SUPERUSUARIO" PARA REDIRIGIR A LA PÁGINA DE ADMINISTRADOR
+				//Nutriologo superusuario = nutriologoRepository.findByRol(rolRepository.findByCodigo(1));
+				Nutriologo superusuario = nutriologoService.getSuperUsuario(RolEnum.SU);
 				if(superusuario==nutriologo){
 					TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 					objTransUsuario.setLogin(LocalDateTime.now());
@@ -73,15 +79,19 @@ public class AuthController {
 
 					return "admin/principal";
 				}
-
-				TransaccionUsuario objTransUsuario = new TransaccionUsuario();
-				objTransUsuario.setLogin(LocalDateTime.now());
-				objTransUsuario.setUsuario(nutriologo);
-				//objTransUsuario.setRol(vistaUsuario);
-				transUsuarioRepository.save(objTransUsuario);
+				else{
+					TransaccionUsuario objTransUsuario = new TransaccionUsuario();
+					objTransUsuario.setLogin(LocalDateTime.now());
+					objTransUsuario.setUsuario(nutriologo);
+					//objTransUsuario.setRol(vistaUsuario);
+					transUsuarioRepository.save(objTransUsuario);
+					
+					return "menu";
+				}
 				
-				return "menu";
 			}
+
+			// SI EL PACIENTE INICIA SESIÓN
 			else if (paciente!=null && passwordEncoder.matches(password, paciente.getPassword())) {
 				//if (objUsuario!=null) {
 					HttpSession sesion = request.getSession();

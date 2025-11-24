@@ -4,7 +4,7 @@
 <head>
 	<meta charset="utf-8">
 	<title>Menú Principal</title>
-	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
+	<!--<link rel="stylesheet" type="text/css" href="../static/css/style2.css">-->
 	
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
@@ -21,7 +21,8 @@
 	
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 
-	<link rel="stylesheet" type="text/css" th:href="@{../static/css/style2.css}">
+	<!--Link de los estilos-->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
 </head>
 <body>
 	<header>
@@ -65,14 +66,14 @@
 			<div class="container-01">
 				<div>
 					<a th:href="@{/rutina/}" class="enlace-imagen">
-						<img th:src="@{../static/images/rutinas.png}">
+						<img th:src="@{/images/rutinas.png}">
 					</a>
 					<h3>Rutinas</h3>
 					<p>Hecha un vistazo a nuestras rutinas para organizarlas y ver sus detalles en cualquier momento</p>
 				</div>
 				<div>
 					<a th:href="@{/dieta/}" class="enlace-imagen" >
-						<img th:src="@{../static/images/dieta.png}">
+						<img th:src="@{/images/dieta.png}">
 					</a>
 					<h3>Dietas</h3>
 					<p>Hecha un vistazo a nuestras dietas para organizarlas y ver sus detalles en cualquier momento</p>

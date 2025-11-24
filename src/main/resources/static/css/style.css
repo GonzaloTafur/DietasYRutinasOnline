@@ -42,6 +42,11 @@ button{
     color: red;
 }
 
+.exito{
+	color: green;
+}
+
+
 .w3-card{
 	background-color: rgb(170, 215, 252);
 	border-radius: 10px;
@@ -89,4 +94,14 @@ section{
 
 tbody{
 	background-color: #d7ebee;
+}
+
+
+.lst-radiobtn{
+	list-style:none;
+	display: flex;
+}
+
+.lst-radiobtn li{
+	padding: 7px;
 }

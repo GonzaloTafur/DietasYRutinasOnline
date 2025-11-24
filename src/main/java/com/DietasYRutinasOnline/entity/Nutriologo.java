@@ -2,8 +2,15 @@ package com.DietasYRutinasOnline.entity;
 
 import java.io.File;
 
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
+import com.DietasYRutinasOnline.entity.ENUM.RolEnum;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import lombok.Data;
@@ -52,8 +59,12 @@ public class Nutriologo extends Usuario{
     @Column(name = "CV")
     private File CV;
 
-    @ManyToOne
+    /*@ManyToOne
     @JoinColumn(name = "id_rol", referencedColumnName = "id_rol")
-    private Rol rol;
+    private Rol rol;*/
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "rol")
+    private RolEnum rol;
 
 }

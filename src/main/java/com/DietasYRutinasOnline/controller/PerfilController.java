@@ -109,6 +109,7 @@ public class PerfilController {
 				//List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, true);
 				List<Reunion> re = reunionService.getNutriologo(nutriologo, true);
 				model.addAttribute("objReunion", re);
+				//model.addAttribute("dias", dias);
 				
 				List<Rutina> misRutinas = rutinaRepository.findByNutriologo(nutriologo);
 				model.addAttribute("misRutinas", misRutinas);
@@ -134,7 +135,7 @@ public class PerfilController {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 		if (objUsuario!=null) {
 			model.addAttribute("objUsuario", objUsuario);
-			return "usuario/editar_perfil";
+			return "perfil/editar_perfil";
 		}
 		else {
 			return "index";

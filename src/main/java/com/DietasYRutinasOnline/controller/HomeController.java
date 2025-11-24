@@ -47,7 +47,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 @Controller
-@RequestMapping("/home/")
+@RequestMapping("/home")
 public class HomeController {
 	
 	@Autowired
@@ -70,6 +70,7 @@ public class HomeController {
 		
 		if(paciente!=null || nutriologo!=null){
 			model.addAttribute("paciente", paciente);
+			model.addAttribute("nutriologo", nutriologo);
 			return "menu";
 		}
 
@@ -194,6 +195,11 @@ public class HomeController {
 		return "usuario/horario";
 	}*/
 	
+	@GetMapping("/ver_horario")
+	public String verHorario(HttpSession sesion, Model model) {
+		return "usuario/horario";
+	}
+
 	/* VER NOTIFICACIONES EN MANTENIMIENTO */
 
 	/*@GetMapping("/verNotis")

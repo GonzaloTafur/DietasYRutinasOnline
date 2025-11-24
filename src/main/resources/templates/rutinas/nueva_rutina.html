@@ -4,8 +4,10 @@
 <head>
 	<meta charset="utf-8">
 	<title>Nueva Rutina</title>
-	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
+
+	<!--<link rel="stylesheet" type="text/css" href="../../static/css/style2.css">-->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
@@ -21,6 +23,82 @@
 	
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 </head>
+
+<style>
+/* The container */
+.checkbuton {
+  display: block;
+  position: relative;
+  padding-left: 35px;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+/* Hide the browser's default checkbox */
+.checkbuton input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 25px;
+  width: 25px;
+  background-color: #eee;
+}
+
+/* On mouse-over, add a grey background color */
+.checkbuton:hover input ~ .checkmark {
+  background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a background */
+.checkbuton input:checked ~ .checkmark {
+  background-color:green;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the checkmark when checked */
+.checkbuton input:checked ~ .checkmark:after {
+  display: block;
+}
+
+/* Style the checkmark/indicator */
+.checkbuton .checkmark:after {
+  left: 9px;
+  top: 5px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
+}
+
+.list-radiobtn{
+	list-style:none;
+	display: flex;
+}
+
+.list-radiobtn li{
+	padding: 7px;
+}
+
+</style>
+
 <body>
 	<main>
 		<section>
@@ -30,13 +108,8 @@
             	th:object="${ru}"
             	method="POST" >
 				
-				<label for="nombres_apellidos">Nombre de rutina</label>
-				<input 
-                            	type="text" 
-                            	id="multi-first-name" 
-                            	th:field="*{nombre}"
-                            	required=""
-                            	/>
+				<label for="nombre">Nombre de rutina</label>
+				<input type="text" th:field="*{nombre}" required=""/>
                             	
                 <!--<label for="percentage">Tipo de rutina</label>        
     				<select id="percentage" name="tipo">
@@ -44,25 +117,34 @@
         				<option th:value="'Volumen'">Rutina de Volumen</option>
     				</select>-->
 
-					<label>Objetivo</label>
-					<ul>
-						<li th:each="o : ${lstObjetivo}">
-							<input type="radio" th:field="*{objetivo}" th:value="${o.codigo}" th:text="${o.nombre}"/>
-						</li>
-					</ul>
+				<label>Objetivo</label>
+				<ul class="lst-radiobtn">
+					<li th:each="o : ${rbtObjetivo}">
+						<input type="radio" th:field="*{objetivo}" th:value="${o}" th:text="${o.nombre}"/>
+					</li>
+				</ul>
     				
-    			<label for="percentage">Parte del cuerpo</label>        
-    				<select id="percentage" name="parteCuerpo">
+    			<label>Parte del cuerpo</label>        
+    				<select name="parteCuerpo">
         				<option th:value="'Tren Superior'" selected="selected">Tren Superior</option>
         				<option th:value="'Tren Inferior'">Tren Inferior</option>
     				</select>
                             	
-				<label for="percentage">Nivel</label>        
-    				<select id="percentage" name="nivel">
+				<label for="nivel">Nivel</label>
+					<select name="nivel" th:field="*{nivel}">
+						<option th:each="n : ${cbxNiveles}"
+								th:value="${n}"
+								th:text="${n.nombre}">
+						</option>
+					</select>
+
+    				<!--<select id="percentage" name="nivel">
         				<option th:value="Principiante" selected="selected">Principiante</option>
         				<option th:value="Intermedio">Intermedio</option>
         				<option th:value="Avanzado">Avanzado</option>
-    				</select>
+    				</select>-->
+
+
     	
 				<label for="mensaje">Descripción</label>
                     <textarea id="mensaje" th:field="*{descripcion}"></textarea>
@@ -70,43 +152,53 @@
 				<label>Ejercicios</label>
 				
 				<div class="deslisable">
-            <table class="pure-table">
-               
-           		 	<thead>
-                        <tr>
-                            <th>Nombre del Ejercicio</th>
-                            <th>Grupo Muscular</th>
-                            <th>Tipo</th>
-                            <th>Número de Series</th>
-                            <th>Número de Repeticiones</th>
-                            <th>Descripción</th>
-                            <th>Seleccionar</th>
-                        </tr>
-                    </thead>
+					<table class="pure-table pure-table-bordered">
+					
+							<thead>
+								<tr>
+									<th>Nombre del Ejercicio</th>
+									<th>Grupo Muscular</th>
+									<th>Tipo</th>
+									<th>Número de Series</th>
+									<th>Número de Repeticiones</th>
+									<th>Descripción</th>
+									<th>Seleccionar</th>
+								</tr>
+							</thead>
 
-                    <tbody class="pure-table-border">
-                        <tr th:each="e: ${listaEjercicios}">
-                            <td><span th:text="${e.nombre}"></span></td>
-                            <td><span th:text="${e.grupomuscular}"></span></td>
-                            <td><span th:text="${e.tipo}"></span></td>
-                            <td><span th:text="${e.series}"></span></td>
-                            <td><span th:text="${e.repeticiones}"></span></td>
-                            <td><span th:text="${e.descripcion}"></span></td>
-                            <td><input
-                            	type="checkbox" 
-    							th:field="*{ejercicio}" 
-    							th:value="${e.codigo}"></td>
-                        </tr> 
-                    </tbody>
-            </table>
-
-        </div>  	
+							<tbody class="pure-table-border">
+								<tr th:each="e: ${listaEjercicios}">
+									<td><span th:text="${e.nombre}"></span></td>
+									<td><span th:text="${e.grupomuscular}"></span></td>
+									<td><span th:text="${e.tipo}"></span></td>
+									<td><span th:text="${e.series}"></span></td>
+									<td><span th:text="${e.repeticiones}"></span></td>
+									<td><span th:text="${e.descripcion}"></span></td>
+									<!--<td><input
+										type="checkbox" 
+										th:field="*{ejercicio}" 
+										th:value="${e.codigo}">
+									</td>-->
+									<td>
+										<label class="checkbuton">
+											<input type="checkbox" 
+													th:field="*{ejercicio}" 
+													th:value="${e.codigo}" 
+													checked="checked">
+											<span class="checkmark"></span>
+										</label>
+									</td>
+								</tr> 
+							</tbody>
+					</table>
+				</div>  	
                 <span class="span" th:if="${error}" th:text="${error}"></span>
 
 				<br>
 				<input type="submit" class="pure-button pure-button-primary" value="Guardar Rutina">
 
 			</form>
+			<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Cancelar</a>
 		</section>
 	</main>
 

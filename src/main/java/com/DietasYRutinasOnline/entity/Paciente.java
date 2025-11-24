@@ -5,9 +5,13 @@ import java.sql.Date;
 
 import org.attoparser.dom.Text;
 
+import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -69,6 +73,10 @@ public class Paciente extends Usuario{
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "id_condicion", referencedColumnName = "id_condicion")
     private Condicion condicion;
+
+    /*@Enumerated(EnumType.STRING)
+    @Column(name="id_objetivo")
+    private Objetivo objetivo;*/
 
 	@Column(name="frec_ejercicios")
 	private String frecEjercicios;

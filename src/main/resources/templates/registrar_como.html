@@ -4,10 +4,13 @@
     </head>
     
     <body>
-        <h1>¿Como que usuario va a registrarse?</h1>
+        <div>
+            <h1>¿Como que usuario va a registrarse?</h1>
 
-        <a th:href="@{/usuario/registrar_usuario_paciente}" method="GET">Paciente</a>
+            <a th:href="@{/usuario/registrar_usuario_paciente}" method="GET">Paciente</a>
+            
+            <a th:href="@{/usuario/registrar_usuario_nutriologo}" method="GET">Nutriologo</a>
+        </div>
         
-        <a th:href="@{/usuario/registrar_usuario_nutriologo}" method="GET">Nutriologo</a>
     </body>
 </html>

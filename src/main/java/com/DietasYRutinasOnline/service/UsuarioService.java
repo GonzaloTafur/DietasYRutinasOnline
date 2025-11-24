@@ -59,6 +59,10 @@ public class UsuarioService {
         return pacienteRepository.findByCorreo(correo);
     }
 
+    public Usuario getCorreo(@RequestParam("correo") String correo){
+        return usuarioRepository.findByCorreo(correo);
+    }
+
     /*public Usuario guardarUsuario(Usuario u){
         return usuarioRepository.save(u);
     }*/
@@ -71,10 +75,10 @@ public class UsuarioService {
 
     public Nutriologo guardarNutriologo(Nutriologo n) {
         String hash = passwordEncoder.encode(n.getPassword());
-        Rol rol = rolRepository.findByNombre("Estandar");
+        //Rol rol = rolRepository.findByNombre("Estandar");
         
 		n.setPassword(hash);
-        n.setRol(rol);
+        //n.setRol(rol);
         return nutriologoRepository.save(n);
     }
 

@@ -49,7 +49,7 @@
 
 				<span class="span" th:if="${error}" th:text="${error}"></span>
                     
-				<input type="submit" value="Guardar">
+				<input class="pure-button pure-button-primary" type="submit" value="Guardar">
 			</form>
 
 			<h3>Cambiar Correo electronico</h3>
@@ -63,14 +63,14 @@
 
 				<span class="span" th:if="${errorcorreo}" th:text="${errorcorreo}"></span>
                     
-				<input type="submit" value="Guardar">
+				<input class="pure-button pure-button-primary"  type="submit" value="Guardar">
 			</form>
 			
 			<h3>¿Quieres cerrar sesión?</h3>
 			<p><a type="button" 
 				class="pure-button pure-button-secondary" 
 				style="background-color:red; color:white" 
-				th:href="@{/usuario/cerrarSesion}">Cerrar Sesion</a></p>
+				th:href="@{/usuario/cerrar_sesion}">Cerrar Sesion</a></p>
 			
 		</section>
 	</main>

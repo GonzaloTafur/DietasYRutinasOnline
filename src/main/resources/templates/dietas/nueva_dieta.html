@@ -4,8 +4,12 @@
 <head>
 	<meta charset="utf-8">
 	<title>Nueva Dieta</title>
-	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
+	<!--<link rel="stylesheet" type="text/css" href="../../static/css/style.css">
+	<link rel="stylesheet" type="text/css" href="../../static/css/inputs.css">-->
+
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/inputs.css}">
+
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
@@ -21,6 +25,8 @@
     
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 </head>
+
+
 <body>
 	<main>
 		<section>
@@ -51,9 +57,9 @@
 				</div>-->
 
 				<label>Objetivo</label>
-				<ul>
-					<li th:each="o : ${lstObjetivo}">
-						<input type="radio" th:field="*{objetivo}" th:value="${o.codigo}" th:text="${o.nombre}"/>
+				<ul class="lst-radiobtn">
+					<li th:each="o : ${rbtObjetivo}">
+						<input type="radio" th:field="*{objetivo}" th:value="${o}" th:text="${o.nombre}"/>
 					</li>
 				</ul>
     				
@@ -62,9 +68,8 @@
 
 				
 				<label>¿Que alimenos incluye?</label>
-				
 				<div class="deslisable">
-				<table class="pure-table tabla-check">
+				<table class="pure-table pure-table-bordered">
 
            		 	<thead>
                         <tr>
@@ -76,36 +81,45 @@
                         </tr>
                     </thead>
 
-                    <tbody class="pure-table-border">
+                    <tbody>
                         <tr th:each="alimento: ${listaAlimentos}">
                             <td><span th:text="${alimento.nombre}"></span></td>
                             <td><span th:text="${alimento.nutrientes}"></span></td>
                             <td><span th:text="${alimento.tipo}"></span></td>
                             <td><span th:text="${alimento.descripcion}"></span></td>
-                            <td><input
-                            	type="checkbox" 
-    							th:field="*{alimento}" 
-    							th:value="${alimento.codigo}"></td>
+                            <td>
+								<label class="checkbuton">
+									<input
+										type="checkbox" 
+										th:field="*{alimento}" 
+										th:value="${alimento.codigo}">
+									<span class="checkmark"></span>
+								</label>
+							</td>
                         </tr> 
                     </tbody>
                  </table>
-            </div>
+            	</div>
 				
-				<label>Condición alimenticia</label>
-					<div th:each="condicion : ${listaCondiciones}">
-					<label th:text="${condicion.nombre}"></label>
-    				<input 
-    					type="checkbox" 
-    					th:field="*{condicion}" 
-    					th:value="${condicion.codigo}"
-    				/>
-				</div>
-				       	
+					<label>No recomendado para los que padecen de:
+						<div th:each="c : ${listaCondiciones}">
+							<label class="checkbuton">
+								<input 
+									type="checkbox" 
+									th:field="*{condicion}" 
+									th:text="${c.nombre}"
+									th:value="${c.codigo}"/>
+								<span class="checkmark"></span>
+							</label>
+						</div>
+				    </label>   
+
                 <span class="span" th:if="${error}" th:text="${error}"></span>
 
 				<input type="submit" class="pure-button pure-button-primary" value="Guardar Dieta">
-
+				
 			</form>
+			<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Cancelar</a>
 		</section>
 	</main>
 

@@ -13,6 +13,7 @@ import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.ENUM.Dia;
 import com.DietasYRutinasOnline.repository.AsistenciaRepository;
 import com.DietasYRutinasOnline.repository.NutriologoRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
@@ -68,7 +69,7 @@ public class ReunionService {
         return reunionRepository.findByNutriologoAndEstado(nutriologo, true);
     }
 
-    public Reunion grabarReunion(HttpSession sesion, String dia, Reunion re){
+    public Reunion grabarReunion(HttpSession sesion, Dia dia, Reunion re){
         Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 
         Reunion reunionUsuario = reunionRepository.findByNutriologoAndDiaAndEstado(nutriologo, dia, true);

@@ -24,6 +24,9 @@ import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.ENUM.Dia;
+import com.DietasYRutinasOnline.entity.ENUM.Nivel;
+import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
 import com.DietasYRutinasOnline.repository.EjercicioRepository;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
 import com.DietasYRutinasOnline.repository.HistorialMedRepository;
@@ -189,6 +192,8 @@ public class RutinaController {
 		model.addAttribute("lstObjetivo", lstObjetivo);
 		Rutina ru = new Rutina();
 		model.addAttribute("ru", ru);
+		model.addAttribute("cbxNiveles", Nivel.values());
+		model.addAttribute("rbtObjetivo", ObjetivoEnum.values());
 		return "rutinas/nueva_rutina";
 	}
 

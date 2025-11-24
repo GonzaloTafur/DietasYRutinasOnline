@@ -44,7 +44,7 @@ import jakarta.servlet.http.HttpSession;
 
 
 @Controller
-@RequestMapping("/usuario/")
+@RequestMapping("/usuario")
 public class UsuarioController {
 	
 	@Autowired
@@ -89,11 +89,7 @@ public class UsuarioController {
 
 	@GetMapping("registrar_usuario_nutriologo")
 	public String registraCuentaNutri(HttpServletRequest request, Model model) {
-		//List<Rol> listaTiposUsuario = rolRepository.findAll();
-		//model.addAttribute("listaTiposUsuario", listaTiposUsuario);
-		
-		//Nutriologo nutriologo = new Nutriologo();
-		Usuario nutriologo = new Nutriologo();
+		Nutriologo nutriologo = new Nutriologo();
 		model.addAttribute("nutriologo", nutriologo);
 		
 		//List<String> listaPaises = nacionalidadService.obtenerTodosLosPaises();
@@ -103,9 +99,6 @@ public class UsuarioController {
 
 	@GetMapping("registrar_usuario_paciente")
 	public String registraCuentaPac(HttpServletRequest request, Model model) {
-		//List<Rol> listaTiposUsuario = rolRepository.findAll();
-		//model.addAttribute("listaTiposUsuario", listaTiposUsuario);
-		
 		Paciente paciente = new Paciente();
 		model.addAttribute("paciente", paciente);
 		
@@ -120,7 +113,7 @@ public class UsuarioController {
     		HttpServletRequest request,
     		@RequestParam("correo") String correo,
     		//@ModelAttribute("objUsuario") Usuario objUsuario,
-    		@ModelAttribute("nutriologo") Usuario nutriologo,
+    		@ModelAttribute("nutriologo") Nutriologo nutriologo,
 			//@ModelAttribute("nombre") String nombre,
     		Model model) {
 
@@ -145,25 +138,14 @@ public class UsuarioController {
 	        transaccionRepository.save(objTransaccion);*/
 	        
 	        HttpSession sesion = request.getSession();
-			sesion.setAttribute("usuario", nutriologo);
-			
+			sesion.setAttribute("nutriologo", nutriologo);
+			return "redirect:/home/";
+
 			/*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
 	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);*/
 	        
-	        //if(esPaciente) {
-	        	HistorialMed cuestionario = new HistorialMed();
-	            model.addAttribute("cuestionario", cuestionario);
-	            //model.addAttribute("usuRegistrado", objUsuario.getIdusuario());
-	            
-	            TransaccionUsuario objTransUsuario = new TransaccionUsuario();
-	            //objTransUsuario.setRegistro(LocalDateTime.now());
-	            objTransUsuario.setUsuario(nutriologo);
-	            //objTransUsuario.setRol(vistaUsuario);
-	            transUsuarioRepository.save(objTransUsuario);
-	            
-	            return "cuestionario";
-	        //}
+	        //return "menu";
 	        
 	        /*TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 	        objTransUsuario.setRegistro(LocalDateTime.now());
@@ -420,7 +402,7 @@ public class UsuarioController {
 		return "recomendacion_inicial";
 	}
 	
-	@GetMapping("cerrarSesion")
+	@GetMapping("/cerrar_sesion")
 	public String cerrarSesion(HttpSession sesion, Model model) {
 		/*Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 	
@@ -431,7 +413,51 @@ public class UsuarioController {
         transUsuarioRepository.save(objTransUsuario);*/
 		
         sesion.invalidate();
-		return "index";
+		return "iniciar_sesion";
+	}
+
+	@GetMapping("/recuperar_password")
+	public String recuperarPassword(){
+		return "seguridad/validar_correo";
+	}
+
+	@GetMapping("/validar_email")
+	public String validarEmail(Model model, @RequestParam("correo") String correo){
+		Usuario correUsuario = usuarioService.getCorreo(correo);
+		/* SI EL CORREO INSERTADO ES NULO, DEVELVE UN MENSAJE DE ERROR */
+		if(correUsuario==null) {
+			model.addAttribute("error", "El correo ingresado no se encuentra en el sistema");
+			return "seguridad/validar_correo";
+		}
+		/* SI EL CORREO INSERTADO ES VALIDO, REDIRIGE A LA PANTALLA DE RECUPERAR CONTRASEÑA */
+		else{		
+			model.addAttribute("u", correUsuario);
+			System.out.println("ID del usuario con el correo insertado: " + correUsuario.getCodigo());
+			return "seguridad/recuperar_password";
+		}
+	}
+
+	@PostMapping("/nueva_password")
+	public String nuevaPassword(
+	        @ModelAttribute("u") UsuarioDTO passwordNueva,
+			@RequestParam(value="repetirPassword") String repetirPassword,
+	        Model model) {
+
+		Usuario usuario = usuarioRepository.findById(passwordNueva.getCodigo()).orElse(null);
+		
+		if (passwordNueva.getPassword().equals(repetirPassword)) {
+			String encryptedPassword = passwordEncoder.encode(passwordNueva.getPassword());
+			usuario.setPassword(encryptedPassword);
+			usuarioRepository.save(usuario);
+
+			model.addAttribute("exito", "¡La contraseña se actualizó con éxito! Inicie sesión con su nueva contraseña.");
+			return "seguridad/recuperar_password";
+		}
+		else{
+			model.addAttribute("error", "Las contraseñas no coinciden. Intente de nuevo.");
+			return "seguridad/recuperar_password";
+		}
+		
 	}
 	
 	@RequestMapping(value = "/nuevaContraseña", method = RequestMethod.POST)
@@ -450,14 +476,13 @@ public class UsuarioController {
 			usuarioService.nuevaContraseña(nutriologo, password);
 
 	        sesion.invalidate();
-	        return "index";
+	        return "iniciar_sesion";
 	    }
-		
 		else if(paciente!=null && password.getPassword().equals(repetirPassword)){
 			usuarioService.nuevaContraseña(paciente, password);
 
 	        sesion.invalidate();
-	        return "index";
+	        return "iniciar_sesion";
 		}
 	    model.addAttribute("errorcontraseña", "Hubo un error al actualizar la nueva contraseña.");
 	    return "seguridad";
