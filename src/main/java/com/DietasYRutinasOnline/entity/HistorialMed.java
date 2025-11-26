@@ -2,6 +2,7 @@ package com.DietasYRutinasOnline.entity;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -56,7 +57,7 @@ public class HistorialMed implements Serializable{
 	private Boolean estado;
 	
 	@Column(name="fecha_modif")
-	private LocalDateTime fecha;
+	private LocalDate fecha;
 	
 	/*@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(

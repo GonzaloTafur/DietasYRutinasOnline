@@ -1,5 +1,7 @@
 package com.DietasYRutinasOnline.repository;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,6 +16,7 @@ public interface HistorialMedRepository extends JpaRepository<HistorialMed, Long
     HistorialMed findByCodigo(Long codigo);
 
     HistorialMed findByPacienteAndEstado(Paciente paciente, Boolean estado);
-        
+    
+    List<HistorialMed> findByPaciente(Paciente paciente);
     
 }

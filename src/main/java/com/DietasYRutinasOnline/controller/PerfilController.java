@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -91,17 +92,18 @@ public class PerfilController {
 			if (paciente!=null) {
 
 				model.addAttribute("paciente", paciente); 
-				HistorialMed miInfo = historialMedService.getPaciente(paciente, true);
+				/*HistorialMed miInfo = historialMedService.getPaciente(paciente, true);
 				//HistorialMed hm = historialMedService.getCodigo(codigo);
 				//Paciente miInfo = pacienteService.getHistorial(hm);
+				
 				if(miInfo==null){
 					HistorialMed cuestionario = new HistorialMed();
 					model.addAttribute("cuestionario", cuestionario);
 					return "cuestionario";
 				}
 				
-				model.addAttribute("miInfo", miInfo);
-				return "perfil/perfil";
+				model.addAttribute("miInfo", miInfo);*/
+				return "perfil/perfil_paciente";
 			}
 			//model.addAttribute("objUsuario", objUsuario);
 			else if(nutriologo!=null){
@@ -146,27 +148,19 @@ public class PerfilController {
 	/* EDICIÓN DE HISTORIAL MEDICO */	
 	public boolean puedeEditar(HistorialMed HistorialMed) {
 	    LocalDateTime fechaHoy = LocalDateTime.now();
-	    LocalDateTime fechaModificacion = HistorialMed.getFecha();
+	    LocalDate fechaModificacion = HistorialMed.getFecha();
 	    return ChronoUnit.DAYS.between(fechaModificacion, fechaHoy) >= 7;
 	}
 
-	@GetMapping("/editarInfo")
-	public String editarInfo(HttpSession sesion, Model model) {
+	@GetMapping("/editarMedidas")
+	public String editarMedidas(HttpSession sesion, Model model) {
 	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
-	    if (paciente != null) {
-	        /*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
-	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);
-			*/
-	        //HistorialMed infoActiva = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
+	    if (paciente!=null) {
 			HistorialMed miHistorial = historialMedService.getEstado(true);
-			//Paciente pacienteActual = usuarioService.findByHistorialMed(miHistorial);
-
+			//HistorialMed miHistorial = historialMedService.getPaciente(paciente, true);
 
 	        if (miHistorial!=null && puedeEditar(miHistorial)) {
-	        	miHistorial.setEstado(false);
-	            historialMedService.guardarHistorial(miHistorial);
-	        	
+
 	            HistorialMed nuevaInfo = new HistorialMed();
 	            //nuevaInfo.setFrecEjercicios(miHistorial.getFrecEjercicios());
 	            nuevaInfo.setPesoCorporal(miHistorial.getPesoCorporal());
@@ -176,16 +170,10 @@ public class PerfilController {
 	            nuevaInfo.setPerimMuslo(miHistorial.getPerimMuslo());
 	            nuevaInfo.setPerimBrazo(miHistorial.getPerimBrazo());
 
-	            model.addAttribute("infoActiva", miHistorial);
-	            model.addAttribute("nuevaInfo", nuevaInfo);
-	            return "usuario/editar_HistorialMed";
+	            model.addAttribute("medidas", nuevaInfo);
+	            return "perfil/editar_medidas";
 	        } 
 	        else {
-	        	model.addAttribute("paciente", paciente);
-	    	    
-	    	    //HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
-	    	    model.addAttribute("miInfo", miHistorial);
-	        	
 	            model.addAttribute("inactivo", "Debe esperar al menos 7 días antes de poder realizar otra modificación.");
 	            return "redirect:/perfil/";
 	        }
@@ -193,46 +181,37 @@ public class PerfilController {
 	    return "redirect:/index";
 	}
 
-	@PostMapping("/actualizarInfo")
-	public String actualizarInfo(
+	@PostMapping("/actualizarMedidas")
+	public String actualizarMedidas(
 	        HttpSession sesion,
-	        @ModelAttribute("nuevaInfo") HistorialMed nuevaInfo,
+			@ModelAttribute("infoActiva") HistorialMed miHistorial,
+	        @ModelAttribute("medidas") HistorialMed nuevaInfo,
 	        Model model) {
 
-	    Paciente paciente = (Paciente) sesion.getAttribute("usuario");
-	    if (paciente != null) {
+	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+	    if (paciente!=null) {
 	        //Paciente usuRegistrado = usuarioService.findById(paciente.getIdusuario()).orElse(null);
-	        //nuevaInfo.setPaciente(usuRegistrado);
+	        nuevaInfo.setPaciente(paciente);
 	        nuevaInfo.setEstado(true);
-	        nuevaInfo.setFecha(LocalDateTime.now());
-
-			//paciente.setHistorialMedico(nuevaInfo);
-			//usuarioService.guardarPaciente(paciente);
-
+	        nuevaInfo.setFecha(LocalDate.now());
 	        historialMedService.guardarHistorial(nuevaInfo);
 
-	        //Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        //model.addAttribute("esPaciente", esPaciente);
-
-			model.addAttribute("exito", "Su información se actualizó con éxito");
-			model.addAttribute("objUsuario", paciente);
-
-			//HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
-			model.addAttribute("miInfo", nuevaInfo);
+			paciente.setHistorial(nuevaInfo);
+			pacienteService.guardarPaciente(paciente);
 
 			return "redirect:/perfil/";
 	    }
-
 	    return "iniciar_sesion";
 	}
 	
 	@GetMapping("/verSeguimiento")
 	public String verSeguimiento(HttpSession sesion, Model model) {
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-		
-		List<HistorialMed> listaSeguimiento = historialMedService.getEstadoAll(true);
-	    model.addAttribute("listaSeguimiento", listaSeguimiento);
+		//Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+
+		//List<HistorialMed> listaSeguimiento = historialMedService.getEstadoAll(true);
+	    List<HistorialMed> listaSeguimiento = historialMedService.getSegumiento(paciente);
+		model.addAttribute("listaSeguimiento", listaSeguimiento);
 	    Collections.reverse(listaSeguimiento);
 	    
 		return "usuario/seguimiento";

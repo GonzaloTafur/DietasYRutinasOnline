@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,13 +59,12 @@ public class CuestionarioController {
         Paciente paciente = (Paciente) session.getAttribute("paciente");
         if (paciente!=null) {
             hm.setEstado(true);
-	        hm.setFecha(LocalDateTime.now());
+	        hm.setFecha(LocalDate.now());
             hm.setPaciente(paciente);
             historialMedService.guardarHistorial(hm);
             return "redirect:/menu/";
         }
-        return "iniciar_sesion";
-        
+        return "iniciar_sesion";  
     }
 
 

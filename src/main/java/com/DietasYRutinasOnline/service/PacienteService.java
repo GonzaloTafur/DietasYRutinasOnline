@@ -40,4 +40,8 @@ public class PacienteService {
         return pacienteRepository.save(paciente);
     }
 
+    public Paciente guardarPaciente(Paciente paciente){
+        return pacienteRepository.save(paciente);
+    }  
+    
 }

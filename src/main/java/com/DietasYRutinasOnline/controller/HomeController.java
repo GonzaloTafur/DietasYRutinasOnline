@@ -107,8 +107,11 @@ public class HomeController {
 		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 		
-		if (paciente!=null || nutriologo!=null) {
+		if (paciente!=null) {
 			model.addAttribute("u", paciente);
+			return "usuario/seguridad";
+		}
+		else if(nutriologo!=null){
 			model.addAttribute("u", nutriologo);
 			return "usuario/seguridad";
 		}

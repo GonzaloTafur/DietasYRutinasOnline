@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
@@ -235,7 +236,7 @@ public class UsuarioController {
 				paciente.setCondicion(null);
 
 				cuestionario.setEstado(true);
-				cuestionario.setFecha(LocalDateTime.now());
+				cuestionario.setFecha(LocalDate.now());
 				historialMedRepository.save(cuestionario);
 
 				//paciente.setHistorialMedico(cuestionario);
@@ -446,9 +447,10 @@ public class UsuarioController {
 		Usuario usuario = usuarioRepository.findById(passwordNueva.getCodigo()).orElse(null);
 		
 		if (passwordNueva.getPassword().equals(repetirPassword)) {
-			String encryptedPassword = passwordEncoder.encode(passwordNueva.getPassword());
+			/*String encryptedPassword = passwordEncoder.encode(passwordNueva.getPassword());
 			usuario.setPassword(encryptedPassword);
-			usuarioRepository.save(usuario);
+			usuarioRepository.save(usuario);*/
+			usuarioService.nuevaContraseña(usuario, passwordNueva);
 
 			model.addAttribute("exito", "¡La contraseña se actualizó con éxito! Inicie sesión con su nueva contraseña.");
 			return "seguridad/recuperar_password";
@@ -461,11 +463,13 @@ public class UsuarioController {
 	}
 	
 	@RequestMapping(value = "/nuevaContraseña", method = RequestMethod.POST)
-	public String nuevaContraseña(HttpSession sesion, UsuarioDTO password, Usuario u,
+	public String nuevaContraseña(
+			HttpSession sesion, 
+			UsuarioDTO password, 
+			Usuario u,
 	        @RequestParam(value="repetirPassword") String repetirPassword,
 	        Model model) {
 
-	    //Usuario nuevaPassword = (Usuario) sesion.getAttribute("usuario");
 		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("u");
 		Paciente paciente = (Paciente) sesion.getAttribute("u");
 

@@ -28,7 +28,7 @@
             <thead>
                 <tr>
                 	<th>Fecha de modificación</th>
-                    <th>Frecuencia de ejercicios</th>
+                    <!--<th>Frecuencia de ejercicios</th>-->
                     <th>Peso corporal</th>
                     <th>Estatura</th>
                     <th>Perimetro de cintura</th>                   
@@ -41,7 +41,7 @@
             <tbody class="pure-table-border">
                 <tr th:each="infopaciente: ${listaSeguimiento}">
                 	<td><span th:text="${infopaciente.fecha}"></span></td>
-                	<td><span th:text="${infopaciente.frecEjercicios}"></span></td>
+                	<!--<td><span th:text="${infopaciente.frecEjercicios}"></span></td>-->
                     <td><span th:text="${infopaciente.pesoCorporal}"></span></td>
                     <td><span th:text="${infopaciente.estatura}"></span></td>
                     <td><span th:text="${infopaciente.perimCintura}"></span></td>
@@ -55,7 +55,7 @@
             </div>
 
 		<br>
-        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
+        <a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Retroceder</a>
     </section>
 	</main>
 	

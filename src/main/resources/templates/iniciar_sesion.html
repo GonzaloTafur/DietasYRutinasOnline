@@ -19,6 +19,7 @@
                     <form class="pure-form pure-form-stacked"  
                         th:action="@{/autenticacion/validar_usuario}" 
                         method="POST">
+                        <span class="span" th:if="${error}" th:text="${error}"></span>
                         
                         <label for="aligned-email">Correo Electronico</label>
                         <input type="email" id="aligned-email" name="correo" required=""/>
@@ -26,10 +27,10 @@
                         <label for="aligned-password">Contraseña</label>
                         <input type="password" id="aligned-password" name="password" required="">
                         <a th:href="@{/usuario/recuperar_password}">¿Has olvidado tu contraseña?</a> 
-            
+                        <br>
+
                         <input type="submit" class="pure-button pure-button-primary" value="Ingresar">
 
-                        <span class="span" th:if="${error}" th:text="${error}"></span>
                     </form>
             
                     <br>

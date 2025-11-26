@@ -81,4 +81,11 @@ public class Paciente extends Usuario{
 	@Column(name="frec_ejercicios")
 	private String frecEjercicios;
 
+    //@Column(name="id_historial")
+    //private Integer historial;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    @JoinColumn(name = "id_historial", referencedColumnName = "id_historial")
+    private HistorialMed historial;
+
 }

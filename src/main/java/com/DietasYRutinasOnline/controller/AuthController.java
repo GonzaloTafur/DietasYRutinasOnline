@@ -119,7 +119,7 @@ public class AuthController {
 					return "menu";
 			}
 			else{
-				//model.addAttribute("error", "El correo electronico y la contraseña no coinciden. Intenta de nuevo.");
+				model.addAttribute("error", "El correo electronico y la contraseña no coinciden. Intenta de nuevo.");
 				return "iniciar_sesion";
 			}
 

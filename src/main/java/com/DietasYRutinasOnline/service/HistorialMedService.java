@@ -28,6 +28,11 @@ public class HistorialMedService {
         return historialMedRepository.findAll();
     }
 
+    public HistorialMed desactivarHistorial(HistorialMed hm){
+        hm.setEstado(false);
+        return historialMedRepository.save(hm);
+    }
+
     public HistorialMed guardarHistorial(HistorialMed hm){
         //hm.setEstado(true);
 	    //hm.setFecha(LocalDateTime.now());
@@ -48,6 +53,10 @@ public class HistorialMedService {
 
     public HistorialMed getPaciente(Paciente paciente, Boolean estado){
         return historialMedRepository.findByPacienteAndEstado(paciente, estado);
+    }
+
+    public List<HistorialMed> getSegumiento(Paciente paciente){
+        return historialMedRepository.findByPaciente(paciente);
     }
     
 }
