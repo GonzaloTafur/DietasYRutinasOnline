@@ -9,4 +9,8 @@ import com.DietasYRutinasOnline.entity.Objetivo;
 @Repository
 public interface ObjetivoRepository extends JpaRepository<Objetivo, Long>{
     
+    Objetivo findByCodigo(Long codigo);
+
+    Objetivo findByNombre(String nombre);
+
 }

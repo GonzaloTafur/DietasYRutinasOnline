@@ -42,15 +42,15 @@ public class ReunionService {
         return reunionRepository.findAll();
     }
 
-    public List<Reunion> verReuniones(HttpSession sesion, Model model, Long codigo){
+    public List<Reunion> verReuniones(Model model, Long codigo, Paciente paciente){
 
-        Paciente paciente = (Paciente) sesion.getAttribute("usuario");
+        //Paciente paciente = (Paciente) sesion.getAttribute("paciente");
         
         Nutriologo nutriologoReunion = nutriologoRepository.findByCodigo(codigo);
 		model.addAttribute("nutriologoReunion", nutriologoReunion);
 
 		List<Reunion> listaReuniones = reunionRepository.findByNutriologoAndEstado(nutriologoReunion, true);
-		model.addAttribute("listaReuniones", listaReuniones);
+		//model.addAttribute("listaReuniones", listaReuniones);
 
 		Map<Long, Boolean> estadoAsistencia = listaReuniones.stream().collect(
 			Collectors.toMap(

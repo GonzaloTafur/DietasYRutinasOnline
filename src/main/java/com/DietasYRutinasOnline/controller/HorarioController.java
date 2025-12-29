@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.ENUM.Dia;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
 import com.DietasYRutinasOnline.repository.RolRepository;
@@ -50,49 +51,22 @@ public class HorarioController {
 	@PostMapping("/grabarHorario")
 	public String grabarHorario(
 	        HttpSession sesion, 
-	        @ModelAttribute("objHorario") Horario objHorario,
-	        @RequestParam("dia") String dia,
+	        @ModelAttribute("objHorario") Horario h,
+	        @RequestParam("dia") Dia dia,
 	        @RequestParam("parte") String parte,
 	        Model model) {
 
-	    Paciente paciente = (Paciente) sesion.getAttribute("usuario");
+	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 	    if (paciente!=null) {
-	    	/*objHorario.setPaciente(paciente);
-	    	objHorario.setEstado(true);
-	    	
-	    	Horario conflictoHorario = horarioRepository.findByPacienteAndDiaAndParteAndEstado(paciente, dia, parte, true);
-	    	Horario conflictoDia = horarioRepository.findByPacienteAndDiaAndEstado(paciente, dia, true);
-	    	
-	    	if(conflictoHorario!=null) {	    		
-	    		model.addAttribute("error", "El horario está en conflicto con otro existente");
-	    	}
-	    	else if(conflictoDia!=null){
-	    		model.addAttribute("error", "Te sugerimos que no elijas más de una rutina para un mismo día");
-	    	}
-	    	else {
-	    		//objHorario.setEstado(true);
-	    		horarioRepository.save(objHorario);
-	    		model.addAttribute("exito", "Se añadió con éxito");
-	    		
-	    		Transaccion objTransaccion = new Transaccion();
-	            objTransaccion.setFecha(LocalDateTime.now());
-	            objTransaccion.setTipo("CREACIÓN");
-	            objTransaccion.setUsuario(objUsuario);
-	            objTransaccion.setHorario(objHorario);
-	            transaccionRepository.save(objTransaccion);
-	    	}*/
+			h.setPaciente(paciente);
+			h.setEstado(true);
+			horarioService.grabarHorario(paciente, h, dia, parte, model);
 
-			horarioService.grabarHorario(sesion, model, objHorario, dia, parte);
-	    }
-	    /*List<Rutina> listaRutinas = rutinaRepository.findAll();
-	    model.addAttribute("listaRutinas", listaRutinas);
-	        
-	    List<Horario> miHorario = horarioRepository.findByPacienteAndEstado(objUsuario, true);
-	    model.addAttribute("miHorario", miHorario);*/
-	        
-	    Horario nuevoHorario = new Horario();
-		model.addAttribute("objHorario", nuevoHorario);
-		return "redirect:/home/ver_horario";
+			return "redirect:/home/ver_horario";
+		}
+		else{
+			return "iniciar_sesion";
+		}
 	}
 	
 	@GetMapping("/eliminar_hora/{codigo}")

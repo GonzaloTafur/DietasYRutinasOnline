@@ -28,14 +28,10 @@
 	<header>
 		
 		<ul>
-            <li><a th:href="@{/perfil/}">
-            	Perfil<i class="fa-solid fa-user"></i></a></li>
-            <li><a th:href="@{/home/ajustes_cuenta/{codigo}}">
-            	Ajustes<i class="fa-solid fa-cog"></i></a></li>
-            <li><a th:href="@{/home/verNotis}">
-            	Notificaciones<i class="fa-solid fa-bell"></i></a></li>
-            <li><a th:if="${paciente}" th:href="@{/home/ver_horario}">
-            	Mi horario<i class="fa-regular fa-calendar-days"></i></a></li>
+            <li><a th:href="@{/perfil/}">Perfil <i class="fa-solid fa-user"></i></a></li>
+            <li><a th:href="@{/home/ajustes_cuenta/{codigo}}">Ajustes <i class="fa-solid fa-cog"></i></a></li>
+            <li><a th:href="@{/home/verNotis}">Notificaciones <i class="fa-solid fa-bell"></i></a></li>
+            <li><a th:if="${paciente}" th:href="@{/home/ver_horario}">Mi horario <i class="fa-regular fa-calendar-days"></i></a></li>
           </ul>
 		
 	</header>

@@ -15,19 +15,19 @@
 
     <header>
         <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}"><</a>
-        <div class="pure-g" th:value="paciente">
+        <div class="pure-g" th:value="ppaciente">
             <div class="pure-u-2-2" style="margin: 20px;">
                 <img th:src="@{/images/user.jpg}" class="fdp">
-                <p><strong>Nombre: </strong><span th:text="${paciente.nombres}"></span></p>
-                <p><strong>Fecha de nacimiento: </strong><span th:text="${paciente.fechanacimiento}"></span></p>
-                <p><strong>Nacionalidad: </strong><span th:text="${paciente.nacionalidad}"></span></p>
-                <p><strong>Sexo: </strong><span th:text="${paciente.sexo}"></span></p>
+                <p><strong>Nombre: </strong><span th:text="${ppaciente.nombres}"></span></p>
+                <p><strong>Fecha de nacimiento: </strong><span th:text="${ppaciente.fechanacimiento}"></span></p>
+                <p><strong>Nacionalidad: </strong><span th:text="${ppaciente.nacionalidad}"></span></p>
+                <p><strong>Sexo: </strong><span th:text="${ppaciente.sexo}"></span></p>
             </div>
             <br>
             <div class="pure-u-2-3">
-                <h1 th:text="${paciente.usuario}"></h1>
-                <p><span th:text="${paciente.biografia}"></span></p>
-                <a type="button" class="pure-button pure-button-primary" href="@{/perfil/editarPerfil}">Editar</a>
+                <h1 th:text="${ppaciente.usuario}"></h1>
+                <p><span th:text="${ppaciente.biografia}"></span></p>
+                <a th:if="${nutriologo==null}" type="button" class="pure-button pure-button-primary" href="@{/perfil/editarPerfil}">Editar</a>
             </div>
             </div>
         </div>
@@ -37,56 +37,94 @@
     
     <section class="section-profile">
         <div class="contenido">
-            <h2 style="text-align: center;">Historial Médico</h2><hr>
+            <div id="medidas" style="display: block;">
+                <h2 style="text-align: center;">Historial Médico</h2><hr>
 
-            <span class="alert" th:if="${inactivo}" th:text="${inactivo}"></span>
-            
-            <div class="pure-g" th:value="paciente">
-                <div class="carta2 pure-u-1-3">
-                    <h4>Condición Alimenticia</h4>
-                    <h2 th:text="${paciente.condicion.nombre}"></h2>
+                <span class="alert" th:if="${inactivo}" th:text="${inactivo}"></span>
+                
+                <div class="pure-g" th:value="ppaciente">
+                    <div class="carta2 pure-u-1-3">
+                        <h4>Condición Alimenticia</h4>
+                        <h2 th:text="${ppaciente.condicion.nombre}"></h2>
+                    </div>
+                    <div class="carta2 pure-u-1-3">
+                        <h4>Frecuencia de ejercicios</h4>
+                        <h2 th:text="${ppaciente.frecEjercicios.nombre}"></h2>
+                    </div>
+                    <div class="carta2 pure-u-1-3">
+                        <h4>Objetivo</h4>
+                        <h2 th:text="${ppaciente.objetivo.nombre}"></h2>
+                    </div>
                 </div>
-                <div class="carta2 pure-u-1-3">
-                    <h4>Frecuencia de ejercicios</h4>
-                    <h2 h:text="${paciente.frecEjercicios}"></h2>
+
+                <div class="pure-g" th:value="ppaciente">
+                    <div class="carta pure-u-1-4">
+                        <h4>Peso corporal</h4>
+                        <h1 th:text="${ppaciente.historial.pesoCorporal}"></h1>
+                    </div>
+                    <div class="carta pure-u-1-4">
+                        <h4>Estatura</h4>
+                        <h1 th:text="${ppaciente.historial.estatura}"></h1>
+                    </div>
+                    <div class="carta pure-u-1-4">
+                        <h4>Perímetro de cintura</h4>
+                        <h1 th:text="${ppaciente.historial.perimCintura}"></h1>
+                    </div>
+                    <div class="carta pure-u-1-4">
+                        <h4>Perímetro de cadera:</h4>
+                        <h1 th:text="${ppaciente.historial.perimCadera}"></h1>
+                    </div> 
+                    <div class="carta pure-u-1-4">
+                        <h4>Perímetro de muslo:</h4>
+                        <h1 th:text="${ppaciente.historial.perimMuslo}"></h1>
+                    </div>
+                    <div class="carta pure-u-1-4">
+                        <h4>Perímetro de brazo/bicep:</h4>
+                        <h1 th:text="${ppaciente.historial.perimBrazo}"></h1>
+                    </div>
                 </div>
-                <div class="carta2 pure-u-1-3">
-                    <h4>Objetivo</h4>
-                    <h2 th:text="${paciente.objetivo.nombre}"></h2>
-                </div>
+
+                <a th:if="${nutriologo==null}" type="button" class="pure-button pure-button-primary" th:href="@{/perfil/editarMedidas}">Actualizar Medidas</a>
+                <a class="pure-button pure-button-secondary" href="#" id="ver-pagina2">Ver Seguimiento</a>
             </div>
 
-            <div class="pure-g" th:value="paciente">
-                <div class="carta pure-u-1-4">
-                    <h4>Peso corporal</h4>
-                    <h1 th:text="${paciente.historial.pesoCorporal}"></h1>
+            <div id="seguimiento" style="display: none;">
+                <h2 style="text-align: center;">Historial de Medidas</h2><hr>
+                <div class="deslisable">
+                    <table class="pure-table pure-table-bordered" style="margin: 0 auto;">
+                        <thead>
+                            <tr>
+                                <th>Fecha de modificación</th>
+                                <th>Peso corporal</th>
+                                <th>Estatura</th>
+                                <th>Perimetro de cintura</th>                   
+                                <th>Perimetro de cadera</th>   
+                                <th>Perimetro de muslo</th>   
+                                <th>Perimetro de brazo</th> 
+                            </tr>
+                        </thead>
+                    
+                        <tbody class="pure-table-border">
+                            <tr th:each="infopaciente: ${listaSeguimiento}">
+                                <td><span th:text="${infopaciente.fecha}"></span></td>
+                                <td><span th:text="${infopaciente.pesoCorporal}"></span></td>
+                                <td><span th:text="${infopaciente.estatura}"></span></td>
+                                <td><span th:text="${infopaciente.perimCintura}"></span></td>
+                                <td><span th:text="${infopaciente.perimCadera}"></span></td>
+                                <td><span th:text="${infopaciente.perimMuslo}"></span></td>
+                                <td><span th:text="${infopaciente.perimBrazo}"></span></td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
                 </div>
-                <div class="carta pure-u-1-4">
-                    <h4>Estatura</h4>
-                    <h1 th:text="${paciente.historial.estatura}"></h1>
-                </div>
-                <div class="carta pure-u-1-4">
-                    <h4>Perímetro de cintura</h4>
-                    <h1 th:text="${paciente.historial.perimCintura}"></h1>
-                </div>
-                <div class="carta pure-u-1-4">
-                    <h4>Perímetro de cadera:</h4>
-                    <h1 th:text="${paciente.historial.perimCadera}"></h1>
-                </div> 
-                <div class="carta pure-u-1-4">
-                    <h4>Perímetro de muslo:</h4>
-                    <h1 th:text="${paciente.historial.perimMuslo}"></h1>
-                </div>
-                <div class="carta pure-u-1-4">
-                    <h4>Perímetro de brazo/bicep:</h4>
-                    <h1 th:text="${paciente.historial.perimBrazo}"></h1>
-                </div>
+                <a th:if="${nutriologo==null}" type="button" class="pure-button pure-button-primary" th:href="@{/perfil/editarMedidas}">Actualizar Medidas</a>
+                <!--<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/verSeguimiento}">Ver Medidas</a>-->
+                <a class="pure-button pure-button-secondary" href="#" id="ver-pagina1">Ver Medidas</a>
             </div>
-
-            <a type="button" class="pure-button pure-button-primary" th:href="@{/perfil/editarMedidas}">Actualizar Medidas</a>
-            <a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/verSeguimiento}">Ver Segumiento</a>
-            
-        </div><br>
+        </div>
+        
+        <br>
 
         <div class="contenido">
             <span th:if="${mensaje}" th:text="${mensaje}"></span>
@@ -132,3 +170,21 @@
    </main> 
 </body>
 </html>
+
+<script>
+let medidas = document.getElementById("medidas");
+let seguimiento = document.getElementById("seguimiento");
+
+let btnVerPagina2 = document.getElementById("ver-pagina2")
+btnVerPagina2.addEventListener("click", function(){
+    medidas.style.display = "none";
+    seguimiento.style.display = "block";
+});
+
+let btnVerPagina1 = document.getElementById("ver-pagina1")
+btnVerPagina1.addEventListener("click", function(){
+    seguimiento.style.display = "none";
+    medidas.style.display = "block";
+});
+
+</script>

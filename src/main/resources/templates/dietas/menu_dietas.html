@@ -57,7 +57,7 @@
                     <tr th:each="dieta: ${listaDietas}">
                     <td><span th:text="${dieta.nombre}"></span></td>
                     <td><span th:text="${dieta.objetivo.nombre}"></span></td>
-                    <td><span th:text="${dieta.descripcion}"></span></td>
+                    <td><span class="descripcion" th:text="${dieta.descripcion}"></span></td>
                     <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}">Ver detalles</a>
                         <br>
                                             
@@ -89,3 +89,5 @@
 
 </body>
 </html>
+
+<script th:src="@{/js/leer-mas.js}"></script>

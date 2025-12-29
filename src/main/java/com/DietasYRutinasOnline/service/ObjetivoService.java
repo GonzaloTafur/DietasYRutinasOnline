@@ -18,4 +18,8 @@ public class ObjetivoService {
         return objetivoRepository.findAll();
     }
 
+    public Objetivo getCodigo(Long codigo){
+        return objetivoRepository.findByCodigo(codigo);
+    }
+
 }

@@ -6,6 +6,14 @@ body {
 	background-color: #edfac9;
 }
 
+.main-content{
+    background-color: white;
+    width: 1800px;
+    height: auto;
+    margin: 0 auto;
+    
+}
+
 .perfil{
 	margin: 10px;
 }
@@ -71,21 +79,21 @@ hr{
 }
 
 table {
-	width: 100%; /* Ajustar la tabla al contenedor */
-	border-collapse: collapse; /* Quitar separación entre bordes */
+	width: 100%;
+	border-collapse: collapse;
 }
 
 th, td {
-	border: 1px solid #ddd; /* Bordes de las celdas */
-	padding: 8px; /* Espaciado interno */
+	border: 1px solid #ddd;
+	padding: 8px; 
 	text-align: left;
 	background-color: #d7ebee;
 }
 
 th {
-	background-color: #f4f4f4; /* Fondo para la cabecera */
-	position: sticky; /* Cabecera fija */
-	top: 0; /* Fijar cabecera al tope */
+	background-color: #f4f4f4;
+	position: sticky; 
+	top: 0;
 }
 
 section{
@@ -104,4 +112,24 @@ tbody{
 
 .lst-radiobtn li{
 	padding: 7px;
+}
+
+.calendario{
+    background-color: #5b5bff;
+    width: 500px;
+    padding: 20px;
+    margin: 0 auto;
+	color: white;
+}
+
+.insertar-horario{
+    padding: 20px;
+    margin: 20px;
+}
+
+.insertar-horario div{
+    background-color: gray;
+    width: auto;
+    padding: 20px;
+    margin: 0 auto 20px;
 }

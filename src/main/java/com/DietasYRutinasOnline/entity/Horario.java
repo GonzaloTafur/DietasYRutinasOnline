@@ -30,11 +30,11 @@ public class Horario implements Serializable{
     private Long codigo;
 	
 	@OneToOne
-	@JoinColumn(name = "paciente", referencedColumnName = "id_usuario")
+	@JoinColumn(name = "id_paciente", referencedColumnName = "id_usuario")
     private Paciente paciente;
 	
 	@ManyToOne
-	@JoinColumn(name = "rutina", referencedColumnName = "id_rutina")
+	@JoinColumn(name = "id_rutina", referencedColumnName = "id_rutina")
     private Rutina rutina;
 
 	@Enumerated(EnumType.STRING)

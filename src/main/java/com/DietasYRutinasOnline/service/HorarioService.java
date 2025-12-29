@@ -12,6 +12,7 @@ import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.ENUM.Dia;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
 import com.DietasYRutinasOnline.repository.PacienteRepository;
 
@@ -39,20 +40,16 @@ public class HorarioService {
         return horarioRepository.findByPacienteAndEstado(suPerfil, true);
     }
 
-    public Horario grabarHorario(HttpSession sesion, Model model, Horario h, String dia, String parte){
+    public Horario grabarHorario(Paciente paciente, Horario h, Dia dia, String parte, Model model){
 
-        Paciente paciente = (Paciente) sesion.getAttribute("usuario");
-        //h.setPaciente(objUsuario);
-	    h.setEstado(true);
-	    	
 	    Horario conflictoHorario = horarioRepository.findByPacienteAndDiaAndParteAndEstado(paciente, dia, parte, true);
 	    Horario conflictoDia = horarioRepository.findByPacienteAndDiaAndEstado(paciente, dia, true);
 
         if(conflictoHorario!=null) {	    		
-	    		model.addAttribute("error", "El horario está en conflicto con otro existente");
+	    	model.addAttribute("error", "El horario está en conflicto con otro existente");
 	    }
 	    else if(conflictoDia!=null){
-	    	model.addAttribute("error", "Te sugerimos que no elijas más de una rutina para un mismo día");
+	        model.addAttribute("error", "Te sugerimos que no elijas más de una rutina para un mismo día");
 	    }
 
 	    //objHorario.setEstado(true);

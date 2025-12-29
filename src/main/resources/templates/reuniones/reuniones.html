@@ -25,40 +25,37 @@
             
 			<div th:each="reunion : ${listaReuniones}">
     			<p><h3 th:text="${reunion.motivo}"></h3></p>
-    			<p th:text="${reunion.dia}"></p>                       
+    			<p th:text="${reunion.dia.nombre}"></p>                       
     			<p th:text="${reunion.hora}"></p>
     			
-    			
-    			
-    		<!--  <span th:if="${estadoAsistencia[reunion.idreunion] == null}">Asistirás a esta reunión</span>-->
-            <p><a class="pure-button pure-button-secondary"
-            	th:if="${estadoAsistencia[reunion.idreunion] == 'Inactivo'}"
-               th:href="@{/reunion/confirmarAsistencia(idreunion=${reunion.idreunion})}">
-                Confirmar Asistencia
-            </a></p>
-            <br><br>
-            
-		
+				<span th:if="${estadoAsistencia[reunion.codigo] == null}">Asistirás a esta reunión</span>
+					<p><a class="pure-button pure-button-secondary"
+						th:if="${estadoAsistencia[reunion.codigo] == false}"
+					th:href="@{/reunion/confirmarAsistencia(codigo=${reunion.codigo})}">
+						Confirmar Asistencia
+					</a></p>
+					<br><br>
+
     			<p><a class="pure-button pure-button-primary"
-    				th:if="${estadoAsistencia[reunion.idreunion] == 'Activo'}"
+    				th:if="${estadoAsistencia[reunion.codigo] == true}"
        				th:href="${reunion.enlace}"
        				target="_blank">
         			Entrar a la reunión
     			</a></p>
     			<br><br>
     			
-    		<p><a class="pure-button pure-button-secondary"
-               th:if="${estadoAsistencia[reunion.idreunion] == 'Activo'}"
-               th:href="@{/reunion/cancelarAsistencia(idreunion=${reunion.idreunion})}">
-                Cancelar Asistencia
-            </a></p>
-    		<br><br>
+				<p><a class="pure-button pure-button-secondary"
+				th:if="${estadoAsistencia[reunion.codigo] == true}"
+				th:href="@{/reunion/cancelarAsistencia(codigo=${reunion.codigo})}">
+					Cancelar Asistencia
+				</a></p>
+    			<br><br>
     		
     			<hr>
 			</div>
 			
             
-        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
+        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/ver_nutriologos}">Retroceder</a>
     </section>
 	</main>
     <footer>

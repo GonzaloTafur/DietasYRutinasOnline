@@ -3,12 +3,10 @@ package com.DietasYRutinasOnline.entity;
 import java.io.Serializable;
 import java.util.List;
 
-import org.attoparser.dom.Text;
 
 import com.DietasYRutinasOnline.entity.ENUM.Nivel;
 import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -23,6 +21,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
@@ -62,6 +61,7 @@ public class Rutina implements Serializable {
     @Column(name = "estado")
     private Boolean estado;
 
+    @ToString.Exclude
     @ManyToMany
     @JoinTable(
       name = "RutinaEjercicio", 

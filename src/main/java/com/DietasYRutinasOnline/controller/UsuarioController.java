@@ -23,21 +23,29 @@ import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Ejercicio;
 import com.DietasYRutinasOnline.entity.HistorialMed;
 import com.DietasYRutinasOnline.entity.Nutriologo;
+import com.DietasYRutinasOnline.entity.Objetivo;
 import com.DietasYRutinasOnline.entity.Paciente;
+import com.DietasYRutinasOnline.entity.Pais;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.TransaccionUsuario;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.entity.DTO.UsuarioDTO;
+import com.DietasYRutinasOnline.entity.ENUM.FrecEjercicios;
+import com.DietasYRutinasOnline.entity.ENUM.Sexo;
 import com.DietasYRutinasOnline.repository.CondicionRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.HistorialMedRepository;
+import com.DietasYRutinasOnline.repository.PaisRepository;
 import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
 import com.DietasYRutinasOnline.repository.TransUsuarioRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+import com.DietasYRutinasOnline.service.CondicionService;
+import com.DietasYRutinasOnline.service.ObjetivoService;
+import com.DietasYRutinasOnline.service.PaisService;
 import com.DietasYRutinasOnline.service.UsuarioService;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,13 +78,21 @@ public class UsuarioController {
 	TransUsuarioRepository transUsuarioRepository;
 	
 	@Autowired
-	CondicionRepository condicionRepository;
+	private CondicionService condicionService;
+
+	@Autowired
+	private ObjetivoService objetivoService;
 
 	@Autowired
 	public UsuarioService usuarioService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
+
+	@Autowired
+	private PaisService paisService;
+
+
 	
 	@GetMapping("registrar_usuario")
 	public String registraCuenta(HttpServletRequest request, Model model) {
@@ -102,9 +118,12 @@ public class UsuarioController {
 	public String registraCuentaPac(HttpServletRequest request, Model model) {
 		Paciente paciente = new Paciente();
 		model.addAttribute("paciente", paciente);
-		
+		List<Sexo> cbxSexo = Arrays.asList(Sexo.values());
+		model.addAttribute("cbxSexo", cbxSexo);
 		//List<String> listaPaises = nacionalidadService.obtenerTodosLosPaises();
         //model.addAttribute("listaPaises", listaPaises);
+		List<Pais> listaPaises = paisService.getAllPaises();
+		model.addAttribute("listaPaises", listaPaises);
 		return "registrar_paciente";
 	}
 
@@ -181,33 +200,36 @@ public class UsuarioController {
 		    paciente.setPassword(encryptedPassword);
 			
 			paciente.setEstado(true);
-	        //usuarioService.guardarPaciente(paciente);
+	        usuarioRepository.save(paciente);
+			System.out.println("Paciente registrado con exito: " + paciente.getNombres() + " " + paciente.getApellidos());
+			HttpSession sesion = request.getSession();
+			sesion.setAttribute("paciente", paciente);
+			model.addAttribute("frmPaciente", paciente);
+	            
 	        
 	        /*Transaccion objTransaccion = new Transaccion();
 	        objTransaccion.setFecha(LocalDateTime.now());
 	        objTransaccion.setTipo("CREACIÓN");
 	        objTransaccion.setUsuario(objUsuario);
 	        transaccionRepository.save(objTransaccion);*/
-	        
-	        HttpSession sesion = request.getSession();
-			sesion.setAttribute("paciente", paciente);
-			
-			//Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        //model.addAttribute("esPaciente", esPaciente);
-	        
-	       
-	        //HistorialMed cuestionario = new HistorialMed();
-	        //model.addAttribute("cuestionario", cuestionario);
-	        //model.addAttribute("usuRegistrado", objUsuario.getIdusuario());
-	            
-	        TransaccionUsuario objTransUsuario = new TransaccionUsuario();
+
+			TransaccionUsuario objTransUsuario = new TransaccionUsuario();
 	        objTransUsuario.setRegistro(LocalDateTime.now());
 	        //objTransUsuario.setUsuario(objUsuario);
 	        //objTransUsuario.setRol(vistaUsuario);
 	        transUsuarioRepository.save(objTransUsuario);
-	            
-	         return "cuestionario";
+	        
+			//HistorialMed cuestionario = new HistorialMed();
+	        //model.addAttribute("medidas", cuestionario);
+			
+			List<FrecEjercicios> cbxFrecuencia = Arrays.asList(FrecEjercicios.values());
+			model.addAttribute("cbxFrecuencia", cbxFrecuencia);
+			List<Condicion> cbxCondiciones = condicionService.getEstado(true);
+			model.addAttribute("cbxCondiciones", cbxCondiciones);
+			List<Objetivo> ckbObjetivos = objetivoService.getEstado(true);
+			model.addAttribute("ckbObjetivos", ckbObjetivos);
+	        //model.addAttribute("usuRegistrado", objUsuario.getIdusuario());
+	        return "cuestionario";
 	    }
 	        
 		catch(Exception ex) {
@@ -215,193 +237,6 @@ public class UsuarioController {
 		}
 		
     }
-	
-	// ---- VENTANA CUESTIONARIO -------------------------------------------------------------
-	//@RequestMapping(value="/grabarCuestionario", method=RequestMethod.POST)
-	@PostMapping("grabarCuestionario")
-	public String grabarCuestionario(
-			HttpSession sesion,
-	        @ModelAttribute("cuestionario") HistorialMed cuestionario,
-	        //@RequestParam("idusuario") int idusuario,
-	        //@ModelAttribute("usuRegistrado") int idusuario,
-	        Model model) {
-
-		try {
-			Paciente paciente = (Paciente) sesion.getAttribute("paciente");
-			if (paciente!=null) {
-				//Paciente usuRegistrado = pacienteRepository.findById(paciente.getIdusuario()).orElse(null);
-				//cuestionario.setPaciente(usuRegistrado);
-				paciente.setFrecEjercicios(null);
-				paciente.setObjetivo(null);
-				paciente.setCondicion(null);
-
-				cuestionario.setEstado(true);
-				cuestionario.setFecha(LocalDate.now());
-				historialMedRepository.save(cuestionario);
-
-				//paciente.setHistorialMedico(cuestionario);
-				//usuarioService.guardarPaciente(paciente);
-				
-				//Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-				//boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-				//model.addAttribute("esPaciente", esPaciente);
-			}
-
-		}
-		catch(Exception ex) {
-			return "cuestionario";
-		}
-		
-		/* RECOMENDACIÓN INICIAL */
-		
-		/* INFORMACION DE PACIENTE */
-		//HistorialMed miInfo = HistorialMedRepository.findByPacienteAndEstado(paciente, true);
-	    //model.addAttribute("miInfo", cuestionario);
-		
-		/* RUTINAS */
-		/*List<Rutina> listaRutinas;
-	    listaRutinas = rutinaRepository.findByEstado(true);
-	    model.addAttribute("listaRutinas", listaRutinas);
-	    
-	    if(cuestionario!=null && cuestionario.getObjetivo().equals("Deficit")) {
-	    	listaRutinas = rutinaRepository.findByTipo("Deficit");
-	    	model.addAttribute("listaRutinas", listaRutinas);
-	    	
-		    if(cuestionario.getFrecEjercicios().equals("A veces o nada") || cuestionario.getFrecEjercicios().equals("Semanalmente")) {
-		    	
-		    	listaRutinas = rutinaRepository.findByNivelAndTipo("Principiante", "Deficit");
-			    model.addAttribute("listaRutinas", listaRutinas);
-		    }
-		    else if(cuestionario.getFrecEjercicios().equals("30 minutos a diario")) {
-		    	
-		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
-		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Deficit");
-		    	model.addAttribute("listaRutinas", listaRutinas);
-		    }
-		    
-	    }
-	    
-	    else if(cuestionario!=null && cuestionario.getObjetivo().equals("Volumen")) {
-	    	listaRutinas = rutinaRepository.findByTipo("Volumen");
-	    	model.addAttribute("listaRutinas", listaRutinas);
-	    	
-	    	if(cuestionario.getFrecEjercicios().equals("A veces o nada") || cuestionario.getFrecEjercicios().equals("Semanalmente")) {
-		    	
-		    	listaRutinas = rutinaRepository.findByNivelAndTipo("Principiante", "Volumen");
-			    model.addAttribute("listaRutinas", listaRutinas);
-		    }
-		    else if(cuestionario.getFrecEjercicios().equals("30 minutos diario")) {
-		    	
-		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
-		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Volumen");
-		    	model.addAttribute("listaRutinas", listaRutinas);
-
-		    }
-	    }
-	    
-	    else if (cuestionario!=null){
-	    	if(cuestionario.getFrecEjercicios().equals("A veces o nada") || cuestionario.getFrecEjercicios().equals("Semanalmente")) {
-		    	
-		    	listaRutinas = rutinaRepository.findByNivel("Principiante");
-			    model.addAttribute("listaRutinas", listaRutinas);
-		    }
-		    else if(cuestionario.getFrecEjercicios().equals("30 minutos a diario")) {
-		    	
-		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
-		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Deficit");
-		    	model.addAttribute("listaRutinas", listaRutinas);
-		    }
-	    }*/
-		
-	    /* DIETAS */
-	    /*List<Dieta> listaDietas;
-	    listaDietas = dietaRepository.findByEstado(true);
-	    model.addAttribute("listaDietas", listaDietas);
-	    
-	    if(cuestionario!=null && cuestionario.getObjetivo().equals("Deficit")) {
-	    	listaDietas = dietaRepository.findByObjetivo("Deficit");
-		    model.addAttribute("listaDietas", listaDietas);
-		    
-		    if(cuestionario.getCondicion().equals("Lacteos")) {
-		    	Condicion lacteos = condicionRepository.findByNombre("Lacteos");
-		    	model.addAttribute("lacteos", lacteos);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(lacteos);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(cuestionario.getCondicion().equals("Gluten")) {
-		    	Condicion gluten = condicionRepository.findByNombre("Gluten");
-		    	
-		    	listaDietas = dietaRepository.findByCondicionAndObjetivo(gluten, "Deficit");
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-		    
-	    	else if(cuestionario.getCondicion().equals("Vegano")) {
-	    		Condicion carne = condicionRepository.findByNombre("Carne");
-		    	model.addAttribute("carne", carne);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(carne);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    }
-	    
-	    else if(cuestionario!=null && cuestionario.getObjetivo().equals("Volumen")) {
-	    	listaDietas = dietaRepository.findByObjetivo("Volumen");
-	    	model.addAttribute("listaDietas", listaDietas);
-	    	
-	    	if(cuestionario.getCondicion().equals("Lacteos")) {
-	    		Condicion lacteos = condicionRepository.findByNombre("Lacteos");
-		    	
-		    	listaDietas = dietaRepository.findByCondicion(lacteos);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(cuestionario.getCondicion().equals("Gluten")) {
-	    		Condicion gluten = condicionRepository.findByNombre("Gluten");
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNotAndObjetivo(gluten, "Volumen");
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(cuestionario.getCondicion().equals("Vegano")) {
-	    		Condicion carne = condicionRepository.findByNombre("Carne");
-		    	model.addAttribute("carne", carne);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(carne);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    }
-	    
-	    else if (cuestionario!=null){
-	    	
-	    	if(cuestionario.getCondicion().equals("Lacteos")) {
-	    		Condicion lacteos = condicionRepository.findByNombre("Lacteos");
-		    	model.addAttribute("lacteos", lacteos);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(lacteos);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(cuestionario.getCondicion().equals("Gluten")) {
-	    		Condicion gluten = condicionRepository.findByNombre("Gluten");
-		    	model.addAttribute("gluten", gluten);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(gluten);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(cuestionario.getCondicion().equals("Vegano")) {
-	    		Condicion carne = condicionRepository.findByNombre("Carne");
-		    	model.addAttribute("carne", carne);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(carne);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    }*/
-		
-		return "recomendacion_inicial";
-	}
 	
 	@GetMapping("/cerrar_sesion")
 	public String cerrarSesion(HttpSession sesion, Model model) {

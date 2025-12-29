@@ -15,19 +15,19 @@
 
     <header>
         <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}"><</a>
-        <div class="pure-g" th:value="nutriologo">
+        <div class="pure-g" th:value="pnutriologo">
             <div class="pure-u-2-2" style="margin: 20px;">
                 <img th:src="@{/images/user.jpg}" class="fdp">
-                <p><strong>Nombre: </strong><span th:text="${nutriologo.nombres}"></span></p>
-                <p><strong>Fecha de nacimiento: </strong><span th:text="${nutriologo.fechanacimiento}"></span></p>
-                <p><strong>Nacionalidad: </strong><span th:text="${nutriologo.nacionalidad}"></span></p>
-                <p><strong>Sexo: </strong><span th:text="${nutriologo.sexo}"></span></p>
+                <p><strong>Nombre: </strong><span th:text="${pnutriologo.nombres}"></span></p>
+                <p><strong>Fecha de nacimiento: </strong><span th:text="${pnutriologo.fechanacimiento}"></span></p>
+                <p><strong>Nacionalidad: </strong><span th:text="${pnutriologo.nacionalidad}"></span></p>
+                <p><strong>Sexo: </strong><span th:text="${pnutriologo.sexo}"></span></p>
             </div>
             <br>
             <div class="pure-u-2-3">
-                <h1 th:text="${nutriologo.usuario}"></h1>
-                <p><span th:text="${nutriologo.biografia}"></span></p>
-                <a type="button" class="pure-button pure-button-primary" href="@{/perfil/editarPerfil}">Editar</a>
+                <h1 th:text="${pnutriologo.usuario}"></h1>
+                <p><span th:text="${pnutriologo.biografia}"></span></p>
+                <a th:if="${paciente==null}" type="button" class="pure-button pure-button-primary" href="@{/perfil/editarPerfil}">Editar</a>
             </div>
             </div>
         </div>
@@ -54,7 +54,7 @@
                 </div>
                 <a type="button" th:href="@{/reunion/pacientesAsistidos}">Pacientes asistidos</a>
                 <br>
-                <a th:href="@{/reunion/nueva_reunion}" class="pure-button pure-button-primary">Programar una nueva reunión</a>
+                <a th:if="${paciente==null}" th:href="@{/reunion/nueva_reunion}" class="pure-button pure-button-primary">Programar una nueva reunión</a>
 
             </div>
 
@@ -62,10 +62,10 @@
                 <div id="tabla-rutinas" style="display: block;">
 
                     <h2>Rutinas creadas</h2>
-                    <a th:href="@{/rutina/crear_rutina}" class="pure-button pure-button-primary">Crear Nueva rutina</a>
+                    <a th:if="${paciente==null}" th:href="@{/rutina/crear_rutina}" class="pure-button pure-button-primary">Crear Nueva rutina</a>
                     <a href="#" id="ver-dietas">Dietas</a>
                     <hr>
-                    <table class="pure-table">
+                    <table class="pure-table pure-table-bordered">
                         <thead>
                                 <tr>
                                     <th>Nombre de la Rutina</th>
@@ -83,7 +83,7 @@
                                 <td><span th:text="${rutina.objetivo.nombre}"></span></td>
                                 <td><span th:text="${rutina.parteCuerpo}"></span></td>
                                 <td><span th:text="${rutina.nivel}"></span></td>
-                                <td><span th:text="${rutina.descripcion}"></span></td>
+                                <td><span class="descripcion" th:text="${rutina.descripcion}"></span></td>
                                 <td>
                                     <div class="dropdown">
                                         <a th:href="@{/rutina/verDetalleRutina(codigo=${rutina.codigo})}">Ver detalles</a>
@@ -98,33 +98,33 @@
 
                 <div id="tabla-dietas" style="display: none;">
                     <h2>Dietas creadas</h2>
-                    <a class="pure-button pure-button-primary" th:href="@{/dieta/crear_dieta}">Crear Nueva Dieta</a>
+                    <a th:if="${paciente==null}" class="pure-button pure-button-primary" th:href="@{/dieta/crear_dieta}">Crear Nueva Dieta</a>
                     <a href="#" id="ver-rutinas">Rutinas</a>
                     <hr>
 
                     <table class="pure-table pure-table-bordered">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Objetivo</th>
-                            <th>Descripción</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                
-                    <tbody>
-                        <tr th:each="dieta: ${misDietas}">
-                        <td><span th:text="${dieta.nombre}"></span></td>
-                        <td><span th:text="${dieta.objetivo.nombre}"></span></td>
-                        <td><span th:text="${dieta.descripcion}"></span></td>
-                        <td>
-                            <div>
-                                <a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">Ver detalles</a>
-                            </div>
-                        </td>
-                        
-                        </tr> 
-                    </tbody>
+                        <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Objetivo</th>
+                                <th>Descripción</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                    
+                        <tbody>
+                            <tr th:each="dieta: ${misDietas}">
+                            <td><span th:text="${dieta.nombre}"></span></td>
+                            <td><span th:text="${dieta.objetivo.nombre}"></span></td>
+                            <td><span class="descripcion" th:text="${dieta.descripcion}"></span></td>
+                            <td>
+                                <div>
+                                    <a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">Ver detalles</a>
+                                </div>
+                            </td>
+                            
+                            </tr> 
+                        </tbody>
         
                     </table>
                 </div>
@@ -138,4 +138,5 @@
 </body>
 </html>
 
- <script src="@{/js/tablas.js}"></script> 
+ <script th:src="@{/js/tablas.js}"></script> 
+ <script th:src="@{/js/leer-mas.js}"></script>

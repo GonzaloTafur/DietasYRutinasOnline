@@ -3,7 +3,7 @@ package com.DietasYRutinasOnline.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.DietasYRutinasOnline.entity.HistorialMed;
+import com.DietasYRutinasOnline.entity.Objetivo;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.repository.CondicionRepository;
 import com.DietasYRutinasOnline.repository.HistorialMedRepository;
@@ -44,4 +44,8 @@ public class PacienteService {
         return pacienteRepository.save(paciente);
     }  
     
+    public Paciente getObjetivo(Objetivo objetivo){
+        return pacienteRepository.findByObjetivo(objetivo);
+    }
+
 }

@@ -31,62 +31,43 @@
             	method="POST" >
 
 				<label for="nombres">Nombres</label>
-				<input type="text" 
-                            	id="multi-first-name" 
-                            	th:field="*{nombres}" 
-                            	required="" />
+				<input type="text" id="multi-first-name" th:field="*{nombres}" required="" />
 
 				<label for="apellidos">Apellidos</label>
 				<input type="text" id="multi-last-name" th:field="*{apellidos}"/>
 				
-				<label for="usuario">Usuario</label>
+				<label for="usuario">Nombre de Usuario</label>
 				<input type="text" id="multi-last-name" th:field="*{usuario}" />
 
 				<label for="nombres_apellidos">Fecha nacimiento</label>
-				<input type="date" 
-                                id="multi-fecha-nacimiento" 
-                                th:field="*{fechanacimiento}" 
-                                required="" />
+				<input type="date" id="multi-fecha-nacimiento" th:field="*{fechanacimiento}" required="" />
                                 
-                <label for="percentage">Nacionalidad</label>        
-					<select id="percentage" name="nacionalidad">
-						<option th:value="Otro" selected="selected">Otro</option>
-						<option th:value="'Argentina'">Argentina</option>
-						<option th:value="'Bolivia'">Bolivia</option>
-						<option th:value="'Chile'">Chile</option>
-						<option th:value="'Colombia'">Colombia</option>
-						<option th:value="'Ecuador'">Ecuador</option>
-						<option th:value="'España'">España</option>
-						<option th:value="'Mexico'">Mexico</option>
-						<option th:value="'Paraguay'">Paraguay</option>
-						<option th:value="'Perú'">Perú</option>
-						<option th:value="'Uruguay'">Uruguay</option>
-						<option th:value="'Venezuela'">Venezuela</option>
-					</select> 
-				
-				<label for="percentage">Sexo</label>        
-					<select id="percentage" name="sexo">
-						<option th:value="Masculino" selected="selected">Masculino</option>
-						<option th:value="Femenino">Femenino</option>
-				</select>
+                <label for="pais">Nacionalidad</label>        
+					<select id="pais" name="pais" th:field="*{pais}">
+						<option th:each="p : ${listaPaises}"
+								th:value="${p.nombre}"
+								th:text="${p.nombre}">
+						</option>
+					</select>
+
+				<label for="sexo">Sexo</label>
+					<select name="sexo" th:field="*{sexo}">
+						<option th:each="s : ${cbxSexo}"
+								th:value="${s}"
+								th:text="${s}">
+						</option>
+					</select>
 
 				<label for="nombres_apellidos">Correo Electronico</label>
-				<input type="email" 
-                            	id="multi-email" 
-                            	class="pure-u-23-24" 
-                            	th:field="*{correo}" 
-                            	required="" />
+				<input type="email" id="multi-email" class="pure-u-23-24" th:field="*{correo}" required="" />
 
 				<label for="nombres_apellidos">Contraseña</label>
-				<input type="password" 
-                            	id="aligned-password" 
-                            	th:field="*{password}"
-                            	minlength="8" 
-                            	required="" />
-                            	
+				<input type="password" id="aligned-password" th:field="*{password}" minlength="8" required="" />
+
+
                 <span class="span" th:if="${error}" th:text="${error}"></span>
 
-				<input type="submit" value="Enviar">
+				<input class="pure-button pure-button-primary" type="submit" value="Enviar">
 
 			</form>
 		</section>

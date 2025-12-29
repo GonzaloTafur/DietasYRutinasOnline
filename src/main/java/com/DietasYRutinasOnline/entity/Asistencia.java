@@ -1,8 +1,7 @@
 package com.DietasYRutinasOnline.entity;
 
 import java.io.Serializable;
-import java.time.LocalDateTime;
-
+import java.time.LocalDate;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -30,12 +29,12 @@ public class Asistencia implements Serializable{
     @JoinColumn(name = "id_reunion", referencedColumnName = "id_reunion")
     private Reunion reunion;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_paciente", referencedColumnName = "id_usuario")
     private Paciente paciente;
 	
 	@Column(name="fecha")
-	private LocalDateTime fecha;
+	private LocalDate fecha;
 	
 	@Column(name="estado")
 	private Boolean estado;

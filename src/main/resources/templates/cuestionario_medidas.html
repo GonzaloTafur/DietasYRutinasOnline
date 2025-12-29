@@ -21,46 +21,76 @@
 	
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 </head>
+
+<style>
+    #paso{
+        background-color: white;
+        height: auto;
+        padding: 20px;
+        animation-name: animacion-form;
+	    animation-duration: 500ms;
+	    animation-timing-function: ease;
+    }
+
+    #form2{
+        animation-name: animacion-form;
+	    animation-duration: 500ms;
+	    animation-timing-function: ease;
+    }
+
+    @keyframes animacion-form {
+        from{
+            filter: opacity(0%);
+            /*transform: translateY(-200px);*/
+        }
+        to{
+            filter: opacity(100%);
+            /*transform: translate(0);*/
+        }
+    }
+</style>
+
 <body>
         <main>
             <section>
+				<div class="formulario">
                 <h2>Cuestionario - Medidas</h2>
-                <form class="pure-form pure-form-stacked" 
-                	th:action="@{/cuestionario/grabar_medidas}" 
-                      th:object="${medidas}"
-                      method="POST" >
-    
-                    <span class="span">Hemos preparado este cuestionario que nos ayudará a saber detalles acerca de ti y de tu salud.<br>
-                    </span>
-                    
-                    <input type="hidden" name="usuRegistrado" th:value="${usuRegistrado}"/>
-                    
-    				<span class="span" th:if="${exito}" th:text="${usuRegistrado}"></span>
+                <form id="form2" class="pure-form pure-form-stacked" 
+							th:action="@{/cuestionario/grabar_medidas}" 
+							th:object="${medidas}"
+							method="POST">
+			
+							<span class="span">Hemos preparado este cuestionario que nos ayudará a saber detalles acerca de ti y de tu salud.<br>
+							</span>
+							
+							<!--<input type="hidden" name="usuRegistrado" th:value="${usuRegistrado}"/>-->
+							<span class="alert" th:if="${error}" th:text="${error}"></span>
 
-					<br>
-					<span class="span">Si aún no sabe sus medidas, puede saltarte esta parte y luego llenarlas en otro momento.</span>
-					
-                    <label for="nombres_apellidos">Peso corporal</label>
-                    <input type="number" id="multi-last-name" th:field="*{pesoCorporal}" step="0.01" />
-                            
-                    <label for="estatura">Estatura</label>
-                    <input type="number"  id="multi-last-name" th:field="*{estatura}" step="0.01"/>
-    
-                    <label for="nombres_apellidos">Perímetro de cintura</label>
-                    <input  type="number"  id="multi-last-name"th:field="*{perimCintura}" step="0.01" />
-    
-                    <label for="nombres_apellidos">Perímetro de cadera</label>
-                    <input type="number" id="multi-last-name" th:field="*{perimCadera}" step="0.01" />
-    
-                    <label for="nombres_apellidos">Perímetro de muslo</label>
-                    <input type="number" id="multi-last-name" th:field="*{perimMuslo}" step="0.01"  />
-    
-                    <label for="nombres_apellidos">Perímetro de brazo/bicep</label>
-                    <input  type="number"  id="multi-last-name" th:field="*{perimBrazo}"step="0.01"  /> 
-    
-                    <input type="submit" value="Grabar">
-                   
-                </form>
+							<br>
+							<span class="span">Si aún no sabe sus medidas, puede saltarte esta parte y luego llenarlas en otro momento.</span>
+							
+							<label>Peso corporal</label>
+							<input type="number" th:field="*{pesoCorporal}" step="0.01" />
+									
+							<label for="estatura">Estatura</label>
+							<input type="number" th:field="*{estatura}" step="0.01"/>
+
+							<label>Perímetro de cintura</label>
+							<input  type="number" th:field="*{perimCintura}" step="0.01" />
+			
+							<label>Perímetro de cadera</label>
+							<input type="number" th:field="*{perimCadera}" step="0.01" />
+			
+							<label>Perímetro de muslo</label>
+							<input type="number" th:field="*{perimMuslo}" step="0.01"  />
+			
+							<label>Perímetro de brazo/bicep</label>
+							<input  type="number" th:field="*{perimBrazo}" step="0.01"  /> 
+			
+							<input class="pure-button pure-button-primary" type="submit" value="Grabar">
+						</form>
+                      <a class="pure-button pure-button-secondary" type="button" th:href="@{/home/}">Omitir</a>
+				</div>	  
             </section>
         </main>
     

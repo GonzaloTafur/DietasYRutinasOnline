@@ -23,6 +23,10 @@
 		<section style="background-color: white;">
             <h2>Pacientes asistidos a la reunión</h2>  
         
+        <div th:if="${#lists.isEmpty(listaPacientes)}">
+        	<p>Aún no hay pacientes registrados en esta reunión.</p>
+    	</div>
+
         <div class="deslisable">
             <table class="pure-table">
             <thead>
@@ -42,25 +46,25 @@
             <tbody class="pure-table-border">
                 <tr th:each="asistencia: ${listaPacientes}">
                 	<td><span th:text="${asistencia.reunion.motivo}"></span></td>
-                	<td><span th:text="${asistencia.reunion.dia}"></span>
+                	<td><span th:text="${asistencia.reunion.dia.nombre}"></span>
                 		<span th:text="${asistencia.reunion.hora}"></span></td>
                 	<td><span th:text="${asistencia.paciente.nombres}"></span>
                 		<span th:text="${asistencia.paciente.apellidos}"></span></td>
                 	<td><span th:text="${asistencia.fecha}"></span></td>
 					<td><span th:text="${asistencia.estado}"></span></td>
 					
-					<td><a type="button" class="pure-button pure-button-secondary" 
-						th:href="@{/reunion/verSuSeguimiento(idusuario=${asistencia.paciente.idusuario})}">Ver</a></td>
-   			
-                	<td><a th:href="@{/reunion/perfilPaciente(idusuario=${asistencia.paciente.idusuario})}">Ver</a></td>
-                	
+                	<td><a th:href="@{/reunion/verSuSeguimiento(codigo=${asistencia.paciente.codigo})}">Ver</a></td>
+
+                    <td><a type="button" class="pure-button pure-button-secondary" 
+						th:href="@{/reunion/verSuPerfil(codigo=${asistencia.paciente.codigo})}">Ver</a></td>
+                    
                 </tr>
                 
             </tbody>
             </table>
 
         </div>
-        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/retroceder}">Retroceder</a>
+        <a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Retroceder</a>
     </section>
 	</main>
     <footer>

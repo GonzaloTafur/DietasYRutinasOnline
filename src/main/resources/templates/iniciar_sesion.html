@@ -4,17 +4,53 @@
         <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
         <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
         integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
         <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
         <!--<link rel="stylesheet" href="../static/css/style2.css">-->
         
         <title>Iniciar Sesión</title>
     </head>
+
+ <style>
+    #ventana2{
+        background-color: white;
+        margin: 100px auto;
+        width: 500px;
+        padding: 30px;
+        border-radius: 10px;
+    }
+
+    .opciones{
+        background-color: #e6e6e6;
+        width: 150px;
+        height: 150px;
+        padding: 20px;
+        margin: 20px auto;
+        box-shadow: 2px 2px 10px #00000028;
+    }
+
+    .opciones a{
+        display: grid;
+        text-decoration: none;
+        color: black;
+        font-weight: bold;
+        align-items: center;
+        justify-items: center;
+    }
+
+    .opciones i{
+        font-size:100px;
+        margin: 20px;
+        color:green;
+    }
+</style>
+
     <body>
         <main>
             <section>
 
-                <div class="formulario">
+                <div id="login" class="formulario" display="block">
                     <h2>Iniciar Sesión</h2>
                     <form class="pure-form pure-form-stacked"  
                         th:action="@{/autenticacion/validar_usuario}" 
@@ -32,20 +68,33 @@
                         <input type="submit" class="pure-button pure-button-primary" value="Ingresar">
 
                     </form>
-            
                     <br>
-                    <!--<form th:action="@{/usuario/registrarCuenta}" method="POST">
-                        <button type="submit" class="btn-link">
-                            ¿Eres nuevo aquí? Regístrate
-                        </button>
-                    </form>-->
 
                     <div style="text-align: center;">
-                        <a th:href="@{/usuario/registrar_usuario}">¿Eres nuevo aquí? Regístrate</a><br>
+                        <!-- <a th:href="@{/usuario/registrar_usuario}">¿Eres nuevo aquí? Regístrate</a><br> -->
+                         <a href="#" id="registrar">¿Eres nuevo aquí? Regístrate</a>
                     </div>
                    
                 </div>
                 
+                <div id="ventana2" style="display: none;">
+                    <h2>¿Es usted?</h2>
+
+                    <div class="pure-g">
+                        <div class="opciones">
+                            <a th:href="@{/usuario/registrar_usuario_paciente}" method="GET">PACIENTE
+                                <i class="fa fa-user"></i>
+                            </a>  
+                        </div>
+                        <div class="opciones">
+                            <a th:href="@{/usuario/registrar_usuario_nutriologo}" method="GET">NUTRIOLOGO
+                            <i class="fa fa-user-md"></i></a>
+                        </div>
+                    </div>
+
+                    <button id="cancelar" class="pure-button">Cancelar</button>
+                </div>
+
             </section>
         </main>
     
@@ -55,3 +104,21 @@
 
     </body>
 </html>
+
+<script>
+    let login = document.getElementById("login");
+    let ventana2 = document.getElementById("ventana2");
+
+    let btnRegistrar = document.getElementById("registrar")
+
+    btnRegistrar.addEventListener("click", function(){
+        login.style.display = "none";
+        ventana2.style.display = "block";
+    });
+
+    let btnCancelar = document.getElementById("cancelar")
+    btnCancelar.addEventListener("click", function(){
+        ventana2.style.display = "none";
+        login.style.display = "block";
+    });
+</script>

@@ -280,30 +280,6 @@ p {
 	bottom: 140px;
 	right: 10px;
 }
-/*VIDEO*/
-.container-02 video {
-	width: 40%;
-	margin-bottom: 30px;
-}
-.container-video {
-	position: relative;
-	overflow: hidden;
-	width: 100%;
-	padding-top: 56.25%; /* 16:9 Aspect Ratio (divide 9 by 16 = 0.5625) */
-  }
-  
-  /* Then style the iframe to fit in the container div with full height and width */
-  .responsive-iframe {
-	position: absolute;
-	top: 0;
-	left: 0;
-	bottom: 0;
-	right: 0;
-	width: 85%;
-	height: 85%;
-	border: 0;
-	margin: 0 auto;
-  }
 
   /*FORMULARIO*/
   form {
@@ -473,6 +449,7 @@ input[type=submit]{
 .alert{
     font-style: italic;
     color: red;
+	font-weight:bolder;
 }
 
 .exito{
@@ -516,7 +493,7 @@ input[type=submit]{
 
 
 .deslisable {
-	max-height: 440px;
+	max-height: 540px;
 	overflow: auto;
 	border: 1px solid #ccc; 
 }
@@ -526,15 +503,6 @@ table {
 	border-collapse: collapse;
 }
 
-th, td {
-	border: 1px solid #ddd;
-	padding: 8px;
-	text-align: left;
-	background-color: #d7ebee;
-}
-
-th {
-	background-color: #f4f4f4;
-	position: sticky;
-	top: 0;
+tbody{
+	background-color: white;
 }

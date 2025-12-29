@@ -74,81 +74,33 @@ public class RutinaController {
 	@GetMapping("/")
 	public String verRutinas(
 			HttpSession sesion,
-			@ModelAttribute("objRutina") Rutina objRutina,
+			//@ModelAttribute("objRutina") Rutina objRutina,
 			Model model) {
-	    //Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
-		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
-		if (paciente!=null || nutriologo!=null) {
-	        //Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        //model.addAttribute("esPaciente", esPaciente);
-			model.addAttribute("paciente", paciente);
+		try {
+			//Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
+			Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+			Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+			if (paciente!=null) {
+				model.addAttribute("paciente", paciente);
+				//List<Rutina> listaRutinas = rutinaService.filtroRutina(paciente);
+				List<Rutina> listaRutinas = rutinaService.getEstado(true);
+				model.addAttribute("listaRutinas", listaRutinas);
+				return "rutinas/menu_rutinas";
+			}
+			else if(nutriologo!=null){
+				model.addAttribute("nutriologo", nutriologo);
 
-			List<Rutina> listaRutinas = rutinaService.getEstado(true);
-	    	model.addAttribute("listaRutinas", listaRutinas);
+				List<Rutina> listaRutinas = rutinaService.getEstado(true);
+				model.addAttribute("listaRutinas", listaRutinas);
 
-			return "rutinas/menu_rutinas";
-	    }
-	    //HistorialMed pacienteActual = HistorialMedRepository.findByPacienteAndEstado(objUsuario, true);
-	    //model.addAttribute("pacienteActual", pacienteActual);
-	   
-	    //List<Rutina> listaRutinas = rutinaService.getEstado(true);
-	    //model.addAttribute("listaRutinas", listaRutinas);
-	    
-	    
-	    /* VISTA PARA LOS PACIENTES*/
-	    /*if(pacienteActual!=null && pacienteActual.getObjetivo().equals("Deficit")) {
-	    	listaRutinas = rutinaRepository.findByTipo("Deficit");
-	    	model.addAttribute("listaRutinas", listaRutinas);
-	    	
-		    if(pacienteActual.getFrecEjercicios().equals("A veces o nada") || pacienteActual.getFrecEjercicios().equals("Semanalmente")) {
-		    	
-		    	listaRutinas = rutinaRepository.findByNivelAndTipo("Principiante", "Deficit");
-			    model.addAttribute("listaRutinas", listaRutinas);
-		    }
-		    else if(pacienteActual.getFrecEjercicios().equals("30 minutos a diario") || pacienteActual.getFrecEjercicios().equals("1 hora algunos dias")) {
-		    	
-		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
-		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Deficit");
-		    	model.addAttribute("listaRutinas", listaRutinas);
-		    }
-		    
-	    }
-	    
-	    else if(pacienteActual!=null && pacienteActual.getObjetivo().equals("Volumen")) {
-	    	listaRutinas = rutinaRepository.findByTipo("Volumen");
-	    	model.addAttribute("listaRutinas", listaRutinas);
-	    	
-	    	if(pacienteActual.getFrecEjercicios().equals("A veces o nada") || pacienteActual.getFrecEjercicios().equals("Semanalmente")) {
-		    	
-		    	listaRutinas = rutinaRepository.findByNivelAndTipo("Principiante", "Volumen");
-			    model.addAttribute("listaRutinas", listaRutinas);
-		    }
-		    else if(pacienteActual.getFrecEjercicios().equals("30 minutos diario") || pacienteActual.getFrecEjercicios().equals("1 hora algunos dias")) {
-		    	
-		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
-		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Volumen");
-		    	model.addAttribute("listaRutinas", listaRutinas);
-
-		    }
-	    }
-	    
-	    else if (pacienteActual!=null){
-	    	if(pacienteActual.getFrecEjercicios().equals("A veces o nada") || pacienteActual.getFrecEjercicios().equals("Semanalmente")) {
-		    	
-		    	listaRutinas = rutinaRepository.findByNivel("Principiante");
-			    model.addAttribute("listaRutinas", listaRutinas);
-		    }
-		    else if(pacienteActual.getFrecEjercicios().equals("30 minutos a diario") || pacienteActual.getFrecEjercicios().equals("1 hora algunos dias")) {
-		    	
-		    	List<String> niveles = Arrays.asList("Principiante", "Intermedio");
-		    	listaRutinas = rutinaRepository.findByNivelesAndTipo(niveles, "Deficit");
-		    	model.addAttribute("listaRutinas", listaRutinas);
-		    }
-	    }*/
-	    	
-		return "iniciar_sesion";
+				return "rutinas/menu_rutinas";
+			}	
+			return "iniciar_sesion";
+		} 
+		catch (Exception e) {
+			System.out.println("Error al mostrar las rutinas: " + e.getMessage());
+			return "redirect:/home/";
+		}
 	}
 
 	

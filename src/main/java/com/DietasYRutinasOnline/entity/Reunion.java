@@ -49,5 +49,10 @@ public class Reunion implements Serializable{
 	
 	@Column(name="estado")
 	private Boolean estado;
+
+    public Reunion orElseThrow(Object object) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'orElseThrow'");
+    }
 	
 }

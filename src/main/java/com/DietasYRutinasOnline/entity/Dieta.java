@@ -20,6 +20,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
@@ -53,6 +54,7 @@ public class Dieta implements Serializable{
     @JoinColumn(name = "id_nutriologo", referencedColumnName = "id_usuario")
     private Nutriologo nutriologo;
 	
+    @ToString.Exclude
 	@ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
       name = "DietaAlimento", 

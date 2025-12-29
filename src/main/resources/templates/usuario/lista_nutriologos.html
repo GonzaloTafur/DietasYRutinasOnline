@@ -40,10 +40,11 @@
                 	<td><span th:text="${nutriologo.nombres}"></span></td>
                 	<td><span th:text="${nutriologo.apellidos}"></span></td>
                 	<td><span th:text="${nutriologo.biografia}"></span></td>
-					<td><a th:href="@{/reunion/verReuniones(codigo=${nutriologo.codigo})}">Ver Reuniones</a></td>
+					<td><a th:href="@{/reunion/ver_reuniones(codigo=${nutriologo.codigo})}">Ver Reuniones</a></td>
 					
-                	<td><a th:href="@{/reunion/perfilNutriologo(codigo=${nutriologo.codigo})}">Ver su Perfil</a></td>
-                	
+                	<!--<td><a th:href="@{/reunion/verSuPerfil(codigo=${nutriologo.codigo})}">Ver su Perfil</a></td>-->
+                	<td><a th:href="@{/reunion/verSuPerfil(codigo=${nutriologo.codigo})}">Ver su Perfil</a></td>
+                    
                 </tr>
                 
             </tbody>

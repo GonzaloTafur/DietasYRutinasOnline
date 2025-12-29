@@ -21,12 +21,14 @@ import com.DietasYRutinasOnline.entity.Horario;
 import com.DietasYRutinasOnline.entity.HistorialMed;
 import com.DietasYRutinasOnline.entity.Notificacion;
 import com.DietasYRutinasOnline.entity.Nutriologo;
+import com.DietasYRutinasOnline.entity.Objetivo;
 import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.ENUM.Dia;
 import com.DietasYRutinasOnline.repository.AsistenciaRepository;
 import com.DietasYRutinasOnline.repository.CondicionRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
@@ -39,6 +41,7 @@ import com.DietasYRutinasOnline.repository.RutinaRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
 import com.DietasYRutinasOnline.service.DietaService;
+import com.DietasYRutinasOnline.service.PacienteService;
 import com.DietasYRutinasOnline.service.RolService;
 import com.DietasYRutinasOnline.service.RutinaService;
 import com.DietasYRutinasOnline.service.UsuarioService;
@@ -61,6 +64,12 @@ public class HomeController {
 
 	@Autowired
 	private RutinaService rutinaService;
+
+	@Autowired
+	private PacienteService pacienteService;
+
+	@Autowired
+	private HorarioRepository horarioRepository;
 
 	@GetMapping("/")
 	public String irAMenu(HttpSession sesion, Model model){
@@ -200,7 +209,30 @@ public class HomeController {
 	
 	@GetMapping("/ver_horario")
 	public String verHorario(HttpSession sesion, Model model) {
-		return "usuario/horario";
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+
+		if(paciente!=null){
+			//model.addAttribute("paciente", paciente);
+
+			List<Horario> miHorario = horarioRepository.findByPacienteAndEstado(paciente, true);
+			model.addAttribute("miHorario", miHorario);
+
+			Horario objHorario = new Horario();
+			model.addAttribute("objHorario", objHorario);
+			
+			List<Rutina> cbxRutinas = rutinaService.getEstado(true);
+			model.addAttribute("listaRutinas", cbxRutinas);
+
+			model.addAttribute("cbxDias", Dia.values());
+			
+			List<Rutina> listaRutinas = rutinaService.filtroRutina(paciente);	
+			model.addAttribute("listaRutinas", listaRutinas);
+
+			return "usuario/horario";
+		}
+		else{
+			return "iniciar_sesion";
+		}
 	}
 
 	/* VER NOTIFICACIONES EN MANTENIMIENTO */

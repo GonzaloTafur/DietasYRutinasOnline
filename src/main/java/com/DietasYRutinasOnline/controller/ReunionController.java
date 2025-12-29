@@ -1,5 +1,6 @@
 package com.DietasYRutinasOnline.controller;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -34,6 +35,7 @@ import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
 import com.DietasYRutinasOnline.repository.HistorialMedRepository;
 import com.DietasYRutinasOnline.repository.NotificacionRepository;
+import com.DietasYRutinasOnline.repository.NutriologoRepository;
 import com.DietasYRutinasOnline.repository.PacienteRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
 import com.DietasYRutinasOnline.repository.RolRepository;
@@ -42,6 +44,7 @@ import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
 import com.DietasYRutinasOnline.service.AsistenciaService;
 import com.DietasYRutinasOnline.service.DietaService;
+import com.DietasYRutinasOnline.service.HistorialMedService;
 import com.DietasYRutinasOnline.service.HorarioService;
 import com.DietasYRutinasOnline.service.ReunionService;
 import com.DietasYRutinasOnline.service.RutinaService;
@@ -85,153 +88,169 @@ public class ReunionController {
 	@Autowired
 	NotificacionRepository notificacionRepository;
 
+	@Autowired
+	private ReunionRepository reunionRepository;
+
+	@Autowired
+	private AsistenciaRepository asistenciaRepository;
+
+	@Autowired
+	private NutriologoRepository nutriologoRepository;
+
+	@Autowired
+	private HistorialMedService historialMedService;
+
 	
 	@GetMapping("/ver_reuniones")
 	public String verReuniones(
 	        HttpSession sesion,
-	        @RequestParam("id_usuario") Long codigo,
+	        @RequestParam("codigo") Long codigo,
 	        Model model) {
 
-	    Paciente objUsuario = (Paciente) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
-	    	//Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getCodigo());
-	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        //model.addAttribute("esPaciente", esPaciente);
-	    
+	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 
-			//Usuario nutriologoReunion = usuarioRepository.findByCodigo(codigo);
-			//model.addAttribute("nutriologoReunion", nutriologoReunion);
+	    if (paciente!=null) {
+			Nutriologo nutriologoReunion = nutriologoRepository.findByCodigo(codigo);
+			model.addAttribute("nutriologoReunion", nutriologoReunion);
 
-			//List<Reunion> listaReuniones = reunionRepository.findByNutriologoAndEstado(nutriologoReunion, true);
-			//model.addAttribute("listaReuniones", listaReuniones);
-
-			List<Reunion> listaReuniones = reunionService.verReuniones(sesion, model, codigo);
+			List<Reunion> listaReuniones = reunionRepository.findByNutriologoAndEstado(nutriologoReunion, true);
 			model.addAttribute("listaReuniones", listaReuniones);
 
-			/*Map<Long, Boolean> estadoAsistencia = listaReuniones.stream().collect(
+			Map<Long, Boolean> estadoAsistencia = listaReuniones.stream().collect(
 				Collectors.toMap(
 					Reunion::getCodigo, objReunion -> {
-						Asistencia asistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(objUsuario, objReunion, true);
+						Asistencia asistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, objReunion, true);
 						return asistencia!=null ? asistencia.getEstado() : false;
 					}
 				));
-			model.addAttribute("estadoAsistencia", estadoAsistencia);*/
+			model.addAttribute("estadoAsistencia", estadoAsistencia);
 
-			return "usuario/reuniones";
+			//List<Reunion> listaReuniones = reunionService.verReuniones(model, codigo, paciente);
+			//model.addAttribute("listaReuniones", listaReuniones);
+
+			return "reuniones/reuniones";
 		}
 		return "/iniciar_sesion";
 	}
 	
-	/*@GetMapping("/confirmarAsistencia")
-	public String confirmarAsistencia(
-			HttpSession sesion,
-	        @RequestParam("id") Long codigo,
-	        Model model) {
-
-	    Paciente objUsuario = (Paciente) sesion.getAttribute("usuario");
-	    if (objUsuario==null) {
-	        return "redirect:/index";
-	    }
-
-	    /*Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getCodigo());
-        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-        model.addAttribute("esPaciente", esPaciente);
-        
-	    Paciente paciente = pacienteRepository.findById(objUsuario.getCodigo())
-	            .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
-	    
-	    Reunion objReunion = reunionService.getCodigo(codigo);
-	            //.orElseThrow(() -> new IllegalArgumentException("Reunión no encontrada"));
-
-	    Asistencia asistencia = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, objReunion, true);
-	    if (asistencia==null) {
-
-	        asistencia = new Asistencia();
-	        /*asistencia.setPaciente(paciente);
-	        asistencia.setReunion(objReunion);
-	        asistencia.setEstado(true);
-	        asistencia.setFecha(LocalDateTime.now());
-	        asistenciaService.confirmarAsistencia(sesion, codigo, asistencia);
-	        
-	        Transaccion objTransaccion = new Transaccion();
-	    	objTransaccion.setFecha(LocalDateTime.now());
-	    	objTransaccion.setTipo("Acceso a reunión");
-	    	objTransaccion.setReunion(objReunion);
-	    	//objTransaccion.setPaciente(objUsuario);
-	    	objTransaccion.setAsistencia(asistencia);
-	    	transaccionRepository.save(objTransaccion);
-        
-	    	Notificacion objNotificacion = new Notificacion();
-	    	objNotificacion.setTransaccion(objTransaccion);
-	    	objNotificacion.setRol("Nutriologo");
-	    	objNotificacion.setMensaje("El paciente " + paciente.getNombres() + " confirmó unirse a la reunión " + objReunion.getMotivo());
-	    	objNotificacion.setTimestamp(LocalDateTime.now());
-	    	objNotificacion.setEstado(true);
-	    	notificacionRepository.save(objNotificacion);
-	    }
-
-	    Rol rolNutriologo = rolRepository.findByNombre("Nutriologo");
-		   
-	    //List<Usuario> listaNutriologos = usuarioRepository.findByRolAndEstado(rolNutriologo, true);
-	    //model.addAttribute("listaNutriologos", listaNutriologos);
-	    
-	    return "usuario/lista_nutriologos";
-	}
-*/
-
 	@GetMapping("/confirmarAsistencia")
-	public String confirmarAsistencia(HttpSession session, Model model, Long codigo, Asistencia as){
-		asistenciaService.confirmarAsistencia(session, codigo, as);
+	public String confirmarAsistencia(HttpSession sesion,@RequestParam("codigo") Long codigo, Model model) {
+		try{ 
+	    	Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+	    	if (paciente!=null) {
+			
+				Reunion reunion = reunionService.getCodigo(codigo);
+				Asistencia asistenciaExistente = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, reunion, true);
+				if (asistenciaExistente==null) {
 
-		return "redirect:/home/ver_nutriologos";
+					Asistencia asistencia = new Asistencia();
+					asistencia.setPaciente(paciente);
+					asistencia.setReunion(reunion);
+					asistencia.setEstado(true);
+					asistencia.setFecha(LocalDate.now());
+					asistenciaRepository.save(asistencia);
+					//asistenciaService.confirmarAsistencia(sesion, codigo, asistencia);
+					
+					/*Transaccion objTransaccion = new Transaccion();
+					objTransaccion.setFecha(LocalDateTime.now());
+					objTransaccion.setTipo("Acceso a reunión");
+					objTransaccion.setReunion(objReunion);
+					//objTransaccion.setPaciente(objUsuario);
+					objTransaccion.setAsistencia(asistencia);
+					transaccionRepository.save(objTransaccion);
+				
+					Notificacion objNotificacion = new Notificacion();
+					objNotificacion.setTransaccion(objTransaccion);
+					objNotificacion.setRol("Nutriologo");
+					objNotificacion.setMensaje("El paciente " + paciente.getNombres() + " confirmó unirse a la reunión " + objReunion.getMotivo());
+					objNotificacion.setTimestamp(LocalDateTime.now());
+					objNotificacion.setEstado(true);
+					notificacionRepository.save(objNotificacion);*/
+					return "redirect:/reunion/ver_reuniones";
+				}
+				else{
+					System.out.println("No se pudo confirmar asistencia");
+					return "redirect:/home/ver_nutriologos";
+				}
+			}
+			else{
+				return "iniciar_sesion";
+			}
+			
+		}
+		catch(Exception e){
+			System.out.println("Error al confirmar asistencia: " + e.getMessage());
+			return "redirect:/home/ver_nutriologos";
+		}
+
 	}
+
+	/*@GetMapping("/confirmarAsistencia")
+	public String confirmarAsistencia(HttpSession sesion, Long codigo){
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		asistenciaService.confirmarAsistencia(paciente, codigo);
+		return "redirect:/home/ver_nutriologos";
+	}*/
 
 	@GetMapping("/cancelarAsistencia")
-	public String cancelarAsistencia(
-	        @RequestParam("codigo") Long codigo,
-	        HttpSession sesion, Asistencia as) {
+	public String cancelarAsistencia(@RequestParam("codigo") Long codigo, HttpSession sesion) {
 
-	    /*Paciente objUsuario = (Paciente) sesion.getAttribute("usuario");
-	    Reunion objReunion = reunionService.getCodigo(codigo);
-
-	    Asistencia as = asistenciaRepository.findByPacienteAndReunionAndEstado(objUsuario, objReunion, true);
-	    if (as!=null) {
-	    	as.setEstado(false);
-	        asistenciaRepository.save(as);
-	    }*/
-		asistenciaService.cancelarAsistencia(sesion, as, codigo);
-
-	    return "menu"; 
+	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		if (paciente!=null) {
+			/*Reunion objReunion = reunionService.getCodigo(codigo);
+			Asistencia as = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, objReunion, true);
+			if (as!=null) {
+				as.setEstado(false);
+				asistenciaRepository.save(as);
+			}*/
+			asistenciaService.cancelarAsistencia(paciente, codigo);
+			return "redirect:/reunion/ver_reuniones"; 
+		}
+		else {
+			return "iniciar_sesion";
+		}
 	}
-	
-	@GetMapping("/perfilNutriologo")
+
+	@GetMapping("/verSuPerfil")
 	public String perfilNutriologo(
 	        HttpSession sesion,
 	        @RequestParam("codigo") Long codigo,
 	        Model model) {
 
-	    Nutriologo objUsuario = (Nutriologo) sesion.getAttribute("usuario");
-	    if (objUsuario != null) {
-	        /*Rol vistaUsuario = objUsuario.getRol();
-	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);*/
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 
-			Usuario suPerfil = usuarioRepository.findByCodigo(codigo);
-			model.addAttribute("suPerfil", suPerfil);
+		if(paciente!=null){
+			model.addAttribute("paciente", paciente);
 
-			List<Reunion> objReunion = reunionService.getNutriologo(objUsuario, true);
-			model.addAttribute("objReunion", objReunion);
+			Nutriologo perfNutriologo = nutriologoRepository.findByCodigo(codigo);
+			model.addAttribute("pnutriologo", perfNutriologo);
+
+			List<Reunion> re = reunionService.getNutriologo(perfNutriologo, true);
+			model.addAttribute("objReunion", re);
+			//model.addAttribute("dias", dias);
+				
+			List<Rutina> susRutinas = rutinaService.getNutriologo(perfNutriologo);
+			model.addAttribute("misRutinas", susRutinas);
+				
+			List<Dieta> susDietas = dietaService.getNutriologo(perfNutriologo);
+			model.addAttribute("misDietas", susDietas);
 			
-			List<Rutina> susRutinas = rutinaService.getNutriologo(suPerfil);
-			model.addAttribute("susRutinas", susRutinas);
+			return "perfil/perfil_nutriologo";
+		}
+		else if(nutriologo!=null){
+			model.addAttribute("nutriologo", nutriologo);
 
-			List<Dieta> susDietas = dietaService.getNutriologo(suPerfil);
-			model.addAttribute("susDietas", susDietas);
+			Paciente perfilPaciente = pacienteRepository.findByCodigo(codigo);
+			model.addAttribute("ppaciente", perfilPaciente);
 
-			return "usuario/nutriologo";
-	    }
+			List<HistorialMed> listaSeguimiento = historialMedService.getSegumiento(perfilPaciente);
+			model.addAttribute("listaSeguimiento", listaSeguimiento);
+			Collections.reverse(listaSeguimiento);
 
-	    return "iniciar_sesion";
+			return "perfil/perfil_paciente";
+		}
+		return "iniciar_sesion";
 	}
 	
 	
@@ -347,67 +366,37 @@ public class ReunionController {
 	}
 	
 	@GetMapping("/pacientesAsistidos")
-	public String pacientesAsistidos(
-	        HttpSession sesion,
-	        Model model) {
+	public String pacientesAsistidos(HttpSession sesion, Model model) {
 
-	    Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("usuario");
+	    Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 	    if (nutriologo!=null) {
-	        //Rol vistaUsuario = rolRepository.findByIdrol(objUsuario.getRol().getIdrol());
-	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        //model.addAttribute("esPaciente", esPaciente);
-	    }
+			List<Reunion> listaReuniones = reunionService.getNutriologo(nutriologo, true);
+			model.addAttribute("listaReuniones", listaReuniones);
 
-	    List<Reunion> listaReuniones = reunionService.getNutriologo(nutriologo, true);
-	    model.addAttribute("listaReuniones", listaReuniones);
+			List<Asistencia> listaPacientes = listaReuniones.stream()
+				//.flatMap(reunion -> asistenciaRepository.findByReunionAndEstado(reunion, true).stream())
+				.flatMap(reunion -> asistenciaService.getReunion(reunion, true).stream())
+				.collect(Collectors.toList());
+			Collections.reverse(listaPacientes);
+			model.addAttribute("listaPacientes", listaPacientes);
 
-	    List<Asistencia> listaPacientes = listaReuniones.stream()
-	        //.flatMap(reunion -> asistenciaRepository.findByReunionAndEstado(reunion, true).stream())
-	        .flatMap(reunion -> asistenciaService.getReunion(reunion, true).stream())
-			.collect(Collectors.toList());
-	    Collections.reverse(listaPacientes);
-	    model.addAttribute("listaPacientes", listaPacientes);
-
-	    return "reuniones/pacientes_asistidos";
-	}
-	
-	@GetMapping("/perfilPaciente")
-	public String perfilPaciente(
-	        HttpSession sesion,
-	        @RequestParam("codigo") Long codigo,
-	        Model model) {
-
-	    Paciente objUsuario = (Paciente) sesion.getAttribute("usuario");
-	    if (objUsuario != null) {
-	        /*Rol vistaUsuario = objUsuario.getRol();
-	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);*/
-	    }
-
-	    Paciente suPerfil = pacienteRepository.findByCodigo(codigo);
-	    model.addAttribute("suPerfil", suPerfil);
-	    
-	    //HistorialMed suInfo = historialMedRepository.findByPacienteAndEstado(suPerfil, true);
-	    //model.addAttribute("suInfo", suInfo);
-	    
-	    Long asistencias = asistenciaService.asistenciaPaciente(suPerfil, true);
-	    model.addAttribute("asistencias", asistencias);
-	
-	    return "usuario/paciente";
+			return "reuniones/pacientes_asistidos";
+		}
+		else {
+			return "iniciar_sesion";	
+		}
 	}
 	
 	@GetMapping("/verSuSeguimiento")
-	public String verSuSeguimiento(
-	        HttpSession sesion, 
-	        @RequestParam("id") Long codigo, 
-	        Model model) {
+	public String verSuSeguimiento(HttpSession sesion, @RequestParam("codigo") Long codigo, Model model) {
 
-	    Usuario suPerfil = usuarioRepository.findByCodigo(codigo);
+	    Paciente suPerfil = pacienteRepository.findByCodigo(codigo);
 	    if(suPerfil!=null) {
-	    	//List<HistorialMed> listaSeguimiento = historialMedRepository.findByPaciente(suPerfil);
+	    	List<HistorialMed> listaSeguimiento = historialMedRepository.findByPaciente(suPerfil);
 	    	//model.addAttribute("listaSeguimiento", listaSeguimiento);
-	    	model.addAttribute("suPerfil", suPerfil);
-
+	    	model.addAttribute("listaSeguimiento", listaSeguimiento);
+			Collections.reverse(listaSeguimiento);
+			
 	    	return "usuario/seguimiento";
 	    }
 	    model.addAttribute("error", "El usuario no existe.");
@@ -415,8 +404,7 @@ public class ReunionController {
 	}
 
 	@GetMapping("/verSuHorario")
-	public String verSuHorario(
-	        HttpSession sesion, 
+	public String verSuHorario(HttpSession sesion, 
 	        @RequestParam("codigo") Long codigo, 
 	        Model model) {
 

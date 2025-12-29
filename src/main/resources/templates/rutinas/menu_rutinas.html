@@ -57,12 +57,12 @@
                 	<td><span th:text="${ru.objetivo.nombre}"></span></td>
                 	<td><span th:text="${ru.parteCuerpo}"></span></td>
                 	<td><span th:text="${ru.nivel}"></span></td>
-                	<td><span th:text="${ru.descripcion}"></span></td>
+                	<td><span class="descripcion" th:text="${ru.descripcion}"></span></td>
                 <td><a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${ru.codigo})}" method="GET">Ver detalles</a><br>
                 </td>
                 </tr> 
             </tbody>
-            </table>
+        </table>
 
         </div>
         <!--<form th:if="${!esPaciente}" th:action="@{/rutina/crearRutina}" method="POST">
@@ -80,3 +80,5 @@
 	
 </body>
 </html>
+
+<script th:src="@{/js/leer-mas.js}"></script>

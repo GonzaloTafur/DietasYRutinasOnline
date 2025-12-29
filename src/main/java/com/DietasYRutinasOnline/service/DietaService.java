@@ -5,16 +5,30 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.DietasYRutinasOnline.entity.Condicion;
 import com.DietasYRutinasOnline.entity.Dieta;
+import com.DietasYRutinasOnline.entity.Nutriologo;
+import com.DietasYRutinasOnline.entity.Objetivo;
+import com.DietasYRutinasOnline.entity.Paciente;
 import com.DietasYRutinasOnline.entity.Usuario;
 import com.DietasYRutinasOnline.entity.DTO.AlimentoDTO;
+import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
 import com.DietasYRutinasOnline.repository.DietaRepository;
+import com.DietasYRutinasOnline.repository.ObjetivoRepository;
+import com.DietasYRutinasOnline.repository.PacienteRepository;
 
 @Service
 public class DietaService {
     
     @Autowired
     DietaRepository dietaRepository;
+
+    @Autowired
+    PacienteRepository pacienteRepository;
+
+    @Autowired
+    ObjetivoRepository objetivoRepository;
+
 
     public List<Dieta> getEstado(Boolean estado){
         return dietaRepository.findAll();
@@ -44,8 +58,26 @@ public class DietaService {
         return dietaRepository.save(d);
     }
 
-    public List<Dieta> getNutriologo(Usuario suPerfil) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getNutriologo'");
+    public List<Dieta> getNutriologo(Nutriologo nutriologo) {
+        return dietaRepository.findByNutriologo(nutriologo);
     }
+
+    public List<Dieta> filtroDieta(Paciente paciente){
+        Objetivo volumen = objetivoRepository.findByNombre("Volumen");
+        Objetivo deficit = objetivoRepository.findByNombre("Deficit");
+
+        if (pacienteRepository.findByObjetivo(volumen)!=null){ 
+            return dietaRepository.findByObjetivo(ObjetivoEnum.V);
+        }
+        else if(pacienteRepository.findByObjetivo(deficit)!=null){
+            return dietaRepository.findByObjetivo(ObjetivoEnum.D);
+        }
+        else{
+            return dietaRepository.findByEstado(true);
+        }
+    }
+
+    /*public List<Dieta> filtroDietaCondicion(Paciente paciente){
+        
+    }*/
 }

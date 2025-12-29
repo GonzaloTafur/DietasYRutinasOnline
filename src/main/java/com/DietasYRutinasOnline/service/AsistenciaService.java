@@ -1,6 +1,6 @@
 package com.DietasYRutinasOnline.service;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.repository.AsistenciaRepository;
 import com.DietasYRutinasOnline.repository.PacienteRepository;
 import com.DietasYRutinasOnline.repository.ReunionRepository;
-import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -32,9 +31,9 @@ public class AsistenciaService {
         return asistenciaRepository.findAll();
     }
 
-    public Asistencia confirmarAsistencia(HttpSession sesion, Long codigo, Asistencia as){
+    public Asistencia confirmarAsistencia(Paciente paciente, Long codigo){
 
-        Paciente paciente = (Paciente) sesion.getAttribute("usuario");
+        //Paciente paciente = (Paciente) sesion.getAttribute("usuario");
 
         pacienteRepository.findById(paciente.getCodigo())
 	            .orElseThrow(() -> new IllegalArgumentException("Usuario no encontrado"));
@@ -42,25 +41,24 @@ public class AsistenciaService {
 	    Reunion reunion = reunionRepository.findByCodigo(codigo);
 	            //.orElseThrow(() -> new IllegalArgumentException("Reunión no encontrada"));
 
-        as = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, reunion, true);
+        Asistencia as = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, reunion, true);
 
         if (as!=null) {
             System.out.println("Ya está en esa reunión");
         }
         as.setPaciente(paciente);
 	    as.setReunion(reunion);
-	    as.setEstado(true);
-	    as.setFecha(LocalDateTime.now());
+	    as.setFecha(LocalDate.now());
 	    return asistenciaRepository.save(as);
     }
 
-    public Asistencia cancelarAsistencia(HttpSession sesion, Asistencia as, Long codigo){
-        Paciente paciente = (Paciente) sesion.getAttribute("usuario");
+    public Asistencia cancelarAsistencia(Paciente paciente, Long codigo){
+        //Paciente paciente = (Paciente) sesion.getAttribute("usuario");
 	    Reunion reunion = reunionRepository.findByCodigo(codigo);
 
-	    as = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, reunion, true);
+	    Asistencia as = asistenciaRepository.findByPacienteAndReunionAndEstado(paciente, reunion, true);
 	    if (as==null) {
-	    	System.out.println("No se pudo cancelar");	        
+	    	System.out.println("No se pudo cancelar la asistencia");	        
 	    }
 
         as.setEstado(false);

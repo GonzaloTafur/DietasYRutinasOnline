@@ -2,8 +2,6 @@ package com.DietasYRutinasOnline.entity;
 
 import java.io.Serializable;
 import java.sql.Date;
-import org.attoparser.dom.Text;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -42,6 +40,10 @@ public abstract class Usuario implements Serializable{
 
     @Column(name = "nacionalidad", length = 40)
     private String nacionalidad;
+
+    @ManyToOne
+	@JoinColumn(name = "id_pais", referencedColumnName = "id_pais")
+    private Pais pais;
 
     @Column(name = "sexo", length = 15)
     private String sexo;

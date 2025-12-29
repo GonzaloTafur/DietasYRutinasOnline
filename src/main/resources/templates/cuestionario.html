@@ -21,87 +21,71 @@
 	
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 </head>
+
+<style>
+    #paso{
+        background-color: white;
+        height: auto;
+        padding: 20px;
+        animation-name: animacion-form;
+	    animation-duration: 500ms;
+	    animation-timing-function: ease;
+    }
+
+    @keyframes animacion-form {
+        from{
+            filter: opacity(0%);
+            /*transform: translateY(-200px);*/
+        }
+        to{
+            filter: opacity(100%);
+            /*transform: translate(0);*/
+        }
+    }
+</style>
+
 <body>
         <main>
             <section>
                 <h2>Cuestionario</h2>
-				<span class="span">Hemos preparado este cuestionario que nos ayudará a saber detalles acerca de ti y de tu salud.<br></span>
 
-				<div id="paso" display="block">
-					<form id="form1" class="pure-form pure-form-stacked" th:action="@{/cuestionario/grabar_cuestionario}" 
-                      th:object="${paciente}"
-                      method="POST" >
-    
-						
-						
-						<input type="hidden" name="usuRegistrado" th:value="${usuRegistrado}"/>
-						
-						<span class="span" th:if="${exito}" th:text="${usuRegistrado}"></span>
+				<div class="formulario" id="paso" display="block">
+					<form id="form1" class="pure-form pure-form-stacked" 
+						th:action="@{/cuestionario/grabar_cuestionario}" 
+                     	th:object="${frmPaciente}"
+                      	method="POST" >
+
+						<span class="span">Hemos preparado este cuestionario que nos ayudará a saber detalles acerca de ti y de tu salud.<br></span>
+						<input type="hidden" th:field="*{codigo}">
+						<span class="alert" th:if="${error}" th:text="${error}"></span>
 								
-						<label for="percentage">¿Con que frecuencia haces ejercicios?</label>        
-						<select id="percentage" name="frecEjercicios">
-							<option th:value="'A veces o nada'" selected="selected">A veces o nada</option>
-							<option th:value="'30 minutos a diario'">30 minutos a diario</option>
-							<option th:value="'1 hora a diario'">1 hora a diario</option>
-							<option th:value="'1 hora algunos dias'">1 hora algunos días</option>
-							<option th:value="'2 horas o más'">2 horas o más</option>
-							<option th:value="'Semanalmente'">Semanalmente</option>
+						<label for="frecEjercicios">Del 1 al 5 ¿Con que frecuencia haces ejercicios?</label>        
+						<select id="frecEjercicios" name="frecEjercicios">
+							<option th:each="frec : ${cbxFrecuencia}" 
+									th:value="${frec}" 
+									th:text="${frec}">
+							</option>
 						</select>
 
-						<label for="percentage">¿Tienes una condicion alimenticia?</label>
-						<select id="percentage" name="condicion">
-							<option th:value="" selected="selected">Ninguna</option>
-							<option th:value="*{condicion.codigo}"></option>
+						<label for="condicion">¿Tienes una condicion alimenticia?</label>
+						<select th:field="*{condicion}">
+							<option th:each="con: ${cbxCondiciones}"
+									th:value="${con.codigo}" 
+									th:text="${con.nombre}">
+							</option>
 						</select>
 						
-						<label for="mensaje">¿Tienes un objetivo?</label>
-						<div th:each="objetivo : ${ckbObjetivos}">
-							<label th:text="${objetivo.nombre}"></label>
-							<input type="checkbox" th:field="*{objetivo}" th:value="${objetivo.codigo}"/>
-						</div>
+						<label for="objetivo">¿Tienes un objetivo?</label>
+						<select th:field="*{objetivo}">
+							<option th:each="objetivo : ${ckbObjetivos}"
+									th:value="${objetivo.codigo}"
+									th:text="${objetivo.nombre}">
+							</option>
+						</select>
 						
 						<br>
-						<input type="submit" value="Grabar">
+						<input class="pure-button pure-button-primary" type="submit" value="Grabar">
 					
-					</form>
-				</div>
-
-				<div id="medidas" display="none">
-					<h2>Cuestionario - Medidas</h2>
-					<form class="pure-form pure-form-stacked" 
-						th:action="@{/cuestionario/grabar_medidas}" 
-						th:object="${medidas}"
-						method="POST" >
-		
-						<span class="span">Hemos preparado este cuestionario que nos ayudará a saber detalles acerca de ti y de tu salud.<br>
-						</span>
-						
-						<input type="hidden" name="usuRegistrado" th:value="${usuRegistrado}"/>
-						
-						<span class="span" th:if="${exito}" th:text="${usuRegistrado}"></span>
-
-						<br>
-						<span class="span">Si aún no sabe sus medidas, puede saltarte esta parte y luego llenarlas en otro momento.</span>
-						
-						<label for="nombres_apellidos">Peso corporal</label>
-						<input type="number" id="multi-last-name" th:field="*{pesoCorporal}" step="0.01" />
-								
-						<label for="estatura">Estatura</label>
-						<input type="number"  id="multi-last-name" th:field="*{estatura}" step="0.01"/>
-		
-						<label for="nombres_apellidos">Perímetro de cintura</label>
-						<input  type="number"  id="multi-last-name"th:field="*{perimCintura}" step="0.01" />
-		
-						<label for="nombres_apellidos">Perímetro de cadera</label>
-						<input type="number" id="multi-last-name" th:field="*{perimCadera}" step="0.01" />
-		
-						<label for="nombres_apellidos">Perímetro de muslo</label>
-						<input type="number" id="multi-last-name" th:field="*{perimMuslo}" step="0.01"  />
-		
-						<label for="nombres_apellidos">Perímetro de brazo/bicep</label>
-						<input  type="number"  id="multi-last-name" th:field="*{perimBrazo}"step="0.01"  /> 
-		
-						<input type="submit" value="Grabar">
 					</form>
 				</div>
             </section>
@@ -111,27 +95,20 @@
             <p class="p-footer">2024. Todos los derechos reservados.</p>
         </footer>
 
-		<script>
-        
-        let form1 = document.getElementById('paso');
-        //form1.addEventListener("submit", siguienteCuestionario)
-        form1.addEventListener("submit", function(event) {
-            event.preventDefault(); // 🚫 Evita el envío
-            siguienteCuestionario(); // ✅ Ejecuta tu lógica
-        });
-
-
-        function siguienteCuestionario(){
-
-            let paso = document.getElementById('paso');
-            let medidas = document.getElementById('medidas');
-
-            paso.style.display = 'none'
-            medidas.style.display = 'block'
-
-        }
-
-    </script>
-
 </body>
 </html>  
+
+<script>
+    /*    
+    // Declaramos las variables
+    const form1 = document.getElementById('form1');
+    const form2 = document.getElementById('ventana2');
+
+    // Luego de haber completado el primer formulario, mostramos el segundo
+    form1.addEventListener('submit', function(event) {
+		event.preventDefault(); // Evitamos el envío del formulario
+        form2.removeAttribute('hidden'); // Mostramos el segundo formulario
+        form1.setAttribute('hidden', 'true'); // Ocultamos el primer formulario
+    });
+*/
+</script>

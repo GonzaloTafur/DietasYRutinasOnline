@@ -39,10 +39,12 @@ import com.DietasYRutinasOnline.repository.RolRepository;
 import com.DietasYRutinasOnline.repository.RutinaRepository;
 import com.DietasYRutinasOnline.repository.TransaccionRepository;
 import com.DietasYRutinasOnline.repository.UsuarioRepository;
+import com.DietasYRutinasOnline.service.DietaService;
 import com.DietasYRutinasOnline.service.HistorialMedService;
 import com.DietasYRutinasOnline.service.NutriologoService;
 import com.DietasYRutinasOnline.service.PacienteService;
 import com.DietasYRutinasOnline.service.ReunionService;
+import com.DietasYRutinasOnline.service.RutinaService;
 import com.DietasYRutinasOnline.service.UsuarioService;
 
 import jakarta.servlet.http.HttpSession;
@@ -55,10 +57,10 @@ public class PerfilController {
 	HorarioRepository horarioRepository;
 	
 	@Autowired
-	RutinaRepository rutinaRepository;
+	RutinaService rutinaService;
 	
 	@Autowired
-	DietaRepository dietaRepository;
+	DietaService dietaService;
 	
 	@Autowired
 	private UsuarioService usuarioService;
@@ -84,14 +86,13 @@ public class PerfilController {
 
 	@GetMapping("/")
 	public String verPerfil(HttpSession sesion, Long codigo, Model model) {
-
 		try {
 			Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 			Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 			//Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 			if (paciente!=null) {
 
-				model.addAttribute("paciente", paciente); 
+				model.addAttribute("ppaciente", paciente);
 				/*HistorialMed miInfo = historialMedService.getPaciente(paciente, true);
 				//HistorialMed hm = historialMedService.getCodigo(codigo);
 				//Paciente miInfo = pacienteService.getHistorial(hm);
@@ -103,20 +104,24 @@ public class PerfilController {
 				}
 				
 				model.addAttribute("miInfo", miInfo);*/
+				List<HistorialMed> listaSeguimiento = historialMedService.getSegumiento(paciente);
+				model.addAttribute("listaSeguimiento", listaSeguimiento);
+				Collections.reverse(listaSeguimiento);
+
 				return "perfil/perfil_paciente";
 			}
 			//model.addAttribute("objUsuario", objUsuario);
 			else if(nutriologo!=null){
-				model.addAttribute("nutriologo", nutriologo);
+				model.addAttribute("pnutriologo", nutriologo);
 				//List<Reunion> objReunion = reunionRepository.findByNutriologoAndEstado(objUsuario, true);
 				List<Reunion> re = reunionService.getNutriologo(nutriologo, true);
 				model.addAttribute("objReunion", re);
 				//model.addAttribute("dias", dias);
 				
-				List<Rutina> misRutinas = rutinaRepository.findByNutriologo(nutriologo);
+				List<Rutina> misRutinas = rutinaService.getNutriologo(nutriologo);
 				model.addAttribute("misRutinas", misRutinas);
 				
-				List<Dieta> misDietas = dietaRepository.findByNutriologo(nutriologo);
+				List<Dieta> misDietas = dietaService.getNutriologo(nutriologo);
 				model.addAttribute("misDietas", misDietas);
 			
 				return "perfil/perfil_nutriologo";
@@ -131,9 +136,7 @@ public class PerfilController {
 	}
 	
 	@PostMapping("/editarPerfil")
-	public String editarPerfil(
-			HttpSession sesion, 
-			Model model) {
+	public String editarPerfil(HttpSession sesion, Model model) {
 		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 		if (objUsuario!=null) {
 			model.addAttribute("objUsuario", objUsuario);
@@ -156,7 +159,7 @@ public class PerfilController {
 	public String editarMedidas(HttpSession sesion, Model model) {
 	    Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 	    if (paciente!=null) {
-			HistorialMed miHistorial = historialMedService.getEstado(true);
+			HistorialMed miHistorial = historialMedService.getEstadoAndPaciente(paciente, true);
 			//HistorialMed miHistorial = historialMedService.getPaciente(paciente, true);
 
 	        if (miHistorial!=null && puedeEditar(miHistorial)) {
@@ -208,52 +211,25 @@ public class PerfilController {
 	public String verSeguimiento(HttpSession sesion, Model model) {
 		//Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 
-		//List<HistorialMed> listaSeguimiento = historialMedService.getEstadoAll(true);
-	    List<HistorialMed> listaSeguimiento = historialMedService.getSegumiento(paciente);
-		model.addAttribute("listaSeguimiento", listaSeguimiento);
-	    Collections.reverse(listaSeguimiento);
-	    
-		return "usuario/seguimiento";
-	}
-	
-	@GetMapping("/verSuPerfil")
-	public String verSuPerfil(
-			HttpSession sesion,
-			@RequestParam("id_usuario") Long codigo,
-			Model model) {
-		
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
-	    	
-	    	if(objUsuario.getCodigo() == codigo) {
-	    		/*Rol vistaUsuario = rolRepository.findByCodigo(objUsuario.getRol().getCodigo());
-	    		boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	    		model.addAttribute("esPaciente", esPaciente);
-	    		
-	    		List<Rutina> misRutinas = rutinaRepository.findByNutriologo(objUsuario);
-	    		model.addAttribute("misRutinas", misRutinas);
-	    
-	    		List<Dieta> misDietas = dietaRepository.findByNutriologo(objUsuario);
-	    		model.addAttribute("misDietas", misDietas);
-	    		
-	    		model.addAttribute("objUsuario", objUsuario);*/
-	    		return "perfil";
-	    	}
-	    	/*else {
-	    		Usuario suPerfil = usuarioService.findByIdusuario(idusuario);
-	    		model.addAttribute("suPerfil", suPerfil);
-		
-	    		List<Rutina> susRutinas = rutinaRepository.findByNutriologo(suPerfil);
-	    		model.addAttribute("susRutinas", susRutinas);
-	    
-	    		List<Dieta> susDietas = dietaRepository.findByNutriologo(suPerfil);
-	    		model.addAttribute("susDietas", susDietas);
-	    		return "usuario/nutriologo";
-	    	}*/
-	        
-	    }
-	    return "redirect:/login";
+		if(paciente!=null){
+			//List<HistorialMed> listaSeguimiento = historialMedService.getEstadoAll(true);
+			List<HistorialMed> listaSeguimiento = historialMedService.getSegumiento(paciente);
+			model.addAttribute("listaSeguimiento", listaSeguimiento);
+			Collections.reverse(listaSeguimiento);
+			
+			return "usuario/seguimiento";
+		}
+		else if(nutriologo!=null){
+			//Paciente medidasPaciente = pacienteService.getCodigo(codigo);
+			List<HistorialMed> listaSeguimiento = historialMedService.getSegumiento(paciente);
+			model.addAttribute("listaSeguimiento", listaSeguimiento);
+			return "usuario/seguimiento";
+		}
+		else{
+			return "iniciar_sesion";
+		}
 	}
 	
 }

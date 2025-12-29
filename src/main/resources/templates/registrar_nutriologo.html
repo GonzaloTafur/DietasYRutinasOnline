@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<title>Registrar usuario</title>
 	<!--<link rel="stylesheet" type="text/css" href="/src/main/resources/static/css/style2.css">-->
-	<link rel="stylesheet" type="text/css" th:href="@{/src/main/resources/static/css/style2.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
@@ -31,10 +31,7 @@
             	method="POST" >
 
 				<label for="nombres">Nombres</label>
-				<input type="text" 
-                            	id="multi-first-name" 
-                            	th:field="*{nombres}" 
-                            	required="" />
+				<input type="text" id="multi-first-name" th:field="*{nombres}" required="" />
 
 				<label for="apellidos">Apellidos</label>
 				<input type="text" id="multi-last-name" th:field="*{apellidos}"/>
@@ -48,31 +45,21 @@
                                 th:field="*{fechanacimiento}" 
                                 required="" />
                                 
-                <label for="percentage">Nacionalidad</label>        
-					<select id="percentage" name="nacionalidad">
-						<option th:value="Otro" selected="selected">Otro</option>
-						<option th:value="'Argentina'">Argentina</option>
-						<option th:value="'Bolivia'">Bolivia</option>
-						<option th:value="'Chile'">Chile</option>
-						<option th:value="'Colombia'">Colombia</option>
-						<option th:value="'Ecuador'">Ecuador</option>
-						<option th:value="'España'">España</option>
-						<option th:value="'Mexico'">Mexico</option>
-						<option th:value="'Paraguay'">Paraguay</option>
-						<option th:value="'Perú'">Perú</option>
-						<option th:value="'Uruguay'">Uruguay</option>
-						<option th:value="'Venezuela'">Venezuela</option>
-					</select> 
+                <label for="pais">Nacionalidad</label>        
+					<select id="pais" name="pais" th:field="*{pais}">
+						<option th:each="p : ${listaPaises}"
+								th:value="${p.nombre}"
+								th:text="${p.nombre}">
+						</option>
+					</select>
 				
-				<label for="percentage">Sexo</label>        
-				<!--<select id="percentage" name="sexo">
-					<option th:value="Masculino" selected="selected">Masculino</option>
-				</select>-->
-				
-				<select id="percentage" name="sexo">
-						<option th:value="Masculino" selected="selected">Masculino</option>
-						<option th:value="Femenino">Femenino</option>
-				</select>
+				<label for="sexo">Sexo</label>
+					<select name="sexo" th:field="*{sexo}">
+						<option th:each="s : ${cbxSexo}"
+								th:value="${s}"
+								th:text="${s}">
+						</option>
+					</select>
 
 				<label for="nombres_apellidos">Correo Electronico</label>
 				<input type="email" 

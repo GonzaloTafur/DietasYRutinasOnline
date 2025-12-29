@@ -5,6 +5,7 @@ import java.sql.Date;
 
 import org.attoparser.dom.Text;
 
+import com.DietasYRutinasOnline.entity.ENUM.FrecEjercicios;
 import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
 
 import jakarta.persistence.CascadeType;
@@ -78,8 +79,9 @@ public class Paciente extends Usuario{
     @Column(name="id_objetivo")
     private Objetivo objetivo;*/
 
+    @Enumerated(EnumType.STRING)    
 	@Column(name="frec_ejercicios")
-	private String frecEjercicios;
+	private FrecEjercicios frecEjercicios;
 
     //@Column(name="id_historial")
     //private Integer historial;
