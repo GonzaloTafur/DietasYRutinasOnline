@@ -79,15 +79,6 @@ xmlns:th="http://www.thymeleaf.org">
                                     th:text="${d.nombre}">
                             </option>
                         </select>
-                        <!--<select name="dia">
-                            <option th:value="'LUNES'">Lunes</option>
-                            <option th:value="'MARTES'">Martes</option>
-                            <option th:value="'MIERCOLES'">Miércoles</option>
-                            <option th:value="'JUEVES'">Jueves</option>
-                            <option th:value="'VIERNES'">Viernes</option>
-                            <option th:value="'SABADO'">Sábado</option>
-                            <option th:value="'DOMINGO'">Domingo</option>
-                        </select>-->
 
                 <label for="parte">Periodo de día:</label>
                 <select name="parte">
@@ -136,19 +127,17 @@ xmlns:th="http://www.thymeleaf.org">
                             <th>Parte del cuerpo</th>
                             <th>Nivel</th>
                             <th>Descripción</th>
-                            <th>Acciones</th>
                         </tr>
                     </thead>
                 
                     <tbody>
                         <tr th:each="ru: ${listaRutinas}">
-                        <td><span th:text="${ru.nombre}"></span></td>
-                        <td><span th:text="${ru.objetivo.nombre}"></span></td>
-                        <td><span th:text="${ru.parteCuerpo}"></span></td>
-                        <td><span th:text="${ru.nivel.nombre}"></span></td>
-                        <td><span th:text="${ru.descripcion}"></span></td>
-                        <td><a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${ru.codigo})}" method="GET">Ver detalles</a>
-                            <br>
+                            <td><a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${ru.codigo})}" method="GET">
+                                <span th:text="${ru.nombre}"></span></a></td>
+                            <td><span th:text="${ru.objetivo.nombre}"></span></td>
+                            <td><span th:text="${ru.parteCuerpo}"></span></td>
+                            <td><span th:text="${ru.nivel.nombre}"></span></td>
+                            <td><span class="descripcion" th:text="${ru.descripcion}"></span></td>
                         </tr> 
                     </tbody>
                     </table>
@@ -161,3 +150,5 @@ xmlns:th="http://www.thymeleaf.org">
 
 </body>
 </html>
+
+ <script th:src="@{/js/leer-mas.js}"></script>

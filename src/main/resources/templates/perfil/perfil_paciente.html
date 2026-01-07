@@ -85,7 +85,7 @@
                 </div>
 
                 <a th:if="${nutriologo==null}" type="button" class="pure-button pure-button-primary" th:href="@{/perfil/editarMedidas}">Actualizar Medidas</a>
-                <a class="pure-button pure-button-secondary" href="#" id="ver-pagina2">Ver Seguimiento</a>
+                <a class="pure-button pure-button-secondary" href="#" id="ver-pagina2">Ver Seguimiento -></a>
             </div>
 
             <div id="seguimiento" style="display: none;">
@@ -118,9 +118,7 @@
                         </tbody>
                     </table>
                 </div>
-                <a th:if="${nutriologo==null}" type="button" class="pure-button pure-button-primary" th:href="@{/perfil/editarMedidas}">Actualizar Medidas</a>
-                <!--<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/verSeguimiento}">Ver Medidas</a>-->
-                <a class="pure-button pure-button-secondary" href="#" id="ver-pagina1">Ver Medidas</a>
+                <a class="pure-button pure-button-secondary" href="#" id="ver-pagina1">Ver Medidas -></a>
             </div>
         </div>
         
@@ -130,7 +128,7 @@
             <span th:if="${mensaje}" th:text="${mensaje}"></span>
             <h2>Dieta(s) que estoy haciendo</h2>
             <hr>
-            <!--<table class="pure-table">
+            <table class="pure-table">
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -141,25 +139,22 @@
                 </thead>
             
                 <tbody class="pure-table-border">
-                    <tr th:each="dieta: ${paciente.historialMedico.dieta}">
-                    <td><span th:text="${dieta.nombre}"></span></td>
-                    <td><span th:text="${dieta.objetivo}"></span></td>
-                    <td><span th:text="${dieta.descripcion}"></span></td>
+                    <tr th:each="d: ${ppaciente.dieta}">
+                    <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${d.codigo})}" ><span th:text="${d.nombre}"></span></a></td>
+                    <td><span th:text="${d.objetivo.nombre}"></span></td>
+                    <td><span class="descripcion" th:text="${d.descripcion}"></span></td>
                     <td>
-                        <div class="dropdown">
-                            <a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">Ver detalles</a>
-                        </div>
                         <br>
                         
-                        <form th:action="@{/dieta/dejarSeguirDieta(codigo=${dieta.codigo})}" method="POST">
+                        <form th:action="@{/dieta/dejarSeguirDieta(codigo=${d.codigo})}" method="POST">
                             <button type="submit" class="pure-button pure-button-secondary">
                             Dejar de seguir Dieta</button>
-                            </form>
+                        </form>
                     </td>
                     
                     </tr> 
                 </tbody>
-            </table>-->
+            </table>
             
             <a th:href="@{/dieta/}" type="button">
                 Seguir otras dietas
@@ -172,6 +167,8 @@
 </html>
 
 <script>
+
+// ============ PAGINADO =============
 let medidas = document.getElementById("medidas");
 let seguimiento = document.getElementById("seguimiento");
 
@@ -185,6 +182,29 @@ let btnVerPagina1 = document.getElementById("ver-pagina1")
 btnVerPagina1.addEventListener("click", function(){
     seguimiento.style.display = "none";
     medidas.style.display = "block";
+});
+
+
+// ============ LEER MÁS =============
+let descripciones = document.querySelectorAll(".descripcion")
+
+descripciones.forEach(descripcion => {
+    // Si "descripcion" tiene más de 150 caracteres, se recorta y se añade el boton "Leer más"
+    if(descripcion.innerText.length > 150){
+        let textoCompleto = descripcion.innerText;
+        let textoRecortado = textoCompleto.substring(0, 170) + "... ";
+
+        let leerMas = document.createElement("a");
+        leerMas.href = "#";
+        leerMas.innerText = "Leer más";
+
+        leerMas.addEventListener("click", function() {
+            descripcion.innerText = textoCompleto;
+            leerMas.style.display = "none";
+        });
+        descripcion.innerText = textoRecortado;
+        descripcion.appendChild(leerMas);
+    }
 });
 
 </script>

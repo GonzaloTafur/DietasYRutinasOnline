@@ -47,7 +47,7 @@
                           
                             <a type="button" class="pure-button pure-button-primary" th:href="${reunion.enlace}">Enlace de la reunión</a>
                            
-                            <a th:href="@{/reunion/desactivarReunion/{codigo} (codigo=${reunion.codigo})}" 
+                            <a th:if="${paciente==null}" th:href="@{/reunion/desactivarReunion/{codigo} (codigo=${reunion.codigo})}" 
                                 class="alert">Desactivar Reunion</a>
                             <hr>
                             <br>

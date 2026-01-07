@@ -2,6 +2,8 @@ package com.DietasYRutinasOnline.controller;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,15 +18,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.DietasYRutinasOnline.entity.Alimento;
+import com.DietasYRutinasOnline.entity.Asistencia;
 import com.DietasYRutinasOnline.entity.Condicion;
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.HistorialMed;
 import com.DietasYRutinasOnline.entity.Nutriologo;
 import com.DietasYRutinasOnline.entity.Objetivo;
 import com.DietasYRutinasOnline.entity.Paciente;
+import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.entity.Rol;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.DTO.DietaDTO;
 import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
 import com.DietasYRutinasOnline.repository.AlimentoRepository;
 import com.DietasYRutinasOnline.repository.CondicionRepository;
@@ -38,6 +43,7 @@ import com.DietasYRutinasOnline.service.AlimentoService;
 import com.DietasYRutinasOnline.service.DietaService;
 import com.DietasYRutinasOnline.service.HistorialMedService;
 import com.DietasYRutinasOnline.service.ObjetivoService;
+import com.DietasYRutinasOnline.service.PacienteService;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -74,7 +80,7 @@ public class DietaController {
 	UsuarioRepository usuarioRepository;
 
 	@Autowired
-	PacienteRepository pacienteRepository;
+	PacienteService pacienteService;
 	
 	@Autowired
 	RolRepository rolRepository;
@@ -83,98 +89,35 @@ public class DietaController {
 	@GetMapping("/")
 	public String verDietas(
 			HttpSession sesion, 
-			@ModelAttribute("objDieta") Dieta objDieta,
+			//@ModelAttribute("objDieta") Dieta objDieta,
 			Model model) {
 		//Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
 		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
 		
-		if(paciente!=null || nutriologo!=null){
-	    	//Rol vistaUsuario = new Rol();
-	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        //model.addAttribute("esPaciente", esPaciente);
+		if(paciente!=null){
+			model.addAttribute("paciente", paciente);
+			
+			List<Dieta> listaDietas = dietaService.getEstado(true);
+	    	//model.addAttribute("listaDietas", listaDietas);
 
+			List<Dieta> dietasPaciente = dietaRepository.findByPaciente(paciente);
+			List<DietaDTO> listaDTO = listaDietas.stream()
+				.map(dieta -> {
+					// Se verifica si el paciente sigue una dieta de la lista
+					boolean sigue = dietasPaciente.contains(dieta); 
+					return new DietaDTO(dieta, sigue);
+				})
+				.toList();
+			model.addAttribute("listaDietas", listaDTO);
+			return "dietas/menu_dietas";
+	    }
+		else if(nutriologo!=null){
 			List<Dieta> listaDietas = dietaService.getEstado(true);
 	    	model.addAttribute("listaDietas", listaDietas);
 
 			return "dietas/menu_dietas";
-	    }
-
-	    //HistorialMed pacienteActual = HistorialMedRepository.findByPacienteAndEstado(objUsuario, true);
-	    //model.addAttribute("pacienteActual", pacienteActual);
-	    
-	    //List<Dieta> listaDietas = dietaService.getEstado(true);
-	    //model.addAttribute("listaDietas", listaDietas);
-	    
-	    /* VISTA PARA LOS PACIENTES*/
-	    /*if(pacienteActual!=null && pacienteActual.getObjetivo().equals("Deficit")) {
-	    	listaDietas = dietaRepository.findByObjetivo("Deficit");
-		    model.addAttribute("listaDietas", listaDietas);
-		    
-		    if(pacienteActual.getCondicion().equals("Lacteos")) {
-		    	Condicion lacteos = condicionRepository.findByNombre("Lacteos");
-		    	model.addAttribute("lacteos", lacteos);
-		    	
-		    	listaDietas = dietaRepository.findByCondicion(lacteos);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(pacienteActual.getCondicion().equals("Gluten")) {
-		    	Condicion gluten = condicionRepository.findByNombre("Gluten");
-		    	
-		    	listaDietas = dietaRepository.findByCondicionAndObjetivo(gluten, "Deficit");
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }    
-	    }
-	    
-	    else if(pacienteActual!=null && pacienteActual.getObjetivo().equals("Volumen")) {
-	    	listaDietas = dietaRepository.findByObjetivo("Volumen");
-	    	model.addAttribute("listaDietas", listaDietas);
-	    	
-	    	if(pacienteActual.getCondicion().equals("Lacteos")) {
-	    		Condicion lacteos = condicionRepository.findByNombre("Lacteos");
-		    	
-		    	listaDietas = dietaRepository.findByCondicion(lacteos);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(pacienteActual.getCondicion().equals("Gluten")) {
-	    		Condicion gluten = condicionRepository.findByNombre("Gluten");
-		    	
-		    	listaDietas = dietaRepository.findByCondicionAndObjetivo(gluten, "Volumen");
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    }
-	    
-	    else if (pacienteActual!=null){
-	    	listaDietas = dietaRepository.findByEstado(true);
-	    	model.addAttribute("listaDietas", listaDietas);
-	    	
-	    	if(pacienteActual.getCondicion().equals("Lacteos")) {
-	    		Condicion lacteos = condicionRepository.findByNombre("Lacteos");
-		    	model.addAttribute("lacteos", lacteos);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(lacteos);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(pacienteActual.getCondicion().equals("Gluten")) {
-	    		Condicion gluten = condicionRepository.findByNombre("Gluten");
-		    	model.addAttribute("gluten", gluten);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(gluten);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    	
-	    	else if(pacienteActual.getCondicion().equals("Vegano")) {
-	    		Condicion carne = condicionRepository.findByNombre("Carne");
-		    	model.addAttribute("carne", carne);
-		    	
-		    	listaDietas = dietaRepository.findByCondicionNot(carne);
-		    	model.addAttribute("listaDietas", listaDietas);
-		    }
-	    }*/
-	    
+		}
 	    return "iniciar_sesion";
 	}
 	
@@ -208,102 +151,71 @@ public class DietaController {
 		return "dietas/lista_alimentos";
 	}
 	
-	//@PostMapping("/seguirDieta")
-	/*public String seguirDieta(
-	        HttpSession sesion,
-	        @ModelAttribute("objDieta") Dieta objDieta,
-	        Model model) {
+	@PostMapping("/seguirDieta")
+	public String seguirDieta(HttpSession sesion, 
+		@RequestParam("codigo") Long codigo, 
+		Model model) {
 	    
-	    //Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-		Paciente paciente = (Paciente) sesion.getAttribute("usuario");
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 	    if (paciente!=null) {
-	        //Rol vistaUsuario = objUsuario.getRol();
-	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        //model.addAttribute("esPaciente", esPaciente);
-	        
-			HistorialMed miHistorial = historialMedService.getEstado(true);
-			Paciente pacienteActual = pacienteRepository.findByHistorialMedico(miHistorial);
-	        //HistorialMed pacienteActual = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
-	        model.addAttribute("pacienteActual", pacienteActual);
-	        
-	        if (pacienteActual!=null) {
-	            /*Dieta dietaPaciente = dietaRepository.findById(objDieta.getCodigo()).orElse(null);
-	            
-	            if (dietaPaciente!=null && !miHistorial.getDieta().contains(dietaPaciente)) {
-	                miHistorial.getDieta().add(dietaPaciente);
-	                historialMedService.guardar(miHistorial);
-	                model.addAttribute("exito", "Se guardó a tu perfil con éxito");  
-	            } 
-	            else {
-	                model.addAttribute("excepcion", "Ya estás haciendo esta dieta");
-	            }
 
-	            Transaccion objTransaccion = new Transaccion();
+			Dieta objDieta = dietaRepository.findByCodigoAndPaciente(codigo, paciente);
+
+			if(objDieta==null){
+
+				Dieta dieta = dietaRepository.findByCodigo(codigo);
+
+				//paciente.getDieta().add(dieta);
+				//pacienteService.guardarPaciente(paciente);
+				pacienteService.seguirDieta(paciente, dieta);
+				return "redirect:/perfil/";
+			
+				//paciente.setDieta(codigo);
+				//pacienteService.guardarPaciente(paciente);
+
+				//pacienteService.seguirDieta(paciente, objDieta);
+	        
+				/*Transaccion objTransaccion = new Transaccion();
 	            objTransaccion.setFecha(LocalDateTime.now());
 	            objTransaccion.setTipo("Seguir Dieta");
 	            objTransaccion.setHistorialMedico(miHistorial);
 	            //objTransaccion.setUsuario(objUsuario);
 	            objTransaccion.setDieta(dietaPaciente);
-	            transaccionRepository.save(objTransaccion);
-                
-	            
-	            /* RETORNAR */
-	            /*List<Dieta> listaDietas;
-	            listaDietas = dietaService.getEstado(true);
-	            model.addAttribute("listaDietas", listaDietas);
-	            
-	            if (pacienteActual != null && "Deficit".equals(miHistorial.getObjetivo())) {
-	                listaDietas = dietaRepository.findByObjetivo("Deficit");
-	                model.addAttribute("listaDietas", listaDietas);
-	            } 
-	            else if (pacienteActual != null && "Volumen".equals(miHistorial.getObjetivo())) {
-	                listaDietas = dietaRepository.findByObjetivo("Volumen");
-	                model.addAttribute("listaDietas", listaDietas);
-	            }
-	            return "dietas/menu_dietas";
-	        }
+	        	transaccionRepository.save(objTransaccion);*/
+			}
+			else{
+				return "redirect:/dieta/";
+			}
+	        
 	    }
 	    return "index";
-	}*/
+	}
 
 	
 	@PostMapping("/dejarSeguirDieta")
 	public String dejarSeguirDieta(
 			HttpSession sesion,
-			@ModelAttribute("objDieta") Dieta objDieta,
+			@RequestParam("codigo") Long codigo,
 			Model model) {
 	    
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
-	    	//Rol vistaUsuario = objUsuario.getRol();
-	        //boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        //model.addAttribute("esPaciente", esPaciente);
-	        
-	        HistorialMed miInfo = historialMedService.getEstado(true);
-			//Paciente pacienteActual = pacienteRepository.findByHistorialMedico(miInfo);
-		    model.addAttribute("miInfo", miInfo);
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+	    if (paciente!=null) {
+
+			Dieta dieta = dietaRepository.findByCodigo(codigo);
+	        pacienteService.dejarSeguirDieta(paciente, dieta);
 		    
-		    if(miInfo!=null) {
-		    	//Dieta dietaPaciente = dietaRepository.findById(objDieta.getCodigo()).orElse(null);
-		    	
-		    	//miInfo.getDieta().remove(dietaPaciente);		    
-		    	historialMedService.guardarHistorial(miInfo);
-		    	model.addAttribute("mensaje", "Dieta eliminada de tu perfil.");
-		    }
-		    
-	        Transaccion objTransaccion = new Transaccion();
+	        /*Transaccion objTransaccion = new Transaccion();
 	        objTransaccion.setFecha(LocalDateTime.now());
 	        objTransaccion.setTipo("Dejar seguir Dieta");
-	        objTransaccion.setHistorialMedico(miInfo);
-	        objTransaccion.setUsuario(objUsuario);
-	        objTransaccion.setDieta(objDieta);
-	        transaccionRepository.save(objTransaccion);
+	        //objTransaccion.setHistorialMedico(miInfo);
+	        objTransaccion.setUsuario(paciente);
+	        objTransaccion.setDieta(dieta);
+	        transaccionRepository.save(objTransaccion);*/
 
-	        model.addAttribute("objUsuario", objUsuario);
+	        //model.addAttribute("paciente", paciente);
 		    
-		    //HistorialMed miInfo1 = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
-		    model.addAttribute("miInfo", miInfo);
-	        return "perfil";
+			System.out.println("=================================== Has dejado de seguir la dieta " + dieta.getNombre() + " ===================================");
+	        return "redirect:/perfil/";
 	    }
 		return "index";
 	}
@@ -446,60 +358,6 @@ public class DietaController {
 		}
 		
 	}	
-	
-	@PostMapping("/seguirDieta2")
-	public String seguirDieta2(
-			HttpSession sesion,
-			@ModelAttribute("objDieta") Dieta objDieta,
-			@ModelAttribute("miInfo") HistorialMed objHistorialMed,
-			//@RequestParam("idHistorialMed")int idHistorialMed, 
-			Model model) {
-	    
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
-	    	/*Rol vistaUsuario = objUsuario.getRol();
-	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);
-	        */
-	        
-	        HistorialMed miHistorial = historialMedService.getEstado(true);
-			//Paciente pacienteActual = pacienteRepository.findByHistorialMedico(miHistorial);
-		    //model.addAttribute("pacienteActual", pacienteActual);
-		    
-		    /*if(pacienteActual.getObjetivo().equals("Volumen") && objDieta.getObjetivo().equals("Volumen")) {
-		    	
-		    }
-	        if(pacienteActual!=null) {
-
-				//HistorialMed dietaPaciente = historialMedRepository.findByPacienteAndEstado(objUsuario, true);
-	        	miHistorial.getDieta().add(objDieta);
-	        	historialMedService.guardarHistorial(miHistorial);
-	        
-	        	Transaccion objTransaccion = new Transaccion();
-	        	objTransaccion.setFecha(LocalDateTime.now());
-	        	objTransaccion.setTipo("Seguir Dieta");
-	        	objTransaccion.setHistorialMedico(miHistorial);
-	        	objTransaccion.setUsuario(objUsuario);
-	        	objTransaccion.setDieta(objDieta);
-	        	transaccionRepository.save(objTransaccion);
-	        }*/
-	        //dietaPaciente.setDieta(objDieta);
-	        
-	    	/*Horario conflictoHorario = horarioRepository.findByPacienteAndDiaAndPeriodo(objUsuario, dia, periodo);
-	    	if(conflictoHorario!=null) {	    		
-	    		model.addAttribute("error", "El horario está en conflicto con otro existente");
-	    	}
-	    	else {
-	    		horarioRepository.save(objHorario);
-	    		model.addAttribute("exito", "Se añadió con éxito");
-	    	}*/
-	    	//model.addAttribute("exito", "Se ha guardado la dieta a tu perfil");
-	        List<Dieta> listaDietas = dietaService.getEstado(true);
-		    model.addAttribute("listaDietas", listaDietas);
-	    	return "dietas/menu_dietas";
-	    }
-		return "index";
-	}
 	
 	// ---- EDITAR DIETA -------------------------------------------------------------------
 	@PostMapping("/editar_dieta/{codigo}")

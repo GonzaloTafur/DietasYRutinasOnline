@@ -7,7 +7,7 @@ body {
 }
 /* == ESTRUCTURA == */
 header {
-	width: 80%;
+	/*width: 80%;*/
 	height: auto;
 	margin: 0 auto;
 	padding: 1% 0;
@@ -26,9 +26,12 @@ header img {
 	margin: 0 30px;
 	width: 90px;
 }
+
+header ul {
+    margin: 0 auto;
+}
 main {
-	width: 80%;
-	padding: 6%;
+	/*width: 80%;*/
 	height: auto;
 	overflow: hidden;
 	margin: 0 auto;
@@ -45,10 +48,9 @@ footer {
 }
 section {
 	width: 96%;
-	min-height: 770px;
+	height: auto;
 	overflow: hidden;
-	margin: 0 auto;
-	/*padding: 4% 2%;*/
+	padding: 4% 2%;
 }
 section h2 {
 	margin-bottom: 20px;
@@ -130,7 +132,8 @@ ul {
 	flex-wrap: wrap;
 	justify-content: center;
 	align-items: flex-start;
-	background: url("../images/intro.jpeg") no-repeat;
+	background: url("../images/banner.jpg") no-repeat center;
+    background-size: cover;
 	padding: 4% 8%;
 	min-height: 300px;
 	width: 84%;
@@ -160,18 +163,7 @@ ul {
 	width: 50%;
 	color: #2b5231;
 }
-#cabecera-01 {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center; 
-    background: url(images/Banner\ Directo\ Interior\ 1189x322px.png) no-repeat center center; /* Alinea el fondo al centro */
-    background-size: cover;
-    padding: 4% 8%;
-    height: auto;
-    width: 90%;
-}
+
 /* == BOTONES == */
 a.boton {
 	color: rgb(255, 255, 255);
@@ -450,6 +442,11 @@ input[type=submit]{
     font-style: italic;
     color: red;
 	font-weight:bolder;
+}
+
+.btn-rojo{
+	background-color: red;
+	color: white;
 }
 
 .exito{

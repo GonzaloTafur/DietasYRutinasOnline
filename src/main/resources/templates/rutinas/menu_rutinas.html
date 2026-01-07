@@ -47,19 +47,17 @@
                     <th>Parte del cuerpo</th>
                     <th>Nivel</th>
                     <th>Descripción</th>
-                    <th>Acciones</th>
                 </tr>
             </thead>
         
             <tbody>
                 <tr th:each="ru: ${listaRutinas}">
-                	<td><span th:text="${ru.nombre}"></span></td>
+                	<td><a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${ru.codigo})}" method="GET">
+                        <span th:text="${ru.nombre}"></span></a></td>
                 	<td><span th:text="${ru.objetivo.nombre}"></span></td>
                 	<td><span th:text="${ru.parteCuerpo}"></span></td>
                 	<td><span th:text="${ru.nivel}"></span></td>
                 	<td><span class="descripcion" th:text="${ru.descripcion}"></span></td>
-                <td><a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${ru.codigo})}" method="GET">Ver detalles</a><br>
-                </td>
                 </tr> 
             </tbody>
         </table>

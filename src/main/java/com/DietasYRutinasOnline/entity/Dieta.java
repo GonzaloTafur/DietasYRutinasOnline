@@ -72,4 +72,23 @@ public class Dieta implements Serializable{
 	//@ManyToMany(mappedBy = "dieta")
     //private List<HistorialMed> historialMedico;
 
+    @ToString.Exclude
+    @ManyToMany(mappedBy = "dieta")
+    private List<Paciente> paciente;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Dieta)) return false;
+        // Luego de comprobar que el objeto equivale a Dieta, ahora lo convertimos
+        Dieta dieta = (Dieta) o;
+
+        return codigo != null && codigo.equals(dieta.codigo);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
+
 }

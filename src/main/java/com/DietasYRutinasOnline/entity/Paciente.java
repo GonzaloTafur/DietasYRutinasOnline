@@ -1,26 +1,22 @@
 package com.DietasYRutinasOnline.entity;
 
-import java.io.File;
-import java.sql.Date;
-
-import org.attoparser.dom.Text;
+import java.util.List;
 
 import com.DietasYRutinasOnline.entity.ENUM.FrecEjercicios;
-import com.DietasYRutinasOnline.entity.ENUM.ObjetivoEnum;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 @Entity
 @NoArgsConstructor
@@ -89,5 +85,13 @@ public class Paciente extends Usuario{
     @ManyToOne(cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_historial", referencedColumnName = "id_historial")
     private HistorialMed historial;
+
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+      name = "DietaPaciente", 
+      joinColumns = @JoinColumn(name = "id_usuario", referencedColumnName ="id_usuario"), 
+      inverseJoinColumns = @JoinColumn(name = "id_dieta", referencedColumnName ="id_dieta"))
+    private List<Dieta> dieta;
 
 }
