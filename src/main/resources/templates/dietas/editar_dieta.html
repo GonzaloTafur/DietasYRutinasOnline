@@ -26,8 +26,8 @@
 		<section>
 			<h2>Editar mi dieta</h2>
 			<form class="pure-form pure-form-stacked" 
-            	th:action="@{/dieta/actualizarDieta}" 
-            	th:object="${objDieta}"
+            	th:action="@{/dieta/actualizar_dieta}" 
+            	th:object="${d}"
             	method="POST" >
 
 				<input type="hidden" th:field="*{codigo}">
@@ -40,16 +40,17 @@
                             	required=""
                             	/>
     	
-    			<label for="percentage">Objetivo</label>        
-    				<select id="percentage" name="objetivo">
-        				<option th:value="'Deficit'" selected="selected">Deficit</option>
-        				<option th:value="'Volumen'">Volumen</option>
-    				</select>
+    			<label>Objetivo</label>
+				<ul class="lst-radiobtn">
+					<li th:each="o : ${rbtObjetivo}">
+						<input type="radio" th:field="*{objetivo}" th:value="${o}" th:text="${o.nombre}"/>
+					</li>
+				</ul>
     				
 				<label for="mensaje">Descripción</label>
-                    <textarea id="mensaje" th:field="*{descripcion}"></textarea>
+                    <textarea id="mensaje" th:field="*{descripcion}" cols="70" rows="5"></textarea>
 				
-				<label>Alimentos</label>
+				<label>¿Que alimentos incluye?</label>
 				<div class="deslisable">
 				<table class="pure-table tabla-check">
            		 	<thead>
@@ -68,28 +69,34 @@
                             <td><span th:text="${alimento.nutrientes}"></span></td>
                             <td><span th:text="${alimento.tipo}"></span></td>
                             <td><span th:text="${alimento.descripcion}"></span></td>
-                            <td><input
-                            	type="checkbox" 
-    							th:field="*{alimento}" 
-    							th:value="${alimento.idalimento}"></td>
+                            <td><label class="checkbuton">
+									<input
+										type="checkbox" 
+										th:field="*{alimento}" 
+										th:value="${alimento.codigo}">
+									<span class="checkmark"></span>
+								</label>
+							</td>
                         </tr> 
                     </tbody>
                  </table>
             </div>
 				
-				<label>Condición alimenticia</label>
-					<div th:each="condicion : ${listaCondiciones}">
-					<label th:text="${condicion.nombre}"></label>
-    				<input 
-    					type="checkbox" 
-    					th:field="*{condicion}" 
-    					th:value="${condicion.idcondicion}"
-    					
-    				/>
-				</div>
+				<label>No recomendado para los que padecen de:
+						<div th:each="c : ${listaCondiciones}">
+							<label class="checkbuton">
+								<input 
+									type="checkbox" 
+									th:field="*{condicion}" 
+									th:text="${c.nombre}"
+									th:value="${c.codigo}"/>
+								<span class="checkmark"></span>
+							</label>
+						</div>
+				    </label>   
 				       	
                 <span class="span" th:if="${error}" th:text="${error}"></span>
-
+				<br>
 				<input type="submit" class="pure-button pure-button-primary" value="Actualizar Dieta">
 
 			</form>

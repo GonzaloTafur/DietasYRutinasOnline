@@ -1,5 +1,9 @@
 package com.DietasYRutinasOnline.controller;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -7,7 +11,10 @@ import java.time.temporal.ChronoUnit;
 import java.util.Collections;
 import java.util.List;
 
+import javax.annotation.processing.Generated;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,6 +23,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.DietasYRutinasOnline.entity.Dieta;
 import com.DietasYRutinasOnline.entity.Nutriologo;
@@ -25,6 +34,7 @@ import com.DietasYRutinasOnline.entity.Reunion;
 import com.DietasYRutinasOnline.entity.Rutina;
 import com.DietasYRutinasOnline.entity.Transaccion;
 import com.DietasYRutinasOnline.entity.Usuario;
+import com.DietasYRutinasOnline.entity.DTO.UsuarioDTO;
 import com.DietasYRutinasOnline.repository.AsistenciaRepository;
 import com.DietasYRutinasOnline.repository.DietaRepository;
 import com.DietasYRutinasOnline.repository.HorarioRepository;
@@ -78,6 +88,8 @@ public class PerfilController {
 	@Autowired
 	private ReunionService reunionService;
 
+	public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/uploads";
+
 
 	@GetMapping("/")
 	public String verPerfil(HttpSession sesion, Long codigo, Model model) {
@@ -88,17 +100,6 @@ public class PerfilController {
 			if (paciente!=null) {
 
 				model.addAttribute("ppaciente", paciente);
-				/*HistorialMed miInfo = historialMedService.getPaciente(paciente, true);
-				//HistorialMed hm = historialMedService.getCodigo(codigo);
-				//Paciente miInfo = pacienteService.getHistorial(hm);
-				
-				if(miInfo==null){
-					HistorialMed cuestionario = new HistorialMed();
-					model.addAttribute("cuestionario", cuestionario);
-					return "cuestionario";
-				}
-				
-				model.addAttribute("miInfo", miInfo);*/
 				List<HistorialMed> listaSeguimiento = historialMedService.getSegumiento(paciente);
 				model.addAttribute("listaSeguimiento", listaSeguimiento);
 				Collections.reverse(listaSeguimiento);
@@ -130,16 +131,104 @@ public class PerfilController {
 
 	}
 	
-	@PostMapping("/editarPerfil")
+	/*@GetMapping("/editarPerfil")
 	public String editarPerfil(HttpSession sesion, Model model) {
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-		if (objUsuario!=null) {
-			model.addAttribute("objUsuario", objUsuario);
+		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+		if (paciente!=null) {
+			model.addAttribute("u", paciente);
+			return "perfil/editar_perfil";
+		}
+		else if(nutriologo!=null){
+			model.addAttribute("u", nutriologo);
 			return "perfil/editar_perfil";
 		}
 		else {
-			return "index";
+			return "iniciar_sesion";
 		}  
+	}*/
+
+	/*@PostMapping("actualizarPerfil")
+	public String actualizarPerfil(
+			HttpSession sesion, 
+			@ModelAttribute("u") UsuarioDTO usuarioDTO,
+			MultipartFile multipartFile,
+			Model model) throws IOException {
+		
+	    UsuarioDTO usuario = (UsuarioDTO) sesion.getAttribute("usuarioDTO");
+		if (usuario!=null) {
+			usuario.setUsuario(usuarioDTO.getUsuario());
+			usuario.setBiografia(usuarioDTO.getBiografia());
+			String nombreArchivo = multipartFile.getOriginalFilename();
+			Path fileNameAndPath = Paths.get(UPLOAD_DIRECTORY, nombreArchivo);
+			Files.write(fileNameAndPath, multipartFile.getBytes());
+			usuario.setFoto(nombreArchivo);
+				
+			usuarioService.guardarUsuario(usuarioService.getCodigo(usuario.getCodigo()));
+
+			return "redirect:/perfil/";
+		}
+		else{
+			return "iniciar_sesion";
+		}
+	}*/
+
+	@GetMapping("/editarPerfil")
+	public String editarPerfil(HttpSession sesion, Model model) {
+
+		Usuario usuario = null;
+
+		if (sesion.getAttribute("paciente") != null) {
+			usuario = (Paciente) sesion.getAttribute("paciente");
+		} else if (sesion.getAttribute("nutriologo") != null) {
+			usuario = (Nutriologo) sesion.getAttribute("nutriologo");
+		}
+
+		if (usuario == null) {
+			return "iniciar_sesion";
+		}
+
+		UsuarioDTO dto = new UsuarioDTO();
+		dto.setUsuario(usuario.getUsuario());
+		dto.setBiografia(usuario.getBiografia());
+
+		model.addAttribute("u", dto);
+		return "perfil/editar_perfil";
+	}
+
+
+	@PostMapping("/actualizarPerfil")
+	public String actualizarPerfil(
+			HttpSession sesion,
+			@ModelAttribute("u") UsuarioDTO dto,
+			@RequestParam("foto") MultipartFile multipartFile
+	) throws IOException {
+
+		Usuario usuario = null;
+
+		if (sesion.getAttribute("paciente") != null) {
+			usuario = (Paciente) sesion.getAttribute("paciente");
+		} 
+		else if (sesion.getAttribute("nutriologo") != null) {
+			usuario = (Nutriologo) sesion.getAttribute("nutriologo");
+		}
+
+		if (usuario==null) {
+			return "iniciar_sesion";
+		}
+
+		usuario.setUsuario(dto.getUsuario());
+		usuario.setBiografia(dto.getBiografia());
+
+		if (!multipartFile.isEmpty()) {
+			String nombreArchivo = multipartFile.getOriginalFilename();
+			Path ruta = Paths.get(UPLOAD_DIRECTORY, nombreArchivo);
+			Files.write(ruta, multipartFile.getBytes());
+			usuario.setFoto(nombreArchivo);
+		}
+
+		usuarioService.guardarUsuario(usuario);
+		return "redirect:/perfil/";
 	}
 
 
@@ -226,5 +315,5 @@ public class PerfilController {
 			return "iniciar_sesion";
 		}
 	}
-	
+
 }

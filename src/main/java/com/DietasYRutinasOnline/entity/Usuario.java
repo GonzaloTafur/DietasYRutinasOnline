@@ -11,6 +11,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.Data;
@@ -50,6 +51,10 @@ public abstract class Usuario implements Serializable{
 
     @Column(name = "biografia", columnDefinition = "TEXT")
     private String biografia;
+
+    @Lob
+    @Column(name = "foto", length =  255)
+    private String foto;
     
     @Column(name = "usuario", length = 80)
     private String usuario;

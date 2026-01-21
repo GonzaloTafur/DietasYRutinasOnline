@@ -353,38 +353,5 @@ public class UsuarioController {
 		sesion.invalidate();
 		return "index";
 	}
-	
-	@PostMapping("actualizarPerfil")
-	public String actualizarPerfil(
-			HttpSession sesion, 
-			@ModelAttribute("objUsuario") Usuario objUsuario,
-			Model model) {
-		
-		Usuario perfilActual = (Usuario) sesion.getAttribute("usuario");
-	    if (objUsuario!=null) {
-	    	perfilActual.setNombres(objUsuario.getNombres());
-	    	//perfilActual.setApellidos(objUsuario.getApellidos());
-	    	//perfilActual.setFechanacimiento(objUsuario.getFechanacimiento());
-	    	perfilActual.setNacionalidad(objUsuario.getNacionalidad());
-	    	//perfilActual.setBiografia(objUsuario.getBiografia());
-	    	usuarioRepository.save(perfilActual);
-	    	
-	        /*Rol vistaUsuario = perfilActual.getRol();
-	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
-	        model.addAttribute("esPaciente", esPaciente);*/
-	    }
-	    model.addAttribute("actualizado", "Su perfil se actualizó con exito");
-	    model.addAttribute("objUsuario", perfilActual);
-	    
-	    //HistorialMed miInfo = historialMedRepository.findByPacienteAndEstado(perfilActual, true);
-	    //model.addAttribute("miInfo", miInfo);
-	    
-	    /*List<Rutina> misRutinas = rutinaRepository.findByNutriologo(perfilActual);
-	    model.addAttribute("misRutinas", misRutinas);
-	    
-	    List<Dieta> misDietas = dietaRepository.findByNutriologo(perfilActual);
-	    model.addAttribute("misDietas", misDietas);*/
-	    
-	    return "menu";
-	}
+
 }

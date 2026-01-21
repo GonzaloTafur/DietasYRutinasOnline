@@ -6,6 +6,9 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" 
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+
+    <link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
     <link rel="stylesheet" th:href="@{/css/perfil.css}">
     <title>Perfil</title>
 </head>
@@ -17,7 +20,7 @@
         <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}"><</a>
         <div class="pure-g" th:value="pnutriologo">
             <div class="pure-u-2-2" style="margin: 20px;">
-                <img th:src="@{/images/user.jpg}" class="fdp">
+                <img th:src="@{/uploads/{img}(img=${pnutriologo.foto})}" class="fdp">
                 <p><strong>Nombre: </strong><span th:text="${pnutriologo.nombres}"></span></p>
                 <p><strong>Fecha de nacimiento: </strong><span th:text="${pnutriologo.fechanacimiento}"></span></p>
                 <p><strong>Nacionalidad: </strong><span th:text="${pnutriologo.nacionalidad}"></span></p>
@@ -27,7 +30,7 @@
             <div class="pure-u-2-3">
                 <h1 th:text="${pnutriologo.usuario}"></h1>
                 <p><span th:text="${pnutriologo.biografia}"></span></p>
-                <a th:if="${paciente==null}" type="button" class="pure-button pure-button-primary" href="@{/perfil/editarPerfil}">Editar</a>
+                <a th:if="${paciente==null}" type="button" class="pure-button pure-button-primary" th:href="@{/perfil/editarPerfil}">Editar</a>
             </div>
             </div>
         </div>
@@ -79,15 +82,17 @@
                         
                         <tbody class="pure-table-border">
                                 <tr th:each="rutina: ${misRutinas}">
-                                <td><span th:text="${rutina.nombre}"></span></td>
+                                <td><a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${rutina.codigo})}">
+                                    <span th:text="${rutina.nombre}"></span></a></td>
                                 <td><span th:text="${rutina.objetivo.nombre}"></span></td>
                                 <td><span th:text="${rutina.parteCuerpo}"></span></td>
                                 <td><span th:text="${rutina.nivel}"></span></td>
                                 <td><span class="descripcion" th:text="${rutina.descripcion}"></span></td>
                                 <td>
-                                    <div class="dropdown">
+                                    <!--<div>
                                         <a th:href="@{/rutina/verDetalleRutina(codigo=${rutina.codigo})}">Ver detalles</a>
-                                    </div>
+                                    </div>-->
+                                    <a th:href="@{/rutina/editar_rutina/{codigo}(codigo=${rutina.codigo})}">Editar</a>
                                 </td>
                                 </tr> 
                         </tbody>
@@ -114,12 +119,13 @@
                     
                         <tbody>
                             <tr th:each="dieta: ${misDietas}">
-                            <td><span th:text="${dieta.nombre}"></span></td>
+                            <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}">Ver detalles
+                                <span th:text="${dieta.nombre}"></span></a></td>
                             <td><span th:text="${dieta.objetivo.nombre}"></span></td>
                             <td><span class="descripcion" th:text="${dieta.descripcion}"></span></td>
                             <td>
                                 <div>
-                                    <a th:href="@{/dieta/verDetalleDieta(codigo=${dieta.codigo})}">Ver detalles</a>
+                                    <a th:href="@{/dieta/editar_dieta/{codigo}(codigo=${dieta.codigo})}">Editar</a>
                                 </div>
                             </td>
                             

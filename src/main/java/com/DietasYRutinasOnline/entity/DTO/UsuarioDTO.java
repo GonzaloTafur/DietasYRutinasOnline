@@ -11,4 +11,8 @@ public class UsuarioDTO {
     
     private String password;
 
+    private String usuario;
+
+    private String biografia;
+
 }

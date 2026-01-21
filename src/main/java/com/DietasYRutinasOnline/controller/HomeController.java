@@ -211,27 +211,34 @@ public class HomeController {
 	public String verHorario(HttpSession sesion, Model model) {
 		Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 
-		if(paciente!=null){
-			//model.addAttribute("paciente", paciente);
+		try{
+			if(paciente!=null){
+				//model.addAttribute("paciente", paciente);
 
-			List<Horario> miHorario = horarioRepository.findByPacienteAndEstado(paciente, true);
-			model.addAttribute("miHorario", miHorario);
+				List<Horario> miHorario = horarioRepository.findByPacienteAndEstado(paciente, true);
+				model.addAttribute("miHorario", miHorario);
 
-			Horario objHorario = new Horario();
-			model.addAttribute("objHorario", objHorario);
-			
-			List<Rutina> cbxRutinas = rutinaService.getEstado(true);
-			model.addAttribute("listaRutinas", cbxRutinas);
+				Horario objHorario = new Horario();
+				model.addAttribute("objHorario", objHorario);
+				
+				List<Rutina> listaRutinas = rutinaService.getEstado(true);
+				model.addAttribute("cbxRutinas", listaRutinas);
 
-			model.addAttribute("cbxDias", Dia.values());
-			
-			List<Rutina> listaRutinas = rutinaService.filtroRutina(paciente);	
-			model.addAttribute("listaRutinas", listaRutinas);
+				model.addAttribute("cbxDias", Dia.values());
+				
+				//List<Rutina> listaRutinas = rutinaService.filtroRutina(paciente);	
+				//List<Rutina> listaRutinas = rutinaService.getEstado(true);
+				model.addAttribute("listaRutinas", listaRutinas);
 
-			return "usuario/horario";
+				return "usuario/horario";
+			}
+			else{
+				return "iniciar_sesion";
+			}
 		}
-		else{
-			return "iniciar_sesion";
+		catch (Exception e){
+			System.out.println("Error en verHorario: " + e.getMessage());
+			return "redirect:/home/";
 		}
 	}
 

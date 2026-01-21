@@ -57,6 +57,8 @@ public class RutinaService {
 		ru.setNivel(ru.getNivel());
 		ru.setDescripcion(ru.getDescripcion());
 		ru.setEjercicio(ru.getEjercicio());
+        //ru.setEstado(true);
+        //ru.setNutriologo(null);
         return rutinaRepository.save(ru);
     }
 

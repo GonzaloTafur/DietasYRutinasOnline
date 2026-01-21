@@ -22,4 +22,8 @@ public class NutriologoService {
     public Nutriologo getSuperUsuario(RolEnum rol){
         return nutriologoRepository.findByRol(rol.SU);
     }
+
+    public Nutriologo guardarNutriologo(Nutriologo nutriologo){
+        return nutriologoRepository.save(nutriologo);
+    }
 }

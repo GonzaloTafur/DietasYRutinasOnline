@@ -5,7 +5,7 @@
 	<meta charset="utf-8">
 	<title>Registrar usuario</title>
 	<!--<link rel="stylesheet" type="text/css" href="/static/css/style2.css">-->
-	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/perfil.css}">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
@@ -14,33 +14,49 @@
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Eczar:wght@400;500;600;700;800&display=swap}" rel="stylesheet">
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Kumbh+Sans:wght@100;200;300;400;500;600;700;800;900&display=swap}" rel="stylesheet">
 	<link rel="stylesheet" th:href="@{https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css}">
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css" 
+    integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css" />
+    
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 </head>
 <body>
-	<main>
-		<section>
-			<h2>Editar Perfil</h2>
-			<form class="pure-form pure-form-stacked" 
-            	th:action="@{/usuario/actualizarPerfil}" 
-            	th:object="${objUsuario}"
-            	method="POST" >
+	<main class="main-content">
 
-				<label for="nombres_apellidos">Nombres</label>
-				<input 
-                            	type="text" 
-                            	id="multi-first-name" 
-                            	th:field="*{nombres}" 
-                            	required=""
-                            	/>
-                            	
-                  <label for="mensaje">Biografía</label>
-                    <textarea id="mensaje" th:field="*{biografia}"></textarea>         
+        <header>
+            <!--<button class="pure-button pure-button-secondary"><</button>-->
+            <br>
+                <form class="pure-form" enctype="multipart/form-data" 
+					th:action="@{/perfil/actualizarPerfil}" 
+					th:object="${u}" 
+					method="POST">
 
-				<input type="submit" value="Guardar">
-
-			</form>
-		</section>
-	</main>
+                    <div class="pure-g">
+                        <div class="pure-u-2-2" style="margin: 20px;">
+                            <!--<img src="/user.jpg" class="fdp">-->
+                            <input name="foto" accept="image/*" type="file">
+                            <p><strong>Nombre: </strong></p>
+                            <p><strong>Fecha de nacimiento: </strong></p>
+                            <p><strong>Nacionalidad: </strong></p>
+                            <p><strong>Sexo: </strong></p>
+                        </div>
+                        <br>
+                        <div class="pure-u-2-3">
+                            <input type="text" th:field="*{usuario}" placeholder="Nombre de Usuario"/>
+                            <br><br>
+                            <textarea th:field="*{biografia}" cols="70" rows="5"></textarea>
+                            <br><br>
+                            <button class="pure-button pure-button-primary">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </header>
+        
+        <br>
+    
+   </main> 
 
 	<footer>
 		<p class="p-footer">2024. Todos los derechos reservados.</p>

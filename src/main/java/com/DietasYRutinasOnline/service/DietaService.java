@@ -55,6 +55,7 @@ public class DietaService {
         d.setDescripcion(d.getDescripcion());
         d.setAlimento(d.getAlimento());
         d.setCondicion(d.getCondicion());
+        d.setEstado(true);
         return dietaRepository.save(d);
     }
 

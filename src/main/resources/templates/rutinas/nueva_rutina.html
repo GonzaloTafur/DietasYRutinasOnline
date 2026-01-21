@@ -166,7 +166,7 @@
 								</tr>
 							</thead>
 
-							<tbody class="pure-table-border">
+							<tbody>
 								<tr th:each="e: ${listaEjercicios}">
 									<td><span th:text="${e.nombre}"></span></td>
 									<td><span th:text="${e.grupomuscular}"></span></td>
@@ -174,11 +174,6 @@
 									<td><span th:text="${e.series}"></span></td>
 									<td><span th:text="${e.repeticiones}"></span></td>
 									<td><span th:text="${e.descripcion}"></span></td>
-									<!--<td><input
-										type="checkbox" 
-										th:field="*{ejercicio}" 
-										th:value="${e.codigo}">
-									</td>-->
 									<td>
 										<label class="checkbuton">
 											<input type="checkbox" 

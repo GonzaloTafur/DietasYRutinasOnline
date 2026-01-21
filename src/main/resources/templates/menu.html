@@ -21,18 +21,17 @@
 	
 	<script th:src="@{https://kit.fontawesome.com/dcce108ca1.js}" crossorigin="anonymous"></script>
 
-	<!--Link de los estilos-->
 	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
 </head>
 <body>
 	<header>
 		
 		<ul>
-            <li><a th:href="@{/perfil/}">Perfil <i class="fa-solid fa-user"></i></a></li>
-            <li><a th:href="@{/home/ajustes_cuenta/{codigo}}">Ajustes <i class="fa-solid fa-cog"></i></a></li>
-            <li><a th:href="@{/home/verNotis}">Notificaciones <i class="fa-solid fa-bell"></i></a></li>
-            <li><a th:if="${paciente}" th:href="@{/home/ver_horario}">Mi horario <i class="fa-regular fa-calendar-days"></i></a></li>
-          </ul>
+            <li><a th:href="@{/perfil/}"><span>Perfil <i class="fa-solid fa-user"></i></span></a></li>
+            <li><a th:href="@{/home/ajustes_cuenta/{codigo}}"><span>Ajustes <i class="fa-solid fa-cog"></i></span></a></li>
+            <li><a th:href="@{/home/verNotis}"><span>Notificaciones <i class="fa-solid fa-bell"></i></span></a></li>
+            <li><a th:if="${paciente}" th:href="@{/home/ver_horario}"><span>Mi horario <i class="fa-regular fa-calendar-days"></i></span></a></li>
+        </ul>
 		
 	</header>
 	<main>
@@ -47,10 +46,10 @@
             
             
             <div>
-            <br><br>
-            <p>Visita a nuestros nutriologos registrados y conocelos en medio de reuniones o citas según tus necesidades: 
-            <span><a type="button" th:href="@{/home/ver_nutriologos}" >Entrar</a></span>
-            </p>
+				<br><br>
+				<p>Visita a nuestros nutriologos registrados y conocelos en medio de reuniones o citas según tus necesidades: 
+				<span><a type="button" th:href="@{/home/ver_nutriologos}" >Entrar</a></span>
+				</p>
 			</div>
         </section>
 		

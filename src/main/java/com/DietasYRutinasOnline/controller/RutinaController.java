@@ -226,26 +226,30 @@ public class RutinaController {
 	}
 	
 	// ---- EDITAR RUTINA -------------------------------------------------------------------
-	@PostMapping("editar_rutina")
+	@GetMapping("editar_rutina/{codigo}")
 	public String editarRutina(
-			@RequestParam("id_rut")Long codigo, 
+			//@RequestParam("codigo")Long codigo,
+			@PathVariable Long codigo,
 			Model model){
-		//Rutina objRutina = rutinaRepository.findByCodigo(codigo);
-		//model.addAttribute("objRutina", objRutina);
+		Rutina objRutina = rutinaService.getCodigo(codigo);
+		model.addAttribute("ru", objRutina);
 		
 		List<Ejercicio> listaEjercicios = ejercicioService.getEstado(true);
 		model.addAttribute("listaEjercicios", listaEjercicios);
+
+		model.addAttribute("cbxNiveles", Nivel.values());
+		model.addAttribute("rbtObjetivo", ObjetivoEnum.values());
 		return "rutinas/editar_rutina";			
 	}
 	
 	@PostMapping("actualizar_rutina")
 	public String actualizarRutina(
 			HttpSession sesion,
-			@ModelAttribute("objRutina") Rutina ru, 
+			@ModelAttribute("ru") Rutina ru, 
 			Model model) {
 		
-		Usuario objUsuario = (Usuario) sesion.getAttribute("usuario");
-        if (objUsuario!=null) {
+		Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
+        if (nutriologo!=null) {
         	/*Rutina rutinaActual = rutinaRepository.findByCodigo(objRutina.getCodigo());
         	rutinaActual.setNombre(objRutina.getNombre());
 			rutinaActual.setTipo(objRutina.getTipo());
@@ -258,8 +262,11 @@ public class RutinaController {
 	        boolean esPaciente = vistaUsuario.getNombre().equals("Paciente");
 	        model.addAttribute("esPaciente", esPaciente);*/
 			rutinaService.actualizarRutina(ru);
+			return "redirect:/perfil/";
 	    }        
-        return "redirect:/rutina/";
+        else{
+			return "iniciar_sesion";
+		}
 	}
 
 }

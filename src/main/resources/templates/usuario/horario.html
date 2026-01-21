@@ -29,7 +29,7 @@ xmlns:th="http://www.thymeleaf.org">
             <div th:each="horario: ${miHorario}" class="calendario">
                 <div>
                     <h2 th:text="${horario.rutina.nombre}"></h2>
-                    <a th:href="@{/rutina/verDetalleRutina(codigo=${horario.rutina.codigo})}">Ver detalles</a>
+                    <a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${horario.rutina.codigo})}">Ver detalles</a>
                     <br>
                     <br>
 
@@ -42,7 +42,9 @@ xmlns:th="http://www.thymeleaf.org">
                         
                         <h3>Parte: <span th:text="${horario.parte}"></span></h3>
                         <hr>
-                        <a th:href="@{/horario/eliminarHora/{codigo} (codigo=${horario.codigo})}" class="alert">Eliminar de tu horario</a>
+                        <a th:href="@{/horario/eliminarHora/{codigo} (codigo=${horario.codigo})}" class="alert" style="text-decoration: none;">
+                            <strong>Eliminar de tu horario</strong>
+                        </a>
 
                     </div>
                 </div>  
@@ -66,7 +68,7 @@ xmlns:th="http://www.thymeleaf.org">
             
                 <label>Rutina:</label>
                 <select th:field="*{rutina.codigo}">
-                    <option th:each="rutinas: ${listaRutinas}"
+                    <option th:each="rutinas: ${cbxRutinas}"
                             th:value="${rutinas.codigo}"
                             th:text="${rutinas.nombre}">
                     </option>

@@ -93,4 +93,8 @@ public class UsuarioService {
         return usuarioRepository.findByCodigo(codigo);
     }
 
+    public Usuario guardarUsuario(Usuario u) {
+        return usuarioRepository.save(u);
+    }
+
 }

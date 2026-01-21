@@ -17,7 +17,8 @@
         <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}"><</a>
         <div class="pure-g" th:value="ppaciente">
             <div class="pure-u-2-2" style="margin: 20px;">
-                <img th:src="@{/images/user.jpg}" class="fdp">
+                <!--<img th:src="@{/images/user.jpg}" class="fdp">-->
+                <img th:src="@{/uploads/{img}(img=${ppaciente.foto})}" class="fdp">
                 <p><strong>Nombre: </strong><span th:text="${ppaciente.nombres}"></span></p>
                 <p><strong>Fecha de nacimiento: </strong><span th:text="${ppaciente.fechanacimiento}"></span></p>
                 <p><strong>Nacionalidad: </strong><span th:text="${ppaciente.nacionalidad}"></span></p>
@@ -27,7 +28,7 @@
             <div class="pure-u-2-3">
                 <h1 th:text="${ppaciente.usuario}"></h1>
                 <p><span th:text="${ppaciente.biografia}"></span></p>
-                <a th:if="${nutriologo==null}" type="button" class="pure-button pure-button-primary" href="@{/perfil/editarPerfil}">Editar</a>
+                <a th:if="${nutriologo==null}" type="button" class="pure-button pure-button-primary" th:href="@{/perfil/editarPerfil}">Editar</a>
             </div>
             </div>
         </div>
@@ -89,6 +90,11 @@
             </div>
 
             <div id="seguimiento" style="display: none;">
+                <div>
+                    <h2>Total de reuniones asistidas</h2>
+                    <h1 th:text="${totalReuniones}"></h1>
+                </div>
+
                 <h2 style="text-align: center;">Historial de Medidas</h2><hr>
                 <div class="deslisable">
                     <table class="pure-table pure-table-bordered" style="margin: 0 auto;">
