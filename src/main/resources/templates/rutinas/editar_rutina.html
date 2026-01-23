@@ -99,106 +99,117 @@
 
 <body>
 	<main>
-		<section>
-			<h2>Editar mi rutina</h2>
+		<section class="form2">
+			<h1>Editar mi rutina</h1>
+            <hr><br>
 			<form class="pure-form pure-form-stacked" 
             	th:action="@{/rutina/actualizar_rutina}" 
             	th:object="${ru}"
             	method="POST" >
 
 				<input type="hidden" th:field="*{codigo}">
-				
-				<label for="nombres_apellidos">Nombre de rutina</label>
-				<input 
-                            	type="text" 
-                            	id="multi-first-name" 
-                            	th:field="*{nombre}"
-                            	required=""
-                            	/>
-				
-				<label>Objetivo</label>
-				<ul class="lst-radiobtn">
-					<li th:each="o : ${rbtObjetivo}">
-						<input type="radio" th:field="*{objetivo}" th:value="${o}" th:text="${o.nombre}"/>
-					</li>
-				</ul>
-    				
-    			<label for="percentage">Parte del cuerpo</label>        
-    				<select id="percentage" name="parteCuerpo">
-        				<option th:value="'Tren Superior'" selected="selected">Tren Superior</option>
-        				<option th:value="'Tren Inferior'">Tren Inferior</option>
-    				</select>
-                            	
-				<label for="nivel">Nivel</label>
-					<select name="nivel" th:field="*{nivel}">
-						<option th:each="n : ${cbxNiveles}"
-								th:value="${n}"
-								th:text="${n.nombre}">
-						</option>
-					</select>
-    	
-				<label for="mensaje">Descripción</label>
-                    <textarea id="mensaje" th:field="*{descripcion}" cols="70" rows="5"></textarea>
-				
-				<label>Ejercicios</label>
-				
-				<div class="deslisable">
-					<table class="pure-table">
+
+				<span class="span" th:if="${error}" th:text="${error}"></span>
+
+                <div class="pure-g">
+					<div class="pure-u-1-2">
+						<label for="nombres_apellidos">Nombre de rutina</label>
+						<input 
+										type="text" 
+										id="multi-first-name" 
+										th:field="*{nombre}"
+										required=""
+										/>
 						
-						<!--<div class="pure-menu pure-menu-horizontal">
-							<ul class="pure-menu-list">
-								<form th:action="@{/rutina/buscarEjercicios}" method="GET">
-									<select class="form-select" name="grupomuscular">
-										<option th:each="ejercicio : ${cbxEjercicios}"
-										th:value="${ejercicio}"
-										th:text="${ejercicio}">
-										</option>
-									</select>
-									<button type="submit" class="btn btn-primary">Buscar</button>
-								</form>
+						<label>Objetivo</label>
+						<ul class="lst-radiobtn">
+							<li th:each="o : ${rbtObjetivo}">
+								<input type="radio" th:field="*{objetivo}" th:value="${o}" th:text="${o.nombre}"/>
+							</li>
+						</ul>
+							
+						<label for="percentage">Parte del cuerpo</label>        
+							<select id="percentage" name="parteCuerpo">
+								<option th:value="'Tren Superior'" selected="selected">Tren Superior</option>
+								<option th:value="'Tren Inferior'">Tren Inferior</option>
+							</select>
+										
+						<label for="nivel">Nivel</label>
+							<select name="nivel" th:field="*{nivel}">
+								<option th:each="n : ${cbxNiveles}"
+										th:value="${n}"
+										th:text="${n.nombre}">
+								</option>
+							</select>
+				
+						<label for="mensaje">Descripción</label>
+							<textarea id="mensaje" th:field="*{descripcion}" cols="70" rows="5"></textarea>
+					</div>
+					
+					<div class="pure-u-1-2">
+						<label>Ejercicios</label>
+						
+						<div class="deslisable">
+							<table class="pure-table">
+								
+								<!--<div class="pure-menu pure-menu-horizontal">
+									<ul class="pure-menu-list">
+										<form th:action="@{/rutina/buscarEjercicios}" method="GET">
+											<select class="form-select" name="grupomuscular">
+												<option th:each="ejercicio : ${cbxEjercicios}"
+												th:value="${ejercicio}"
+												th:text="${ejercicio}">
+												</option>
+											</select>
+											<button type="submit" class="btn btn-primary">Buscar</button>
+										</form>
 
-							</ul>
-						</div>-->
+									</ul>
+								</div>-->
 
-							<thead>
-								<tr>
-									<th>Nombre del Ejercicio</th>
-									<th>Grupo Muscular</th>
-									<th>Tipo</th>
-									<th>Número de Series</th>
-									<th>Número de Repeticiones</th>
-									<th>Descripción</th>
-									<th>Seleccionar</th>
-								</tr>
-							</thead>
+									<thead>
+										<tr>
+											<th>Nombre del Ejercicio</th>
+											<th>Grupo Muscular</th>
+											<th>Tipo</th>
+											<th>Número de Series</th>
+											<th>Número de Repeticiones</th>
+											<th>Descripción</th>
+											<th>Seleccionar</th>
+										</tr>
+									</thead>
 
-							<tbody class="pure-table-border">
-								<tr th:each="e: ${listaEjercicios}">
-									<td><span th:text="${e.nombre}"></span></td>
-									<td><span th:text="${e.grupomuscular}"></span></td>
-									<td><span th:text="${e.tipo}"></span></td>
-									<td><span th:text="${e.series}"></span></td>
-									<td><span th:text="${e.repeticiones}"></span></td>
-									<td><span th:text="${e.descripcion}"></span></td>
-									<td>
-										<label class="checkbuton">
-											<input type="checkbox" 
-														th:field="*{ejercicio}" 
-														th:value="${e.codigo}" 
-													checked="checked">
-											<span class="checkmark"></span>
-										</label>
-									</td>
-								</tr> 
-							</tbody>
-			
-					</table>
-				</div>
-				       	
-                <span class="span" th:if="${error}" th:text="${error}"></span>
+									<tbody class="pure-table-border">
+										<tr th:each="e: ${listaEjercicios}">
+											<td><span th:text="${e.nombre}"></span></td>
+											<td><span th:text="${e.grupomuscular}"></span></td>
+											<td><span th:text="${e.tipo}"></span></td>
+											<td><span th:text="${e.series}"></span></td>
+											<td><span th:text="${e.repeticiones}"></span></td>
+											<td><span th:text="${e.descripcion}"></span></td>
+											<td>
+												<label class="checkbuton">
+													<input type="checkbox" 
+																th:field="*{ejercicio}" 
+																th:value="${e.codigo}" 
+															checked="checked">
+													<span class="checkmark"></span>
+												</label>
+											</td>
+										</tr> 
+									</tbody>
+					
+							</table>
+						</div>
+						
+					</div>
+							
+								
+                </div> 
 
 				<input type="submit" class="pure-button pure-button-primary" value="Actualizar Rutina">
-
+				<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Cancelar</a>
+				
 			</form>
 		</section>
 	</main>

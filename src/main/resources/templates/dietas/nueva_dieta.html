@@ -29,13 +29,17 @@
 
 <body>
 	<main>
-		<section>
+		<section class="form2">
 			<h2>Insertar nueva dieta</h2>
+            <hr>
 			<form class="pure-form pure-form-stacked" 
             	th:action="@{/dieta/grabar_dieta}" 
             	th:object="${d}"
             	method="POST" >
 
+                <div class="pure-g">
+                
+					<div class="pure-u-1-2">
 				<label for="nombres_apellidos">Nombre</label>
 				<input type="text" id="multi-first-name" th:field="*{nombre}" required="" />
                 
@@ -66,42 +70,7 @@
 				<label for="mensaje">Descripción</label>
                     <textarea id="mensaje" th:field="*{descripcion}" cols="70" rows="5"></textarea>
 
-				
-				<label>¿Que alimenos incluye?</label>
-				<div class="deslisable">
-				<table class="pure-table pure-table-bordered">
-
-           		 	<thead>
-                        <tr>
-                            <th>Alimento</th>
-                            <th>Nutrientes</th>
-                            <th>Tipo</th>
-                            <th>Descripción</th>
-                            <th>Seleccionar</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        <tr th:each="alimento: ${listaAlimentos}">
-                            <td><span th:text="${alimento.nombre}"></span></td>
-                            <td><span th:text="${alimento.nutrientes}"></span></td>
-                            <td><span th:text="${alimento.tipo}"></span></td>
-                            <td><span th:text="${alimento.descripcion}"></span></td>
-                            <td>
-								<label class="checkbuton">
-									<input
-										type="checkbox" 
-										th:field="*{alimento}" 
-										th:value="${alimento.codigo}">
-									<span class="checkmark"></span>
-								</label>
-							</td>
-                        </tr> 
-                    </tbody>
-                 </table>
-            	</div>
-				
-					<label>No recomendado para los que padecen de:
+				<label>No recomendado para los que padecen de:
 						<div th:each="c : ${listaCondiciones}">
 							<label class="checkbuton">
 								<input 
@@ -112,14 +81,53 @@
 								<span class="checkmark"></span>
 							</label>
 						</div>
-				    </label>   
+				    </label>
+					</div>
+
+					<div class="pure-u-1-2">    
+					<label>¿Que alimenos incluye?</label>
+						<div class="deslisable">
+						<table class="pure-table pure-table-bordered">
+
+							<thead>
+								<tr>
+									<th>Alimento</th>
+									<th>Nutrientes</th>
+									<th>Tipo</th>
+									<th>Descripción</th>
+									<th>Seleccionar</th>
+								</tr>
+							</thead>
+
+							<tbody>
+								<tr th:each="alimento: ${listaAlimentos}">
+									<td><span th:text="${alimento.nombre}"></span></td>
+									<td><span th:text="${alimento.nutrientes}"></span></td>
+									<td><span th:text="${alimento.tipo}"></span></td>
+									<td><span th:text="${alimento.descripcion}"></span></td>
+									<td>
+										<label class="checkbuton">
+											<input
+												type="checkbox" 
+												th:field="*{alimento}" 
+												th:value="${alimento.codigo}">
+											<span class="checkmark"></span>
+										</label>
+									</td>
+								</tr> 
+							</tbody>
+						</table>
+						</div> 
+					</div>
+
+				</div>
 
                 <span class="span" th:if="${error}" th:text="${error}"></span>
 
 				<input type="submit" class="pure-button pure-button-primary" value="Guardar Dieta">
-				
+				<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Cancelar</a>
 			</form>
-			<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Cancelar</a>
+			
 		</section>
 	</main>
 

@@ -49,17 +49,17 @@
                         <th>Nombre</th>
                         <th>Objetivo</th>
                         <th>Descripción</th>
-                        <th>Acciones</th>
+                        <!--<th>Acciones</th>-->
                     </tr>
                 </thead>
             
                 <tbody>
-                    <tr th:each="dto: ${listaDietas}">
-                        <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dto.dieta.codigo})}">
-                            <span th:text="${dto.dieta.nombre}"></span></a></td>
-                        <td><span th:text="${dto.dieta.objetivo.nombre}"></span></td>
-                        <td><span class="descripcion" th:text="${dto.dieta.descripcion}"></span></td>
-                        <td>
+                    <tr th:each="dieta: ${listaDietas}">
+                        <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}">
+                            <span th:text="${dieta.nombre}"></span></a></td>
+                        <td><span th:text="${dieta.objetivo.nombre}"></span></td>
+                        <td><span class="descripcion" th:text="${dieta.descripcion}"></span></td>
+                        <!--<td th:if="${paciente}">
                             <form th:if="${!dto.seguida}"
                                 th:action="@{/dieta/seguirDieta(codigo=${dto.dieta.codigo})}"
                                 method="POST">
@@ -68,7 +68,6 @@
                                 </button>
                             </form>
 
-                            <!-- Si YA sigue la dieta -->
                             <form th:if="${dto.seguida}"
                                 th:action="@{/dieta/dejarSeguirDieta(codigo=${dto.dieta.codigo})}"
                                 method="POST">
@@ -76,7 +75,7 @@
                                     Dejar de seguir Dieta
                                 </button>
                             </form>
-                        </td>
+                        </td>-->
                     </tr> 
                 </tbody>
             </table>

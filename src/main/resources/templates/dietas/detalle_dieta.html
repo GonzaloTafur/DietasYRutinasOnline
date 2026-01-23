@@ -26,7 +26,7 @@
 		<section>
             <div>
                 <div th:value="${detDieta}">
-                    <!--<div class="mb-3" th:object="${detDieta}">-->
+                    <!--<div th:object="${detDieta}">-->
 
                     
                     <span th:text="${detDieta.codigo}" hidden></span>
@@ -75,6 +75,24 @@
                                     </tr> 
                                 </tbody>
                             </table>
+
+                        <div th:if="${paciente}">
+                            <form th:if="${!seguida}"
+                                th:action="@{/dieta/seguirDieta(codigo=${detDieta.codigo})}"
+                                method="POST">
+                                <button class="pure-button pure-button-primary">
+                                    Seguir Dieta
+                                </button>
+                            </form>
+
+                            <form th:if="${seguida}"
+                                th:action="@{/dieta/dejarSeguirDieta(codigo=${detDieta.codigo})}"
+                                method="POST">
+                                <button class="pure-button pure-button-secondary">
+                                    Dejar de seguir Dieta
+                                </button>
+                            </form>
+                        </div>
                         
                         <!--<form th:if="${esCreador}" th:action="@{/dieta/editarDieta}" th:method="POST">
                             <input type="hidden" name="codigo" th:value="${detalleDieta.codigo}" />

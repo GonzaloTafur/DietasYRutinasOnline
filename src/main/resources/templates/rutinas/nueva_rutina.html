@@ -101,99 +101,104 @@
 
 <body>
 	<main>
-		<section>
+		<section class="form2">
 			<h2>Insertar nueva rutina</h2>
 			<form class="pure-form pure-form-stacked" 
             	th:action="@{/rutina/grabar_rutina}" 
             	th:object="${ru}"
             	method="POST" >
 				
-				<label for="nombre">Nombre de rutina</label>
-				<input type="text" th:field="*{nombre}" required=""/>
-                            	
-                <!--<label for="percentage">Tipo de rutina</label>        
-    				<select id="percentage" name="tipo">
-        				<option th:value="'Deficit'" selected="selected">Rutina de Deficit</option>
-        				<option th:value="'Volumen'">Rutina de Volumen</option>
-    				</select>-->
+				<div class="pure-g">
+					<div class="pure-u-1-2">
+						<label for="nombre">Nombre de rutina</label>
+						<input type="text" th:field="*{nombre}" required=""/>
+										
+						<!--<label for="percentage">Tipo de rutina</label>        
+							<select id="percentage" name="tipo">
+								<option th:value="'Deficit'" selected="selected">Rutina de Deficit</option>
+								<option th:value="'Volumen'">Rutina de Volumen</option>
+							</select>-->
 
-				<label>Objetivo</label>
-				<ul class="lst-radiobtn">
-					<li th:each="o : ${rbtObjetivo}">
-						<input type="radio" th:field="*{objetivo}" th:value="${o}" th:text="${o.nombre}"/>
-					</li>
-				</ul>
-    				
-    			<label>Parte del cuerpo</label>        
-    				<select name="parteCuerpo">
-        				<option th:value="'Tren Superior'" selected="selected">Tren Superior</option>
-        				<option th:value="'Tren Inferior'">Tren Inferior</option>
-    				</select>
-                            	
-				<label for="nivel">Nivel</label>
-					<select name="nivel" th:field="*{nivel}">
-						<option th:each="n : ${cbxNiveles}"
-								th:value="${n}"
-								th:text="${n.nombre}">
-						</option>
-					</select>
+						<label>Objetivo</label>
+						<ul class="lst-radiobtn">
+							<li th:each="o : ${rbtObjetivo}">
+								<input type="radio" th:field="*{objetivo}" th:value="${o}" th:text="${o.nombre}"/>
+							</li>
+						</ul>
+							
+						<label>Parte del cuerpo</label>        
+							<select name="parteCuerpo">
+								<option th:value="'Tren Superior'" selected="selected">Tren Superior</option>
+								<option th:value="'Tren Inferior'">Tren Inferior</option>
+							</select>
+										
+						<label for="nivel">Nivel</label>
+							<select name="nivel" th:field="*{nivel}">
+								<option th:each="n : ${cbxNiveles}"
+										th:value="${n}"
+										th:text="${n.nombre}">
+								</option>
+							</select>
 
-    				<!--<select id="percentage" name="nivel">
-        				<option th:value="Principiante" selected="selected">Principiante</option>
-        				<option th:value="Intermedio">Intermedio</option>
-        				<option th:value="Avanzado">Avanzado</option>
-    				</select>-->
+							<!--<select id="percentage" name="nivel">
+								<option th:value="Principiante" selected="selected">Principiante</option>
+								<option th:value="Intermedio">Intermedio</option>
+								<option th:value="Avanzado">Avanzado</option>
+							</select>-->
 
-
-    	
-				<label for="mensaje">Descripción</label>
-                    <textarea id="mensaje" th:field="*{descripcion}"></textarea>
-				
-				<label>Ejercicios</label>
-				
-				<div class="deslisable">
-					<table class="pure-table pure-table-bordered">
+						<label for="mensaje">Descripción</label>
+							<textarea id="mensaje" th:field="*{descripcion}"></textarea>
+							
+					</div>
+						
+					<div class="pure-u-1-2">
+						<label>Ejercicios</label>
 					
+						<div class="deslisable">
+						<table class="pure-table pure-table-bordered">
 							<thead>
-								<tr>
-									<th>Nombre del Ejercicio</th>
-									<th>Grupo Muscular</th>
-									<th>Tipo</th>
-									<th>Número de Series</th>
-									<th>Número de Repeticiones</th>
-									<th>Descripción</th>
-									<th>Seleccionar</th>
-								</tr>
-							</thead>
+									<tr>
+										<th>Nombre del Ejercicio</th>
+										<th>Grupo Muscular</th>
+										<th>Tipo</th>
+										<th>Número de Series</th>
+										<th>Número de Repeticiones</th>
+										<th>Descripción</th>
+										<th>Seleccionar</th>
+									</tr>
+								</thead>
 
-							<tbody>
-								<tr th:each="e: ${listaEjercicios}">
-									<td><span th:text="${e.nombre}"></span></td>
-									<td><span th:text="${e.grupomuscular}"></span></td>
-									<td><span th:text="${e.tipo}"></span></td>
-									<td><span th:text="${e.series}"></span></td>
-									<td><span th:text="${e.repeticiones}"></span></td>
-									<td><span th:text="${e.descripcion}"></span></td>
-									<td>
-										<label class="checkbuton">
-											<input type="checkbox" 
-													th:field="*{ejercicio}" 
-													th:value="${e.codigo}" 
-													checked="checked">
-											<span class="checkmark"></span>
-										</label>
-									</td>
-								</tr> 
-							</tbody>
-					</table>
-				</div>  	
+								<tbody>
+									<tr th:each="e: ${listaEjercicios}">
+										<td><span th:text="${e.nombre}"></span></td>
+										<td><span th:text="${e.grupomuscular}"></span></td>
+										<td><span th:text="${e.tipo}"></span></td>
+										<td><span th:text="${e.series}"></span></td>
+										<td><span th:text="${e.repeticiones}"></span></td>
+										<td><span th:text="${e.descripcion}"></span></td>
+										<td>
+											<label class="checkbuton">
+												<input type="checkbox" 
+														th:field="*{ejercicio}" 
+														th:value="${e.codigo}" 
+														checked="checked">
+												<span class="checkmark"></span>
+											</label>
+										</td>
+									</tr> 
+								</tbody>
+						</table>
+						</div>
+
+					</div>
+
                 <span class="span" th:if="${error}" th:text="${error}"></span>
-
+				</div>
 				<br>
 				<input type="submit" class="pure-button pure-button-primary" value="Guardar Rutina">
-
+				<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Cancelar</a>
 			</form>
-			<a type="button" class="pure-button pure-button-secondary" th:href="@{/perfil/}">Cancelar</a>
+			
 		</section>
 	</main>
 

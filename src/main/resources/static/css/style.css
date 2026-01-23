@@ -133,3 +133,15 @@ tbody{
     padding: 20px;
     margin: 0 auto 20px;
 }
+
+.form2{
+    background-color: white;
+    padding: 2%;
+    border-radius: 20px;
+    box-shadow: 5px 5px 15px 5px #00000020;
+}
+
+.form2 label{
+    font-weight: bold;
+    margin-top: 10px;
+}

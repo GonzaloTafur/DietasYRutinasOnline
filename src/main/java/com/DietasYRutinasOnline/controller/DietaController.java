@@ -99,9 +99,9 @@ public class DietaController {
 			model.addAttribute("paciente", paciente);
 			
 			List<Dieta> listaDietas = dietaService.getEstado(true);
-	    	//model.addAttribute("listaDietas", listaDietas);
+	    	model.addAttribute("listaDietas", listaDietas);
 
-			List<Dieta> dietasPaciente = dietaRepository.findByPaciente(paciente);
+			/*List<Dieta> dietasPaciente = dietaRepository.findByPaciente(paciente);
 			List<DietaDTO> listaDTO = listaDietas.stream()
 				.map(dieta -> {
 					// Se verifica si el paciente sigue una dieta de la lista
@@ -109,7 +109,7 @@ public class DietaController {
 					return new DietaDTO(dieta, sigue);
 				})
 				.toList();
-			model.addAttribute("listaDietas", listaDTO);
+			model.addAttribute("listaDietas", listaDTO);*/
 			return "dietas/menu_dietas";
 	    }
 		else if(nutriologo!=null){
@@ -313,7 +313,19 @@ public class DietaController {
 		try {
 			Paciente paciente = (Paciente) sesion.getAttribute("paciente");
 			Nutriologo nutriologo = (Nutriologo) sesion.getAttribute("nutriologo");
-			if(paciente!=null || nutriologo!=null){
+			if(paciente!=null) {
+				Dieta detDieta = dietaService.getCodigo(codigo);
+				model.addAttribute("detDieta", detDieta);
+				
+				Dieta dietaPaciente = dietaRepository.findByCodigoAndPaciente(codigo, paciente);
+				boolean seguida = (dietaPaciente != null);
+				model.addAttribute("seguida", seguida);
+				
+				model.addAttribute("paciente", paciente);
+
+				return "dietas/detalle_dieta";
+			}
+			else if(nutriologo!=null){
 				Dieta detDieta = dietaService.getCodigo(codigo);
 				model.addAttribute("detDieta", detDieta);
 				return "dietas/detalle_dieta";
