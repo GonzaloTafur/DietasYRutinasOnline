@@ -52,6 +52,7 @@
                     <table class="pure-table pure-table-bordered">
                         <thead>
                             <tr>
+                                <th>Imagen</th>
                                 <th>Nombre del Ejercicio</th>
                                 <th>Grupo Muscular</th>
                                 <th>Tipo</th>
@@ -63,6 +64,7 @@
     
                         <tbody>
                             <tr th:each="e: ${detRutina.ejercicio}">
+                                <td><img th:src="@{/uploads/{img}(img=${e.foto})}" width="200" height="150"></td>
                                 <td><span th:text="${e.nombre}"></span></td>
                                 <td><span th:text="${e.grupomuscular}"></span></td>
                                 <td><span th:text="${e.tipo}"></span></td>

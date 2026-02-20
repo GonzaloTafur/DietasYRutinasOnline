@@ -58,12 +58,7 @@
                	<label for="hora">Hora</label>
         		<input type="time" min="08:00" max="23:00" th:field="*{hora}" />
                 
-                <label for="enlace">¿En que plataforma se va ha hacer la reunión?</label>
-                <a type="button" class="pure-button pure-button-primary" href="https://meet.google.com/landing" target="_blank">Zoom</a>
-                <br>
-                <a type="button" class="pure-button pure-button-secondary" href="https://developers.zoom.us/docs/api/" target="_blank">Meet</a>
-                <br>
-                
+                <label for="enlace">Pegar el enlace de la reunión</label>
                 <input type="text" id="multi-enlace" th:field="*{enlace}" required="" />
                             	
                 <br>           	

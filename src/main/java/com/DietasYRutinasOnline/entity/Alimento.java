@@ -13,6 +13,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.JoinTable;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
@@ -48,6 +49,10 @@ public class Alimento implements Serializable{
 	/*@ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "condicion", referencedColumnName = "id_condicion")
     private Condicion condicion;*/
+
+	@Lob
+    @Column(name = "foto", length =  255)
+    private String foto;
 
 	@Column(name="estado")
 	private Boolean estado = true;

@@ -1,10 +1,9 @@
 <!DOCTYPE html>
-<html lang="en"
-     xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-     <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
-	<meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
@@ -16,42 +15,47 @@
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+
     <title>Nuestros doctores</title>
 </head>
+
+<style>
+    .rectangulo {
+        background-color: #a8a8a8;
+        border-radius: 20px;
+        padding: 20px;
+        width: 70%;
+        margin: 2% auto;
+    }
+
+    .rectangulo h3, .rectangulo p{
+        color: white;
+        text-align: left;
+    }
+</style>
+
 <body>
       <main>
 		<section style="background-color: white;">
             <h2>Nuestros doctores</h2>  
 
-        <div>
-            <table class="pure-table pure-table-bordered">
-            <thead>
-                <tr>
-                    <th>Nombre</th>
-                    <th>Apellido</th>
-                    <th>Biografía</th>
-                    <th>Reuniones</th>
-                    <th></th>                   
-                </tr>
-            </thead>
-        
-            <tbody>
-                <tr th:each="nutriologo: ${listaNutriologos}">
-                	<td><span th:text="${nutriologo.nombres}"></span></td>
-                	<td><span th:text="${nutriologo.apellidos}"></span></td>
-                	<td><span th:text="${nutriologo.biografia}"></span></td>
-					<td><a th:href="@{/reunion/ver_reuniones(codigo=${nutriologo.codigo})}">Ver Reuniones</a></td>
-					
-                	<!--<td><a th:href="@{/reunion/verSuPerfil(codigo=${nutriologo.codigo})}">Ver su Perfil</a></td>-->
-                	<td><a th:href="@{/reunion/verSuPerfil(codigo=${nutriologo.codigo})}">Ver su Perfil</a></td>
-                    
-                </tr>
-                
-            </tbody>
-            </table>
+            <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}">Retroceder</a>
 
-        </div>
-        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/}">Retroceder</a>
+            <div class="rectangulo pure-g" th:each="nutriologo: ${listaNutriologos}">
+                <div class="pure-u-1-3">
+                    <img th:src="@{/uploads/{img}(img=${nutriologo.foto})}" class="fdp" alt="">
+                </div>
+                
+                <div class="pure-u-2-3">
+                    <h3 th:text="${nutriologo.nombres} + ' ' + ${nutriologo.apellidos}"></h3>
+                    <p th:text="${nutriologo.biografia}"></p>
+                    <br>
+                    <a class="pure-button" th:href="@{/reunion/verSuPerfil(codigo=${nutriologo.codigo})}">Ver Perfil</a>
+                    <a class="pure-button pure-button-primary" th:href="@{/reunion/ver_reuniones(codigo=${nutriologo.codigo})}">Ver reuniones</a>
+                </div>
+            </div>
+            
     </section>
 	</main>
     <footer>

@@ -503,3 +503,8 @@ table {
 tbody{
 	background-color: white;
 }
+
+.fdp{
+    width: 200px;
+    height: 200px;
+}

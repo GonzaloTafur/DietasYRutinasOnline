@@ -37,10 +37,9 @@ xmlns:th="http://www.thymeleaf.org">
                         <p>Descanso por serie: <span th:text="${horario.descaSerie}"></span></p>
                         <p>Descanso por ejercicio: <span th:text="${horario.descaEjercicio}"></span></p>
                         
-                        <h3><span th:text="${horario.dia.nombre}"></span></h3>
+                        <h3><span th:text="${horario.dia.nombre} + ' - ' + ${horario.parte}"></span></h3>
                         <br>
                         
-                        <h3>Parte: <span th:text="${horario.parte}"></span></h3>
                         <hr>
                         <a th:href="@{/horario/eliminarHora/{codigo} (codigo=${horario.codigo})}" class="alert" style="text-decoration: none;">
                             <strong>Eliminar de tu horario</strong>

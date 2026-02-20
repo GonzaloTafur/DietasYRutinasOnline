@@ -8,7 +8,6 @@
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
-
 	
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
@@ -59,6 +58,7 @@
                             <table class="pure-table pure-table-bordered">
                                 <thead>
                                     <tr>
+                                        <th>Imagen</th>
                                         <th>Alimento</th>
                                         <th>Nutrientes</th>
                                         <th>Tipo</th>
@@ -68,6 +68,7 @@
 
                                 <tbody>
                                     <tr th:each="al: ${detDieta.alimento}">
+                                        <td><img th:src="@{/uploads/{img}(img=${al.foto})}" width="150" height="150"></td>
                                         <td><span th:text="${al.nombre}"></span></td>
                                         <td><span th:text="${al.nutrientes}"></span></td>
                                         <td><span th:text="${al.tipo}"></span></td>

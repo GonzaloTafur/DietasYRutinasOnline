@@ -76,24 +76,24 @@
                                     <th>Parte del cuerpo</th>
                                     <th>Nivel</th>
                                     <th>Descripción</th>
-                                    <th>Acciones</th>
                                 </tr>
                         </thead>
                         
                         <tbody class="pure-table-border">
                                 <tr th:each="rutina: ${misRutinas}">
                                 <td><a th:href="@{/rutina/verDetalleRutina/{codigo}(codigo=${rutina.codigo})}">
-                                    <span th:text="${rutina.nombre}"></span></a></td>
+                                    <span th:text="${rutina.nombre}"></span></a>
+                                    <span th:if="${paciente==null}"> | <a th:href="@{/rutina/editar_rutina/{codigo}(codigo=${rutina.codigo})}">Editar</a></span></td>
                                 <td><span th:text="${rutina.objetivo.nombre}"></span></td>
                                 <td><span th:text="${rutina.parteCuerpo}"></span></td>
                                 <td><span th:text="${rutina.nivel}"></span></td>
                                 <td><span class="descripcion" th:text="${rutina.descripcion}"></span></td>
-                                <td>
-                                    <!--<div>
+                                <!--<td>
+                                   <div>
                                         <a th:href="@{/rutina/verDetalleRutina(codigo=${rutina.codigo})}">Ver detalles</a>
-                                    </div>-->
+                                    </div>
                                     <a th:href="@{/rutina/editar_rutina/{codigo}(codigo=${rutina.codigo})}">Editar</a>
-                                </td>
+                                </td>-->
                                 </tr> 
                         </tbody>
                     </table>
@@ -113,21 +113,22 @@
                                 <th>Nombre</th>
                                 <th>Objetivo</th>
                                 <th>Descripción</th>
-                                <th>Acciones</th>
                             </tr>
                         </thead>
                     
                         <tbody>
                             <tr th:each="dieta: ${misDietas}">
                             <td><a th:href="@{/dieta/verDetalleDieta/{codigo}(codigo=${dieta.codigo})}">Ver detalles
-                                <span th:text="${dieta.nombre}"></span></a></td>
+                                <span th:text="${dieta.nombre}"></span></a>
+                                <span th:if="${paciente==null}"> | <a th:href="@{/dieta/editar_dieta/{codigo}(codigo=${dieta.codigo})}">Editar</a></span></td>
+
                             <td><span th:text="${dieta.objetivo.nombre}"></span></td>
                             <td><span class="descripcion" th:text="${dieta.descripcion}"></span></td>
-                            <td>
+                            <!--<td>
                                 <div>
                                     <a th:href="@{/dieta/editar_dieta/{codigo}(codigo=${dieta.codigo})}">Editar</a>
                                 </div>
-                            </td>
+                            </td>-->
                             
                             </tr> 
                         </tbody>

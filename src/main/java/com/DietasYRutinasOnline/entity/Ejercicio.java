@@ -10,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToMany;
 import jakarta.persistence.Table;
 import jakarta.websocket.Decoder.Text;
@@ -47,6 +48,10 @@ public class Ejercicio implements Serializable{
 
     @ManyToMany(mappedBy = "ejercicio")
     private List<Rutina> rutina;
+
+    @Lob
+    @Column(name = "foto", length =  255)
+    private String foto;
 
     @Column(name="estado", columnDefinition="boolean default true")
 	private Boolean estado;

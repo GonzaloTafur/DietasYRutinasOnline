@@ -3,8 +3,8 @@
      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-     <link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
 	<meta name="viewport" content="width=device-width,initial-scale=1">
+
 	<link rel="preconnect" th:href="@{https://fonts.googleapis.com}">
 	<link rel="preconnect" th:href="@{https://fonts.gstatic.com}" crossorigin>
 	<link th:href="@{https://fonts.googleapis.com/css2?family=Yeseva+One&display=swap}" rel="stylesheet">
@@ -16,46 +16,60 @@
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/grids-responsive-min.css}">
     <link rel="stylesheet" th:href="@{https://cdn.jsdelivr.net/npm/purecss@3.0.0/build/pure-min.css}" 
     integrity="sha384-X38yfunGUhNzHpBaEBsWLO+A0HDYOQi8ufWDkZ0k9e0eXz/tH3II7uKZ9msv++Ls" crossorigin="anonymous">
-    <title>Nuestros doctores</title>
+	<link rel="stylesheet" type="text/css" th:href="@{/css/style2.css}">
+
+    <title>Reuniones</title>
 </head>
+
+<style>
+	.rectangulo {
+        background-color: #a8a8a8;
+        border-radius: 20px;
+        padding: 20px;
+        width: 50%;
+        margin: 2% auto;
+		box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.295);
+    }
+</style>
+
 <body>
       <main>
 		<section style="background-color: white;">
-            <h2>Reuniones disponibles</h2>  
-            
-			<div th:each="reunion : ${listaReuniones}">
-    			<p><h3 th:text="${reunion.motivo}"></h3></p>
-    			<p th:text="${reunion.dia.nombre}"></p>                       
-    			<p th:text="${reunion.hora}"></p>
-    			
-				<span th:if="${estadoAsistencia[reunion.codigo] == null}">Asistirás a esta reunión</span>
-					<p><a class="pure-button pure-button-secondary"
-						th:if="${estadoAsistencia[reunion.codigo] == false}"
-					th:href="@{/reunion/confirmarAsistencia(codigo=${reunion.codigo})}">
-						Confirmar Asistencia
+			<div class="rectangulo">
+				<a type="button" class="pure-button pure-button-secondary" th:href="@{/home/ver_nutriologos}">Retroceder</a>
+				<h2>Reuniones disponibles</h2>  
+				
+				<div th:each="reunion : ${listaReuniones}">
+					<p><h3 th:text="${reunion.motivo}"></h3></p>
+					<p th:text="${reunion.dia.nombre}"></p>                       
+					<p th:text="${reunion.hora}"></p>
+					
+					<!--<span th:if="${estadoAsistencia[reunion.codigo] == null}">Asistirás a esta reunión</span>-->
+						<p><a class="pure-button pure-button-secondary"
+							th:if="${estadoAsistencia[reunion.codigo] == false}"
+						th:href="@{/reunion/confirmarAsistencia(codigo=${reunion.codigo})}">
+							Confirmar Asistencia
+						</a></p>
+						<br><br>
+
+					<p><a class="pure-button pure-button-primary"
+						th:if="${estadoAsistencia[reunion.codigo] == true}"
+						th:href="${reunion.enlace}"
+						target="_blank">
+						Entrar a la reunión
 					</a></p>
 					<br><br>
-
-    			<p><a class="pure-button pure-button-primary"
-    				th:if="${estadoAsistencia[reunion.codigo] == true}"
-       				th:href="${reunion.enlace}"
-       				target="_blank">
-        			Entrar a la reunión
-    			</a></p>
-    			<br><br>
-    			
-				<p><a class="pure-button pure-button-secondary"
-				th:if="${estadoAsistencia[reunion.codigo] == true}"
-				th:href="@{/reunion/cancelarAsistencia(codigo=${reunion.codigo})}">
-					Cancelar Asistencia
-				</a></p>
-    			<br><br>
-    		
-    			<hr>
+					
+					<p><a class="pure-button pure-button-secondary"
+					th:if="${estadoAsistencia[reunion.codigo] == true}"
+					th:href="@{/reunion/cancelarAsistencia(codigo=${reunion.codigo})}">
+						Cancelar Asistencia
+					</a></p>
+					<br><br>
+				
+					<hr>
+				</div>
 			</div>
-			
-            
-        <a type="button" class="pure-button pure-button-secondary" th:href="@{/home/ver_nutriologos}">Retroceder</a>
     </section>
 	</main>
     <footer>
